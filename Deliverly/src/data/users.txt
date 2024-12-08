@@ -1,0 +1,5 @@
+001;johndoe123;password123;John Doe;555-1234;123 Elm St, Springfield, IL;john.doe@email.com;customer
+002;janedoe456;password456;Jane Doe;555-5678;456 Oak St, Springfield, IL;jane.doe@email.com;customer
+003;michael789;password789;Michael Smith;555-8765;789 Pine St, Springfield, IL;michael.smith@email.com;customer
+004;sarah321;password321;Sarah Lee;555-4321;321 Maple St, Springfield, IL;sarah.lee@email.com;customer
+005;kevin654;password654;Kevin Brown;555-6543;654 Birch St, Springfield, IL;kevin.brown@email.com;customer
