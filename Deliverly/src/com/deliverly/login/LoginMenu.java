@@ -53,7 +53,7 @@ public class LoginMenu extends javax.swing.JFrame {
         MainPanel.setMaximumSize(new java.awt.Dimension(200, 200));
         MainPanel.setMinimumSize(new java.awt.Dimension(200, 200));
 
-        Logo.setIcon(new javax.swing.ImageIcon("C:\\Users\\natsu\\Downloads\\BlackLogo (1).png")); // NOI18N
+        Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/data/BlackLogo (1).png"))); // NOI18N
 
         jLabel1.setText("Username or Email");
 
@@ -65,11 +65,9 @@ public class LoginMenu extends javax.swing.JFrame {
             }
         });
 
-        usernamelogo.setIcon(new javax.swing.ImageIcon("C:\\Users\\natsu\\Downloads\\free-user-icon-3296-thumb (1).png")); // NOI18N
+        usernamelogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/data/free-user-icon-3296-thumb (1).png"))); // NOI18N
 
-        password.setPreferredSize(new java.awt.Dimension(64, 22));
-
-        passwordlogo.setIcon(new javax.swing.ImageIcon("C:\\Users\\natsu\\Downloads\\hiclipart.com.png")); // NOI18N
+        passwordlogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/data/hiclipart.com.png"))); // NOI18N
 
         LoginButton.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
         LoginButton.setText("Login");
@@ -108,12 +106,12 @@ public class LoginMenu extends javax.swing.JFrame {
                         .addComponent(LoginButton, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(ClearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(password, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(password)
                     .addComponent(Logo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(username)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(260, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         MainPanelLayout.setVerticalGroup(
             MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -135,7 +133,7 @@ public class LoginMenu extends javax.swing.JFrame {
                 .addGroup(MainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(LoginButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ClearButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(136, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(MainPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 720, 540));
