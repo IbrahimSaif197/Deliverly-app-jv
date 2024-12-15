@@ -83,6 +83,12 @@ public class LoginMenu extends javax.swing.JFrame {
 
         usernamelogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/data/free-user-icon-3296-thumb (1).png"))); // NOI18N
         MainPanel.add(usernamelogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(217, 241, -1, -1));
+
+        password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                passwordKeyPressed(evt);
+            }
+        });
         MainPanel.add(password, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 319, 200, 35));
 
         passwordlogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/data/hiclipart.com.png"))); // NOI18N
@@ -96,6 +102,14 @@ public class LoginMenu extends javax.swing.JFrame {
         LoginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 LoginButtonActionPerformed(evt);
+            }
+        });
+        LoginButton.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                LoginButtonKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                LoginButtonKeyTyped(evt);
             }
         });
         MainPanel.add(LoginButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 374, 66, -1));
@@ -178,6 +192,20 @@ public class LoginMenu extends javax.swing.JFrame {
         usernameField.setText("");
         password.setText("");
     }//GEN-LAST:event_ClearButtonActionPerformed
+
+    private void LoginButtonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LoginButtonKeyPressed
+        // nothing
+    }//GEN-LAST:event_LoginButtonKeyPressed
+
+    private void LoginButtonKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LoginButtonKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_LoginButtonKeyTyped
+
+    private void passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER){
+        LoginButtonActionPerformed(null);
+    }
+    }//GEN-LAST:event_passwordKeyPressed
 
     /**
      * @param args the command line arguments
