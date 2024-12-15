@@ -17,8 +17,9 @@ import com.deliverly.main.vendor.VendorMenu;
  * @author natsu
  */
 public class LoginMenu extends javax.swing.JFrame {
-
+    
     private static String username;
+    private static String role;
     public LoginMenu() {
         initComponents();
         this.pack();
@@ -29,6 +30,12 @@ public class LoginMenu extends javax.swing.JFrame {
     
     public String getUsername(){
         return LoginMenu.username;
+    }
+    public void setRole(String role){
+        LoginMenu.role = role;
+    }
+    public String getRole(){
+        return LoginMenu.role;
     }
     /**
      * This method is called from within the constructor to initialize the form.
