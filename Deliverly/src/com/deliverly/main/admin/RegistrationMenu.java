@@ -99,6 +99,7 @@ public class RegistrationMenu extends javax.swing.JFrame {
         });
         MainPanel.add(email, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, 200, 30));
 
+        ID.setText("ADM");
         ID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 IDActionPerformed(evt);
@@ -243,6 +244,7 @@ public class RegistrationMenu extends javax.swing.JFrame {
 
     private void CreateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateButtonActionPerformed
         try { 
+            String role = Role.getSelectedItem().toString();
             String password_string = new String(password.getPassword());
             FileWriter fw = new FileWriter(users_file, true);
             BufferedWriter bw = new BufferedWriter(fw);
@@ -257,10 +259,12 @@ public class RegistrationMenu extends javax.swing.JFrame {
                     phone.getText() + ";" +
                     address.getText() + ";" +
                     email.getText() + ";" +
-                    Role.getSelectedItem().toString()
+                    role
                 );
                 bw.flush();
-                JOptionPane.showMessageDialog(null, "Successfully added a new " + login.getRole());
+                this.reloadData();
+                JOptionPane.showMessageDialog(null, "Successfully added a new " + role);
+                
             }else {
                 JOptionPane.showMessageDialog(null, "Username is already used! Please use a different username.");
             }
@@ -271,19 +275,19 @@ public class RegistrationMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_CreateButtonActionPerformed
 
     private void RoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RoleActionPerformed
-        if(Role.getSelectedItem() == "Admin"){
+        if(Role.getSelectedItem() == "admin"){
                 ID.setText("ADM");
             }
-        else if(Role.getSelectedItem() == "Customer"){
+        else if(Role.getSelectedItem() == "customer"){
                 ID.setText("CUS");
             }
-        else if(Role.getSelectedItem() == "Runner"){
+        else if(Role.getSelectedItem() == "runner"){
                 ID.setText("RNR");
             }
-        else if(Role.getSelectedItem() == "Vendor"){
+        else if(Role.getSelectedItem() == "vendor"){
                 ID.setText("VEN");
             }
-        else if(Role.getSelectedItem() == "Manager"){
+        else if(Role.getSelectedItem() == "manager"){
                 ID.setText("MGR");
             }
     }//GEN-LAST:event_RoleActionPerformed
