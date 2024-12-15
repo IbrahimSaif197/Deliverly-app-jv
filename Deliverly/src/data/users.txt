@@ -23,6 +23,6 @@ RNR007;runner007;runnerpass007;Runner Seven;555-3021;302 Birch St, Springfield, 
 RNR008;runner008;runnerpass008;Runner Eight;555-2010;201 Elm St, Springfield, IL;runner.eight@email.com;runner
 RNR009;runner009;runnerpass009;Runner Nine;555-1009;100 Oak St, Springfield, IL;runner.nine@email.com;runner
 RNR010;runner010;runnerpass010;Runner Ten;555-0098;009 Pine St, Springfield, IL;runner.ten@email.com;runner
-MGR001;manager001;managerpass001;Manager One;555-9870;987 Elm St, Springfield, IL;manager.one@email.com;
-MGR002;manager002;managerpass002;Manager Two;555-8760;876 Oak St, Springfield, IL;manager.two@email.com;
-MGR003;manager003;managerpass003;Manager Three;555-7650;765 Pine St, Springfield, IL;manager.three@email.com;
+MGR001;manager001;managerpass001;Manager One;555-9870;987 Elm St, Springfield, IL;manager.one@email.com;manager
+MGR002;manager002;managerpass002;Manager Two;555-8760;876 Oak St, Springfield, IL;manager.two@email.com;manager
+MGR003;manager003;managerpass003;Manager Three;555-7650;765 Pine St, Springfield, IL;manager.three@email.com;manager
