@@ -34,6 +34,9 @@ public class AdminMenu extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         LoggedUser = new javax.swing.JLabel();
+        ManageUsers = new javax.swing.JButton();
+        TopUpCredits = new javax.swing.JButton();
+        GenerateReceipt = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,6 +50,30 @@ public class AdminMenu extends javax.swing.JFrame {
         LoggedUser.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
         LoggedUser.setText("User");
         jPanel1.add(LoggedUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, -1, -1));
+
+        ManageUsers.setText("Manage Users");
+        ManageUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ManageUsersActionPerformed(evt);
+            }
+        });
+        jPanel1.add(ManageUsers, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 130, 180, 40));
+
+        TopUpCredits.setText("Top-up Credits");
+        TopUpCredits.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TopUpCreditsActionPerformed(evt);
+            }
+        });
+        jPanel1.add(TopUpCredits, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 200, 180, 40));
+
+        GenerateReceipt.setText("Generate Receipt");
+        GenerateReceipt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GenerateReceiptActionPerformed(evt);
+            }
+        });
+        jPanel1.add(GenerateReceipt, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 270, 180, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -62,6 +89,20 @@ public class AdminMenu extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(786, 549));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void ManageUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ManageUsersActionPerformed
+        this.dispose();
+        new RegistrationMenu().setVisible(true);
+    }//GEN-LAST:event_ManageUsersActionPerformed
+
+    private void TopUpCreditsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TopUpCreditsActionPerformed
+        this.dispose();
+        new TopUpMenu().setVisible(true);
+    }//GEN-LAST:event_TopUpCreditsActionPerformed
+
+    private void GenerateReceiptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateReceiptActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_GenerateReceiptActionPerformed
 
     /**
      * @param args the command line arguments
@@ -99,7 +140,10 @@ public class AdminMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton GenerateReceipt;
     private javax.swing.JLabel LoggedUser;
+    private javax.swing.JButton ManageUsers;
+    private javax.swing.JButton TopUpCredits;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
