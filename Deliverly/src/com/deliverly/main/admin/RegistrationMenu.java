@@ -350,8 +350,10 @@ public final class RegistrationMenu extends javax.swing.JFrame {
             FileWriter fw = new FileWriter(users_file, true);
             BufferedWriter bw = new BufferedWriter(fw);
             checkUsernames(users_file);
+            checkIDs(users_file);
             
-            if(isUsernameAvailable(username.getText()) == true && username.getText().length() > 1 == true){
+            if(isUsernameAvailable(username.getText()) == true && username.getText().length() > 1 == true
+                    && isIDAvailable(ID.getText()) == true){
                 bw.newLine();
                 bw.write(
                     ID.getText() + ";" +
@@ -369,7 +371,7 @@ public final class RegistrationMenu extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Successfully added a new " + role);
                 
             }else {
-                JOptionPane.showMessageDialog(null, "Username is already used! Please use a different username.");
+                JOptionPane.showMessageDialog(null, "Username or ID is already used! Please use a different username.");
             }
             
         }catch (IOException e) {
@@ -517,6 +519,29 @@ public final class RegistrationMenu extends javax.swing.JFrame {
     
     private static final Set<String> usernames = new HashSet<>();
     
+    
+    private static boolean checkIDs(File users_file) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(users_file))) {
+            
+            String user;
+            reader.readLine();
+            while ((user = reader.readLine()) != null) {
+                String[] fields = user.split(";");
+                if (fields.length > 1) {
+                    ids.add(fields[0]);
+                }
+            }
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    private static boolean isIDAvailable(String username) {
+        return !ids.contains(username);
+    }
+    
+    private static final Set<String> ids = new HashSet<>();
     
     /**
      * @param args the command line arguments
