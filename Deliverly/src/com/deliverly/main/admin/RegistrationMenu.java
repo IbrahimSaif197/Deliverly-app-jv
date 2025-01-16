@@ -344,102 +344,15 @@ public final class RegistrationMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_goBackActionPerformed
 
     private void CreateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateButtonActionPerformed
-        try { 
-            String role = Role.getSelectedItem().toString();
-            String password_string = new String(password.getPassword());
-            FileWriter fw = new FileWriter(users_file, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            checkUsernames(users_file);
-            checkIDs(users_file);
-            
-            if(isUsernameAvailable(username.getText()) == true && username.getText().length() > 1 == true
-                    && isIDAvailable(ID.getText()) == true){
-                bw.newLine();
-                bw.write(
-                    ID.getText() + ";" +
-                    username.getText() + ";" +
-                    password_string + ";" +
-                    name.getText() + ";" +
-                    phone.getText() + ";" +
-                    address.getText() + ";" +
-                    emailField.getText() + ";" +
-                    "0;" + //credits
-                    role
-                );
-                bw.flush();
-                this.reloadData();
-                JOptionPane.showMessageDialog(null, "Successfully added a new " + role);
-                
-            }else {
-                JOptionPane.showMessageDialog(null, "Username or ID is already used! Please use a different username.");
-            }
-            
-        }catch (IOException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
+        createUser();
     }//GEN-LAST:event_CreateButtonActionPerformed
 
     private void RoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RoleActionPerformed
-        if(Role.getSelectedItem() == "admin"){
-                ID.setText("ADM");
-            }
-        else if(Role.getSelectedItem() == "customer"){
-                ID.setText("CUS");
-            }
-        else if(Role.getSelectedItem() == "runner"){
-                ID.setText("RNR");
-            }
-        else if(Role.getSelectedItem() == "vendor"){
-                ID.setText("VEN");
-            }
-        else if(Role.getSelectedItem() == "manager"){
-                ID.setText("MGR");
-            }
+        roleSelection();
     }//GEN-LAST:event_RoleActionPerformed
 
     private void SearchFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SearchFieldKeyReleased
-        try {
-            String searchtext = SearchField.getText().trim();
-            model.setRowCount(0);
-            
-            if (searchtext.isEmpty()) {
-                reloadData();
-            }
-            
-            FileReader fr = new FileReader(users_file);
-            BufferedReader br = new BufferedReader(fr);
-            String user;
-            
-            while ((user = br.readLine()) != null) {
-                String[] data = user.split(";");
-                String user_id = data[0].trim();
-                String search_user = data[1].trim();
-                String search_pass = data[2].trim();
-                String search_name = data[3].trim();
-                String seach_phone = data[4].trim();
-                String search_address = data[5].trim();
-                String search_email = data[6].trim();
-                String search_credit = data[7].trim();
-                String role = data[8].trim();
-                
-                if (user_id.toLowerCase().contains(searchtext.toLowerCase()) ||
-                    search_user.toLowerCase().contains(searchtext.toLowerCase()) ||
-                    search_pass.toLowerCase().contains(searchtext.toLowerCase()) ||
-                    search_name.toLowerCase().contains(searchtext.toLowerCase()) ||
-                    seach_phone.toLowerCase().contains(searchtext.toLowerCase()) ||
-                    search_address.toLowerCase().contains(searchtext.toLowerCase()) ||
-                    search_email.toLowerCase().contains(searchtext.toLowerCase()) ||
-                    search_credit.toLowerCase().contains(searchtext.toLowerCase()) ||
-                    role.toLowerCase().contains(searchtext.toLowerCase())) {
-                    model.addRow(new Object[]{user_id, search_user, search_pass, search_name,
-                        seach_phone, search_address, search_email, search_credit, role});
-                }
-            }
-            br.close();
-            
-        } catch (IOException e){
-            JOptionPane.showMessageDialog(null, "No users found");
-        }
+        searchUser();
     }//GEN-LAST:event_SearchFieldKeyReleased
 
     private void Edit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Edit1ActionPerformed
@@ -484,7 +397,106 @@ public final class RegistrationMenu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_emailFieldFocusLost
 
+    private void createUser(){
+        try { 
+            String role = Role.getSelectedItem().toString();
+            String password_string = new String(password.getPassword());
+            
+            StringBuilder errorMessages = new StringBuilder();
+            
+            FileWriter fw = new FileWriter(users_file, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            
+            checkUsernames(users_file);
+            checkIDs(users_file);
+            
+            // Validate username
+            if (username.getText().length() <= 1) {
+                errorMessages.append("Username must be more than 1 character.\n");
+            } else if (!isUsernameAvailable(username.getText())) {
+                errorMessages.append("Username is already used.\n");
+            }
+            
+            // Validate ID
+            if (!isIDAvailable(ID.getText())) {
+                errorMessages.append("ID is already used.\n");
+            }
+            
+            // Validate password
+            if (!isPasswordValid(password_string)) {
+                errorMessages.append("Password must be at least 8 characters long and include at least one number.\n");
+            }
+            
+            // Validate phone number
+            if (!isPhoneValid(phone.getText())) {
+                errorMessages.append("Phone number is invalid. It must contain 10-15 digits and can include an optional '+' at the start.\n");
+            }
+            
+            // Validate email
+            if (!checkEmail(emailField.getText())) {
+                errorMessages.append("Email is invalid.\n");
+            }
+            
+            // If any validation fails, show all errors and exit
+            if (errorMessages.length() > 0) {
+                JOptionPane.showMessageDialog(null, errorMessages.toString());
+                return;
+            }
 
+            bw.newLine();
+            bw.write(
+                ID.getText() + ";" +
+                username.getText() + ";" +
+                password_string + ";" +
+                name.getText() + ";" +
+                phone.getText() + ";" +
+                address.getText() + ";" +
+                emailField.getText() + ";" +
+                "0;" + // credits
+                role
+            );
+            bw.flush();
+            this.reloadData();
+            JOptionPane.showMessageDialog(null, "Successfully added a new " + role);
+            
+            
+            }catch (IOException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+    }
+    
+    private boolean isPasswordValid(String password) {
+       if (password.length() < 8) {
+           return false;
+       }
+        if (!password.matches(".*\\d.*")) { 
+           return false;
+        }
+           return true;
+    }
+
+
+    private boolean isPhoneValid(String phone) {
+        return phone.matches("^\\+?[0-9]{10}$");
+    }
+    
+    private void roleSelection() {
+        if(Role.getSelectedItem() == "admin"){
+                ID.setText("ADM");
+            }
+        else if(Role.getSelectedItem() == "customer"){
+                ID.setText("CUS");
+            }
+        else if(Role.getSelectedItem() == "runner"){
+                ID.setText("RNR");
+            }
+        else if(Role.getSelectedItem() == "vendor"){
+                ID.setText("VEN");
+            }
+        else if(Role.getSelectedItem() == "manager"){
+                ID.setText("MGR");
+            }
+    }
 
     private boolean checkEmail(String email){
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
@@ -493,7 +505,59 @@ public final class RegistrationMenu extends javax.swing.JFrame {
         return m.matches();
     }
     
+    private void searchUser() {
+        try {
+            String searchtext = SearchField.getText().trim();
+            model.setRowCount(0);
+            
+            if (searchtext.isEmpty()) {
+                reloadData();
+            }
+            
+            FileReader fr = new FileReader(users_file);
+            BufferedReader br = new BufferedReader(fr);
+            String user;
+            
+            while ((user = br.readLine()) != null) {
+                String[] data = user.split(";");
+                String user_id = data[0].trim();
+                String search_user = data[1].trim();
+                String search_pass = data[2].trim();
+                String search_name = data[3].trim();
+                String seach_phone = data[4].trim();
+                String search_address = data[5].trim();
+                String search_email = data[6].trim();
+                String search_credit = data[7].trim();
+                String role = data[8].trim();
+                
+                if (user_id.toLowerCase().contains(searchtext.toLowerCase()) ||
+                    search_user.toLowerCase().contains(searchtext.toLowerCase()) ||
+                    search_pass.toLowerCase().contains(searchtext.toLowerCase()) ||
+                    search_name.toLowerCase().contains(searchtext.toLowerCase()) ||
+                    seach_phone.toLowerCase().contains(searchtext.toLowerCase()) ||
+                    search_address.toLowerCase().contains(searchtext.toLowerCase()) ||
+                    search_email.toLowerCase().contains(searchtext.toLowerCase()) ||
+                    search_credit.toLowerCase().contains(searchtext.toLowerCase()) ||
+                    role.toLowerCase().contains(searchtext.toLowerCase())) {
+                    model.addRow(new Object[]{user_id, search_user, search_pass, search_name,
+                        seach_phone, search_address, search_email, search_credit, role});
+                }
+            }
+            br.close();
+            
+        } catch (IOException e){
+            JOptionPane.showMessageDialog(null, "No users found");
+        }
+    }
     
+    // User edit Function
+    private void editUser() {
+        
+    }
+    // Delete User function
+    private void deleteUser() {
+        
+    }
     
     
     private static boolean checkUsernames(File users_file) {
