@@ -162,6 +162,18 @@ public class TopUpMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_CancelActionPerformed
 
     private void TopUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TopUpActionPerformed
+        topUp();
+    }//GEN-LAST:event_TopUpActionPerformed
+
+    private void userIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userIDActionPerformed
+        //
+    }//GEN-LAST:event_userIDActionPerformed
+
+    private void AmountFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_AmountFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AmountFocusLost
+    
+    private void topUp() {
         try {
             int added_amount = Integer.parseInt(Amount.getText().trim());
         
@@ -203,16 +215,7 @@ public class TopUpMenu extends javax.swing.JFrame {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Invalid Amount " + e.getMessage());
         }
-    }//GEN-LAST:event_TopUpActionPerformed
-
-    private void userIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userIDActionPerformed
-        //
-    }//GEN-LAST:event_userIDActionPerformed
-
-    private void AmountFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_AmountFocusLost
-        // TODO add your handling code here:
-    }//GEN-LAST:event_AmountFocusLost
-
+    }
     /**
      * @param args the command line arguments
      */
