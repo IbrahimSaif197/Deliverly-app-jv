@@ -1,0 +1,3 @@
+MI1;fa7sa;7loa nek;20.0;VEN302
+MI3;eggs;eggs ;20.0;VEN302
+MI5;eggs;ggg;90.0;VEN302

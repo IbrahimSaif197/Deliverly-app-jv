@@ -1,0 +1,14 @@
+001;vendor001;customer001;Burger;10.00;Pending;hmmmverygood
+002;vendor002;customer002;Pizza;15.00;Pending
+ORD101;CUS201;VEN302;MI102,MI103;2025-07-26;Pending;Dine-In;25.0
+Review: The food was great!
+Review: I loved the ambience.
+ORD102;CUS202;VEN302;MI101;2025-07-26;Pending;Delivery;15.0
+ORD103;CUS203;VEN302;MI102,MI104;2024-07-25;Completed;Take-Away;55.00
+Review: The delivery was on time.
+ORD104;CUS204;VEN302;MI105;2025-07-26;Accepted;Delivery;110.0
+Review: I was not satisfied with my order!
+Review: It was very cold
+Review: I want a refund!
+ORD105;CUS205;VEN302;MI106;2025-07-27;Pending;Delivery;20.0
+Review: Very good!
