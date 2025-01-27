@@ -41,6 +41,29 @@ public final class RegistrationMenu extends javax.swing.JFrame {
         username.setToolTipText("Username should be 2 characters at least");
         password.setToolTipText("Password should be at least 8 characters and 1 number");
         emailField.setToolTipText("example@gmail.com");
+        
+        UsersTable.getSelectionModel().addListSelectionListener(event -> {
+        if (!event.getValueIsAdjusting()) {
+            int selectedRow = UsersTable.getSelectedRow();
+            if (selectedRow != -1) {
+                String iD = (String) UsersTable.getValueAt(selectedRow, 0);
+                ID.setText(iD);
+                String usernameData = (String) UsersTable.getValueAt(selectedRow, 1);
+                username.setText(usernameData);
+                String passwordData = (String) UsersTable.getValueAt(selectedRow, 2);
+                password.setText(passwordData);
+                String nameData = (String) UsersTable.getValueAt(selectedRow, 3);
+                name.setText(nameData);
+                String phoneData = (String) UsersTable.getValueAt(selectedRow, 4);
+                phone.setText(phoneData);
+                String addressData = (String) UsersTable.getValueAt(selectedRow, 5);
+                address.setText(addressData);
+                String emailData = (String) UsersTable.getValueAt(selectedRow, 6);
+                username.setText(emailData);
+                
+            }
+        }
+        });
     }
     File users_file = new File("src//data//users.txt"); //calls users file
     DefaultTableModel model;
@@ -208,6 +231,7 @@ public final class RegistrationMenu extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Registration Menu");
+        jLabel9.setDoubleBuffered(true);
         MainPanel.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 230, 60));
 
         CreateButton.setForeground(new java.awt.Color(0, 0, 0));
@@ -238,6 +262,11 @@ public final class RegistrationMenu extends javax.swing.JFrame {
                 "UserID", "Username", "Password", "Name", "Phone", "Address", "Email", "Credits", "Role"
             }
         ));
+        UsersTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                UsersTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(UsersTable);
 
         MainPanel.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 640, -1));
@@ -380,22 +409,20 @@ public final class RegistrationMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameKeyReleased
 
     private void usernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_usernameFocusLost
-        if(!(username.getText().length() > 1)){
-            JOptionPane.showMessageDialog(null, "Username should be 2 characters at least. Please Try Again!");
-        }
+
     }//GEN-LAST:event_usernameFocusLost
 
     private void passwordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_passwordFocusLost
-        if(!(password.getPassword().length > 8)){
-            JOptionPane.showMessageDialog(null, "Password should be 8 characters at least. Please Try Again!");
-        }
+
     }//GEN-LAST:event_passwordFocusLost
 
     private void emailFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_emailFieldFocusLost
-        if(!(checkEmail(emailField.getText()))){
-            JOptionPane.showMessageDialog(null, "Please enter a valid email address!");
-        }
+
     }//GEN-LAST:event_emailFieldFocusLost
+
+    private void UsersTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UsersTableMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_UsersTableMouseClicked
 
     private void createUser(){
         try { 
@@ -410,34 +437,28 @@ public final class RegistrationMenu extends javax.swing.JFrame {
             checkUsernames(users_file);
             checkIDs(users_file);
             
-            // Validate username
             if (username.getText().length() <= 1) {
                 errorMessages.append("Username must be more than 1 character.\n");
             } else if (!isUsernameAvailable(username.getText())) {
                 errorMessages.append("Username is already used.\n");
             }
             
-            // Validate ID
             if (!isIDAvailable(ID.getText())) {
                 errorMessages.append("ID is already used.\n");
             }
             
-            // Validate password
             if (!isPasswordValid(password_string)) {
                 errorMessages.append("Password must be at least 8 characters long and include at least one number.\n");
             }
             
-            // Validate phone number
             if (!isPhoneValid(phone.getText())) {
                 errorMessages.append("Phone number is invalid. It must contain 10-15 digits and can include an optional '+' at the start.\n");
             }
             
-            // Validate email
             if (!checkEmail(emailField.getText())) {
                 errorMessages.append("Email is invalid.\n");
             }
             
-            // If any validation fails, show all errors and exit
             if (errorMessages.length() > 0) {
                 JOptionPane.showMessageDialog(null, errorMessages.toString());
                 return;

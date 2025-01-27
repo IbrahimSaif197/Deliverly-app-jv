@@ -39,55 +39,78 @@ public class LoginMenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        MainPanel = new javax.swing.JPanel();
-        Logo = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        usernameField = new javax.swing.JTextField();
+        WestPanel = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        UserLabel = new javax.swing.JLabel();
         usernamelogo = new javax.swing.JLabel();
+        usernameField = new javax.swing.JTextField();
+        PassLabel = new javax.swing.JLabel();
         password = new javax.swing.JPasswordField();
         passwordlogo = new javax.swing.JLabel();
         LoginButton = new javax.swing.JButton();
         ClearButton = new javax.swing.JButton();
+        ForgotPassword = new javax.swing.JLabel();
+        EastPanel = new javax.swing.JPanel();
+        Logo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setPreferredSize(new java.awt.Dimension(840, 500));
 
-        MainPanel.setBackground(new java.awt.Color(225, 254, 255));
-        MainPanel.setMaximumSize(new java.awt.Dimension(200, 200));
-        MainPanel.setMinimumSize(new java.awt.Dimension(200, 200));
-        MainPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        WestPanel.setBackground(new java.awt.Color(255, 255, 255));
+        WestPanel.setPreferredSize(new java.awt.Dimension(400, 100));
+        WestPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/data/BlackLogo (1).png"))); // NOI18N
-        MainPanel.add(Logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 0, -1, -1));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new java.awt.GridLayout());
 
-        jLabel1.setText("Username or Email");
-        MainPanel.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 206, 200, 29));
+        jLabel3.setFont(new java.awt.Font("Nirmala UI", 3, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Welcome To Deliverly");
+        jLabel3.setPreferredSize(new java.awt.Dimension(205, 30));
+        jPanel1.add(jLabel3);
 
-        jLabel2.setText("Password");
-        MainPanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 284, 200, 29));
+        WestPanel.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 2, 396, 100));
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        UserLabel.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        UserLabel.setForeground(new java.awt.Color(0, 0, 0));
+        UserLabel.setText("Username or Email");
+        jPanel3.add(UserLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 40, 200, 29));
+
+        usernamelogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/data/free-user-icon-3296-thumb (1).png"))); // NOI18N
+        jPanel3.add(usernamelogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 70, -1, -1));
 
         usernameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 usernameFieldActionPerformed(evt);
             }
         });
-        MainPanel.add(usernameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 241, 200, 37));
+        jPanel3.add(usernameField, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 200, 37));
 
-        usernamelogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/data/free-user-icon-3296-thumb (1).png"))); // NOI18N
-        MainPanel.add(usernamelogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(217, 241, -1, -1));
+        PassLabel.setFont(new java.awt.Font("Nirmala UI", 1, 14)); // NOI18N
+        PassLabel.setForeground(new java.awt.Color(0, 0, 0));
+        PassLabel.setText("Password");
+        jPanel3.add(PassLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, 200, 29));
 
         password.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 passwordKeyPressed(evt);
             }
         });
-        MainPanel.add(password, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 319, 200, 35));
+        jPanel3.add(password, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 140, 200, 35));
 
         passwordlogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/data/hiclipart.com.png"))); // NOI18N
-        MainPanel.add(passwordlogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(217, 319, -1, -1));
+        jPanel3.add(passwordlogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, -1, -1));
 
-        LoginButton.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        LoginButton.setBackground(new java.awt.Color(255, 255, 255));
+        LoginButton.setFont(new java.awt.Font("Nirmala UI", 3, 14)); // NOI18N
+        LoginButton.setForeground(new java.awt.Color(0, 0, 0));
         LoginButton.setText("Login");
         LoginButton.setMaximumSize(new java.awt.Dimension(30, 30));
         LoginButton.setMinimumSize(new java.awt.Dimension(30, 30));
@@ -105,9 +128,11 @@ public class LoginMenu extends javax.swing.JFrame {
                 LoginButtonKeyTyped(evt);
             }
         });
-        MainPanel.add(LoginButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 374, 66, -1));
+        jPanel3.add(LoginButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 230, 70, -1));
 
-        ClearButton.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        ClearButton.setBackground(new java.awt.Color(255, 255, 255));
+        ClearButton.setFont(new java.awt.Font("Nirmala UI", 3, 14)); // NOI18N
+        ClearButton.setForeground(new java.awt.Color(0, 0, 0));
         ClearButton.setText("Clear");
         ClearButton.setMaximumSize(new java.awt.Dimension(30, 30));
         ClearButton.setMinimumSize(new java.awt.Dimension(30, 30));
@@ -117,11 +142,33 @@ public class LoginMenu extends javax.swing.JFrame {
                 ClearButtonActionPerformed(evt);
             }
         });
-        MainPanel.add(ClearButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(394, 374, 66, -1));
+        jPanel3.add(ClearButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 230, 70, -1));
 
-        getContentPane().add(MainPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 720, 540));
+        ForgotPassword.setBackground(new java.awt.Color(255, 255, 255));
+        ForgotPassword.setFont(new java.awt.Font("Nirmala UI", 3, 14)); // NOI18N
+        ForgotPassword.setForeground(new java.awt.Color(0, 51, 255));
+        ForgotPassword.setText("Forgot Your Password?");
+        jPanel3.add(ForgotPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 180, 200, 29));
 
-        setSize(new java.awt.Dimension(736, 549));
+        WestPanel.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 400, 400));
+
+        getContentPane().add(WestPanel, java.awt.BorderLayout.WEST);
+
+        EastPanel.setBackground(new java.awt.Color(204, 255, 255));
+        EastPanel.setMaximumSize(new java.awt.Dimension(200, 200));
+        EastPanel.setMinimumSize(new java.awt.Dimension(200, 200));
+        EastPanel.setPreferredSize(new java.awt.Dimension(440, 500));
+        EastPanel.setLayout(new java.awt.GridLayout());
+
+        Logo.setForeground(new java.awt.Color(0, 0, 0));
+        Logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Logo.setIcon(new javax.swing.ImageIcon("C:\\Users\\natsu\\Downloads\\black_on_trans-resized.png")); // NOI18N
+        EastPanel.add(Logo);
+        Logo.getAccessibleContext().setAccessibleName("");
+
+        getContentPane().add(EastPanel, java.awt.BorderLayout.EAST);
+
+        setSize(new java.awt.Dimension(855, 509));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -130,6 +177,29 @@ public class LoginMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameFieldActionPerformed
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
+        logIn();   
+    }//GEN-LAST:event_LoginButtonActionPerformed
+
+    private void ClearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearButtonActionPerformed
+        usernameField.setText("");
+        password.setText("");
+    }//GEN-LAST:event_ClearButtonActionPerformed
+
+    private void LoginButtonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LoginButtonKeyPressed
+        // nothing
+    }//GEN-LAST:event_LoginButtonKeyPressed
+
+    private void LoginButtonKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LoginButtonKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_LoginButtonKeyTyped
+
+    private void passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER){
+        LoginButtonActionPerformed(null);
+    }
+    }//GEN-LAST:event_passwordKeyPressed
+    
+    public void logIn() {
         try{
             boolean userFound = false;
             File users_file = new File("src//data//users.txt");
@@ -178,28 +248,13 @@ public class LoginMenu extends javax.swing.JFrame {
         }catch(IOException e){
             JOptionPane.showMessageDialog(null,e.getMessage());
         }
-                            
-    }//GEN-LAST:event_LoginButtonActionPerformed
-
-    private void ClearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearButtonActionPerformed
-        usernameField.setText("");
-        password.setText("");
-    }//GEN-LAST:event_ClearButtonActionPerformed
-
-    private void LoginButtonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LoginButtonKeyPressed
-        // nothing
-    }//GEN-LAST:event_LoginButtonKeyPressed
-
-    private void LoginButtonKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LoginButtonKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_LoginButtonKeyTyped
-
-    private void passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordKeyPressed
-        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER){
-        LoginButtonActionPerformed(null);
     }
-    }//GEN-LAST:event_passwordKeyPressed
-
+    
+    
+    
+    
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -237,11 +292,16 @@ public class LoginMenu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ClearButton;
+    private javax.swing.JPanel EastPanel;
+    private javax.swing.JLabel ForgotPassword;
     private javax.swing.JButton LoginButton;
     private javax.swing.JLabel Logo;
-    private javax.swing.JPanel MainPanel;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel PassLabel;
+    private javax.swing.JLabel UserLabel;
+    private javax.swing.JPanel WestPanel;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPasswordField password;
     private javax.swing.JLabel passwordlogo;
     private javax.swing.JTextField usernameField;
