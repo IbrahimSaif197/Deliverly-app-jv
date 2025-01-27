@@ -1,7 +1,7 @@
 package com.deliverly.login;
 
 
-import com.deliverly.main.admin.AdminMenu;
+import com.deliverly.main.admin.RegistrationMenu;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -238,7 +238,7 @@ public class LoginMenu extends javax.swing.JFrame {
                     new VendorMenu().setVisible(true);
                 }
                 else if(user.split(";")[0].contains("ADM") == true){
-                    new AdminMenu().setVisible(true);
+                    new RegistrationMenu().setVisible(true);
                 }
                 else if(user.split(";")[0].contains("MNG") == true){
                     new ManagerMenu().setVisible(true);
