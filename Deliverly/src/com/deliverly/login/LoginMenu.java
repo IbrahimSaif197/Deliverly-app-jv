@@ -1,7 +1,7 @@
 package com.deliverly.login;
 
 
-import com.deliverly.main.admin.RegistrationMenu;
+import com.deliverly.main.admin.AdminMenu;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -55,7 +55,7 @@ public class LoginMenu extends javax.swing.JFrame {
         Logo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(840, 500));
+        setBackground(new java.awt.Color(204, 255, 255));
 
         WestPanel.setBackground(new java.awt.Color(255, 255, 255));
         WestPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
@@ -158,7 +158,7 @@ public class LoginMenu extends javax.swing.JFrame {
         EastPanel.setMaximumSize(new java.awt.Dimension(200, 200));
         EastPanel.setMinimumSize(new java.awt.Dimension(200, 200));
         EastPanel.setPreferredSize(new java.awt.Dimension(540, 500));
-        EastPanel.setLayout(new java.awt.GridLayout());
+        EastPanel.setLayout(new java.awt.GridLayout(1, 0));
 
         Logo.setForeground(new java.awt.Color(0, 0, 0));
         Logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -238,7 +238,7 @@ public class LoginMenu extends javax.swing.JFrame {
                     new VendorMenu().setVisible(true);
                 }
                 else if(user.split(";")[0].contains("ADM") == true){
-                    new RegistrationMenu().setVisible(true);
+                    new AdminMenu().setVisible(true);
                 }
                 else if(user.split(";")[0].contains("MNG") == true){
                     new ManagerMenu().setVisible(true);
