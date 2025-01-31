@@ -4,17 +4,65 @@
  */
 package com.deliverly.main.manager;
 
+import com.deliverly.login.LoginMenu;
+import com.deliverly.login.ThemeManager;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.*;
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import java.awt.Color;
+import java.awt.Component;
 /**
  *
  * @author natsu
  */
-public class ManagerMenu extends javax.swing.JFrame {
+public final class ManagerMenu extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ManagerMenu
-     */
+    File menus_file = new File("src//data//restaurants.txt");
+    DefaultTableModel model;
+    LoginMenu login = new LoginMenu();
+    
+    
+    public void reloadData(DefaultTableModel tableModel){
+        try {
+            tableModel.setRowCount(0);
+            FileReader fr = new FileReader(menus_file);
+            BufferedReader br = new BufferedReader(fr);
+            String user;
+            while ((user = br.readLine()) != null) {
+                String[] user_data = user.split(";");
+                tableModel.addRow(new Object[]{
+                    user_data[0], user_data[1], user_data[2], user_data[3]
+                    });
+            }
+        } catch (IOException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
     public ManagerMenu() {
         initComponents();
+        LoggedUser.setText(login.getUsername());
+        
+        this.model = (DefaultTableModel) Menu.getModel();
+        this.reloadData(model);
+       
+        Menu.getSelectionModel().addListSelectionListener(event -> {
+        if (!event.getValueIsAdjusting()) {
+            int selectedRow = Menu.getSelectedRow();
+            if (selectedRow != -1) {
+                String foodID = (String) Menu.getValueAt(selectedRow, 0);
+                foodIDField.setText(foodID);
+            }
+        }
+        });
     }
 
     /**
@@ -26,21 +74,116 @@ public class ManagerMenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        LoggedUser = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Menu = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        foodIDField = new javax.swing.JTextField();
+        DeleteButton = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        darkModeCheckBox = new javax.swing.JCheckBox();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1000, 700));
+        setPreferredSize(new java.awt.Dimension(1000, 700));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        jPanel1.setBackground(new java.awt.Color(204, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        pack();
+        LoggedUser.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
+        LoggedUser.setForeground(new java.awt.Color(0, 0, 0));
+        LoggedUser.setText("User");
+        jPanel1.add(LoggedUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, -1, -1));
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setText("Welcome back,");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+
+        jTabbedPane1.addTab("tab1", jPanel1);
+
+        jPanel2.setBackground(new java.awt.Color(204, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jTabbedPane1.addTab("tab2", jPanel2);
+
+        jPanel3.setBackground(new java.awt.Color(204, 255, 255));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jTabbedPane1.addTab("tab3", jPanel3);
+
+        jPanel4.setBackground(new java.awt.Color(204, 255, 255));
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        Menu.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Food ID", "Food Name", "Description", "Price"
+            }
+        ));
+        jScrollPane1.setViewportView(Menu);
+
+        jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 97, 700, 441));
+
+        jLabel1.setText("Food ID");
+        jPanel4.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(44, 155, -1, -1));
+        jPanel4.add(foodIDField, new org.netbeans.lib.awtextra.AbsoluteConstraints(44, 177, 162, 35));
+
+        DeleteButton.setText("Delete");
+        DeleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteButtonActionPerformed(evt);
+            }
+        });
+        jPanel4.add(DeleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 250, 80, 30));
+
+        jTabbedPane1.addTab("Menu Edit", jPanel4);
+
+        getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 600));
+
+        jPanel5.setBackground(new java.awt.Color(204, 255, 255));
+        jPanel5.setLayout(new java.awt.BorderLayout());
+
+        darkModeCheckBox.setBackground(new java.awt.Color(255, 255, 255));
+        darkModeCheckBox.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        darkModeCheckBox.setForeground(new java.awt.Color(0, 0, 0));
+        darkModeCheckBox.setText("Dark Mode");
+        darkModeCheckBox.setContentAreaFilled(false);
+        darkModeCheckBox.setMargin(new java.awt.Insets(6, 6, 6, 6));
+        darkModeCheckBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                darkModeCheckBoxItemStateChanged(evt);
+            }
+        });
+        jPanel5.add(darkModeCheckBox, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 600, 1000, 70));
+
+        setSize(new java.awt.Dimension(1016, 679));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtonActionPerformed
+        deleteFood();
+    }//GEN-LAST:event_DeleteButtonActionPerformed
+
+    private void darkModeCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_darkModeCheckBoxItemStateChanged
+        if (darkModeCheckBox.isSelected()) {
+            ThemeManager.setDarkMode(this);
+        } else {
+            ThemeManager.setLightMode(this);
+        }
+    }//GEN-LAST:event_darkModeCheckBoxItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -68,7 +211,7 @@ public class ManagerMenu extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(ManagerMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -76,7 +219,49 @@ public class ManagerMenu extends javax.swing.JFrame {
             }
         });
     }
+    
+    private void deleteFood() {
+        try {
+            List<String> foods = Files.readAllLines(menus_file.toPath());
+            List<String> updatedFoods = new ArrayList<>();
 
+            boolean found = false;
+
+            for (String food : foods) {
+                if (food.startsWith(foodIDField.getText().trim() + ";")) {
+                    found = true;
+                    continue;
+                }
+                updatedFoods.add(food);
+            }
+
+            if (!found) {
+                throw new IOException("Food not found!");
+            }
+
+            Files.write(menus_file.toPath(), updatedFoods);
+            reloadData(model);
+
+            JOptionPane.showMessageDialog(this, "Food deleted successfully!");
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error deleting food: " + e.getMessage());
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton DeleteButton;
+    private javax.swing.JLabel LoggedUser;
+    private javax.swing.JTable Menu;
+    private javax.swing.JCheckBox darkModeCheckBox;
+    private javax.swing.JTextField foodIDField;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 }
