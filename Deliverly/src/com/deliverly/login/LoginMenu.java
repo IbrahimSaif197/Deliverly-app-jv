@@ -12,6 +12,7 @@ import com.deliverly.main.manager.ManagerMenu;
 import com.deliverly.main.runner.RunnerMenu;
 import com.deliverly.main.vendor.VendorMenu;
 
+
 /**
  *
  * @author natsu
@@ -22,6 +23,13 @@ public class LoginMenu extends javax.swing.JFrame {
     public LoginMenu() {
         initComponents();
         this.pack();
+        ThemeManager.setLightMode(this);
+        darkModeCheckBox.setSelected(ThemeManager.isDarkModeEnabled()); 
+        if (ThemeManager.isDarkModeEnabled()) {
+            ThemeManager.setDarkMode(this);
+        } else {
+            ThemeManager.setLightMode(this);
+        }
     }
     public void setUsername(String username){
         LoginMenu.username = username;
@@ -51,6 +59,7 @@ public class LoginMenu extends javax.swing.JFrame {
         passwordlogo = new javax.swing.JLabel();
         LoginButton = new javax.swing.JButton();
         ClearButton = new javax.swing.JButton();
+        darkModeCheckBox = new javax.swing.JCheckBox();
         EastPanel = new javax.swing.JPanel();
         Logo = new javax.swing.JLabel();
 
@@ -151,6 +160,18 @@ public class LoginMenu extends javax.swing.JFrame {
 
         WestPanel.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 280, 270));
 
+        darkModeCheckBox.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        darkModeCheckBox.setForeground(new java.awt.Color(0, 0, 0));
+        darkModeCheckBox.setText("Dark Mode");
+        darkModeCheckBox.setToolTipText("");
+        darkModeCheckBox.setContentAreaFilled(false);
+        darkModeCheckBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                darkModeCheckBoxItemStateChanged(evt);
+            }
+        });
+        WestPanel.add(darkModeCheckBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, 110, 40));
+
         getContentPane().add(WestPanel, java.awt.BorderLayout.WEST);
 
         EastPanel.setBackground(new java.awt.Color(204, 255, 255));
@@ -158,12 +179,28 @@ public class LoginMenu extends javax.swing.JFrame {
         EastPanel.setMaximumSize(new java.awt.Dimension(200, 200));
         EastPanel.setMinimumSize(new java.awt.Dimension(200, 200));
         EastPanel.setPreferredSize(new java.awt.Dimension(540, 500));
-        EastPanel.setLayout(new java.awt.GridLayout(1, 0));
 
         Logo.setForeground(new java.awt.Color(0, 0, 0));
         Logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/data/black_on_trans-resized (1).png"))); // NOI18N
-        EastPanel.add(Logo);
+
+        javax.swing.GroupLayout EastPanelLayout = new javax.swing.GroupLayout(EastPanel);
+        EastPanel.setLayout(EastPanelLayout);
+        EastPanelLayout.setHorizontalGroup(
+            EastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(EastPanelLayout.createSequentialGroup()
+                .addGap(88, 88, 88)
+                .addComponent(Logo, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(88, Short.MAX_VALUE))
+        );
+        EastPanelLayout.setVerticalGroup(
+            EastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(EastPanelLayout.createSequentialGroup()
+                .addGap(113, 113, 113)
+                .addComponent(Logo, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(113, Short.MAX_VALUE))
+        );
+
         Logo.getAccessibleContext().setAccessibleName("");
 
         getContentPane().add(EastPanel, java.awt.BorderLayout.EAST);
@@ -198,6 +235,14 @@ public class LoginMenu extends javax.swing.JFrame {
         LoginButtonActionPerformed(null);
     }
     }//GEN-LAST:event_passwordKeyPressed
+
+    private void darkModeCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_darkModeCheckBoxItemStateChanged
+        if (darkModeCheckBox.isSelected()) {
+            ThemeManager.setDarkMode(this);
+        } else {
+            ThemeManager.setLightMode(this);
+        }
+    }//GEN-LAST:event_darkModeCheckBoxItemStateChanged
     
     public void logIn() {
         try{
@@ -240,7 +285,7 @@ public class LoginMenu extends javax.swing.JFrame {
                 else if(user.split(";")[0].contains("ADM") == true){
                     new AdminMenu().setVisible(true);
                 }
-                else if(user.split(";")[0].contains("MNG") == true){
+                else if(user.split(";")[0].contains("MGR") == true){
                     new ManagerMenu().setVisible(true);
                 }
                 
@@ -298,6 +343,7 @@ public class LoginMenu extends javax.swing.JFrame {
     private javax.swing.JLabel PassLabel;
     private javax.swing.JLabel UserLabel;
     private javax.swing.JPanel WestPanel;
+    private javax.swing.JCheckBox darkModeCheckBox;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;

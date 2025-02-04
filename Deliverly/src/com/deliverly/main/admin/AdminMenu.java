@@ -4,6 +4,7 @@ package com.deliverly.main.admin;
 
 
 import com.deliverly.login.LoginMenu;
+import com.deliverly.login.ThemeManager;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -60,6 +61,14 @@ public final class AdminMenu extends javax.swing.JFrame {
         //tips config
         ToolTipManager.sharedInstance().setInitialDelay(0);
         ToolTipManager.sharedInstance().setDismissDelay(2000);
+        
+        darkModeCheckBox.setSelected(ThemeManager.isDarkModeEnabled());
+        darkModeCheckBox1.setSelected(ThemeManager.isDarkModeEnabled());
+        if (ThemeManager.isDarkModeEnabled()) {
+            ThemeManager.setDarkMode(this);
+        } else {
+            ThemeManager.setLightMode(this);
+        }
         
         //table
         this.model = (DefaultTableModel) UsersTable.getModel();
@@ -135,6 +144,7 @@ public final class AdminMenu extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         LoggedUser = new javax.swing.JLabel();
+        darkModeCheckBox = new javax.swing.JCheckBox();
         TopUpPanel = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         userID = new javax.swing.JTextField();
@@ -150,6 +160,7 @@ public final class AdminMenu extends javax.swing.JFrame {
         YearSpinner = new javax.swing.JSpinner();
         jLabel17 = new javax.swing.JLabel();
         MonthSpinner = new javax.swing.JSpinner();
+        darkModeCheckBox1 = new javax.swing.JCheckBox();
         Table = new javax.swing.JPanel();
         Delete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -167,7 +178,7 @@ public final class AdminMenu extends javax.swing.JFrame {
         jTabbedPane1.setMaximumSize(new java.awt.Dimension(300, 300));
         jTabbedPane1.setMinimumSize(new java.awt.Dimension(300, 300));
 
-        RegistrationPanel.setBackground(new java.awt.Color(225, 254, 255));
+        RegistrationPanel.setBackground(new java.awt.Color(204, 255, 255));
         RegistrationPanel.setForeground(new java.awt.Color(0, 0, 0));
         RegistrationPanel.setMaximumSize(new java.awt.Dimension(200, 200));
         RegistrationPanel.setMinimumSize(new java.awt.Dimension(200, 200));
@@ -336,9 +347,26 @@ public final class AdminMenu extends javax.swing.JFrame {
         LoggedUser.setText("User");
         RegistrationPanel.add(LoggedUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, -1, -1));
 
+        darkModeCheckBox.setBackground(new java.awt.Color(255, 255, 255));
+        darkModeCheckBox.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        darkModeCheckBox.setForeground(new java.awt.Color(0, 0, 0));
+        darkModeCheckBox.setText("Dark Mode");
+        darkModeCheckBox.setContentAreaFilled(false);
+        darkModeCheckBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                darkModeCheckBoxItemStateChanged(evt);
+            }
+        });
+        darkModeCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                darkModeCheckBoxActionPerformed(evt);
+            }
+        });
+        RegistrationPanel.add(darkModeCheckBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 580, 110, 30));
+
         jTabbedPane1.addTab("User Management", RegistrationPanel);
 
-        TopUpPanel.setBackground(new java.awt.Color(225, 254, 255));
+        TopUpPanel.setBackground(new java.awt.Color(204, 255, 255));
         TopUpPanel.setForeground(new java.awt.Color(204, 255, 255));
         TopUpPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -423,9 +451,21 @@ public final class AdminMenu extends javax.swing.JFrame {
         MonthSpinner.setModel(new javax.swing.SpinnerNumberModel(1, 1, 12, 1));
         TopUpPanel.add(MonthSpinner, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 230, 50, 30));
 
+        darkModeCheckBox1.setBackground(new java.awt.Color(255, 255, 255));
+        darkModeCheckBox1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        darkModeCheckBox1.setForeground(new java.awt.Color(0, 0, 0));
+        darkModeCheckBox1.setText("Dark Mode");
+        darkModeCheckBox1.setContentAreaFilled(false);
+        darkModeCheckBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                darkModeCheckBox1ItemStateChanged(evt);
+            }
+        });
+        TopUpPanel.add(darkModeCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 540, 110, 40));
+
         jTabbedPane1.addTab("Top Up Menu", TopUpPanel);
 
-        Table.setBackground(new java.awt.Color(225, 254, 255));
+        Table.setBackground(new java.awt.Color(204, 255, 255));
         Table.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Delete.setForeground(new java.awt.Color(0, 0, 0));
@@ -494,9 +534,9 @@ public final class AdminMenu extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Table, javax.swing.GroupLayout.PREFERRED_SIZE, 635, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
+                    .addComponent(Table, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -615,6 +655,26 @@ public final class AdminMenu extends javax.swing.JFrame {
     private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteActionPerformed
         deleteUser();
     }//GEN-LAST:event_DeleteActionPerformed
+
+    private void darkModeCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_darkModeCheckBoxItemStateChanged
+        if (darkModeCheckBox.isSelected()) {
+            ThemeManager.setDarkMode(this);
+        } else {
+            ThemeManager.setLightMode(this);
+        }
+    }//GEN-LAST:event_darkModeCheckBoxItemStateChanged
+
+    private void darkModeCheckBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_darkModeCheckBox1ItemStateChanged
+        if (darkModeCheckBox1.isSelected()) {
+            ThemeManager.setDarkMode(this);
+        } else {
+            ThemeManager.setLightMode(this);
+        }
+    }//GEN-LAST:event_darkModeCheckBox1ItemStateChanged
+
+    private void darkModeCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_darkModeCheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_darkModeCheckBoxActionPerformed
 
     private void createUser(){
         try { 
@@ -752,30 +812,25 @@ public final class AdminMenu extends javax.swing.JFrame {
     
     private void deleteUser() {
         try {
-            List<String> lines = Files.readAllLines(users_file.toPath());
-            List<String> updatedLines = new ArrayList<>();
+            List<String> users = Files.readAllLines(users_file.toPath());
+            List<String> updatedUsers = new ArrayList<>();
 
             boolean found = false;
 
-            for (String line : lines) {
+            for (String line : users) {
                 if (line.startsWith(ID.getText().trim() + ";")) {
                     found = true;
                     continue; // Skip this line
                 }
-                updatedLines.add(line);
+                updatedUsers.add(line);
             }
 
             if (!found) {
                 throw new IOException("User not found!");
             }
-
-            // Write back to file
-            Files.write(users_file.toPath(), updatedLines);
-
-            // Reload table data
+            
+            Files.write(users_file.toPath(), updatedUsers);
             reloadData(model);
-
-            // Clear input fields
             clearFields();
 
             JOptionPane.showMessageDialog(this, "User deleted successfully!");
@@ -1088,6 +1143,8 @@ public final class AdminMenu extends javax.swing.JFrame {
     private javax.swing.JTable UsersTable;
     private javax.swing.JSpinner YearSpinner;
     private javax.swing.JTextField address;
+    private javax.swing.JCheckBox darkModeCheckBox;
+    private javax.swing.JCheckBox darkModeCheckBox1;
     private javax.swing.JTextField emailField;
     private javax.swing.JButton goBack;
     private javax.swing.JLabel jLabel1;
