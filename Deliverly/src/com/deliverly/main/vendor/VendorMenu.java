@@ -163,7 +163,7 @@ public class VendorMenu extends javax.swing.JFrame {
         setBackground(new java.awt.Color(240, 240, 240));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBackground(new java.awt.Color(242, 234, 211));
+        jPanel2.setBackground(new java.awt.Color(153, 255, 255));
         jPanel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -247,12 +247,14 @@ public class VendorMenu extends javax.swing.JFrame {
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 914, 40));
 
+        mainPanel.setBackground(new java.awt.Color(204, 255, 255));
         mainPanel.setLayout(new java.awt.CardLayout());
 
-        menuPanel.setBackground(new java.awt.Color(250, 250, 250));
+        menuPanel.setBackground(new java.awt.Color(204, 255, 255));
         menuPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jScrollPane1.setBackground(new java.awt.Color(250, 250, 250));
+        jScrollPane1.setForeground(new java.awt.Color(204, 255, 255));
 
         menuTable.setBackground(new java.awt.Color(250, 250, 250));
         menuTable.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -375,7 +377,7 @@ public class VendorMenu extends javax.swing.JFrame {
 
         mainPanel.add(menuPanel, "card3");
 
-        homePanel.setBackground(new java.awt.Color(250, 250, 250));
+        homePanel.setBackground(new java.awt.Color(204, 255, 255));
         homePanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -390,7 +392,7 @@ public class VendorMenu extends javax.swing.JFrame {
 
         mainPanel.add(homePanel, "card2");
 
-        orderPanel.setBackground(new java.awt.Color(250, 250, 250));
+        orderPanel.setBackground(new java.awt.Color(204, 255, 255));
         orderPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jScrollPane2.setBackground(new java.awt.Color(250, 250, 250));
@@ -478,7 +480,7 @@ public class VendorMenu extends javax.swing.JFrame {
 
         mainPanel.add(orderPanel, "card4");
 
-        orderHistoryPanel.setBackground(new java.awt.Color(250, 250, 250));
+        orderHistoryPanel.setBackground(new java.awt.Color(204, 255, 255));
         orderHistoryPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jScrollPane3.setBackground(new java.awt.Color(250, 250, 250));
@@ -523,7 +525,7 @@ public class VendorMenu extends javax.swing.JFrame {
 
         mainPanel.add(orderHistoryPanel, "card5");
 
-        reviewPanel.setBackground(new java.awt.Color(250, 250, 250));
+        reviewPanel.setBackground(new java.awt.Color(204, 255, 255));
         reviewPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jScrollPane4.setBackground(new java.awt.Color(250, 250, 250));
@@ -574,7 +576,7 @@ public class VendorMenu extends javax.swing.JFrame {
 
         mainPanel.add(reviewPanel, "card6");
 
-        revenuePanel.setBackground(new java.awt.Color(250, 250, 250));
+        revenuePanel.setBackground(new java.awt.Color(204, 255, 255));
         revenuePanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
