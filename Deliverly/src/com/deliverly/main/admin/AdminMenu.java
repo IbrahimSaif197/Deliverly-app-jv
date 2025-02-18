@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -44,12 +42,19 @@ public final class AdminMenu extends javax.swing.JFrame {
             BufferedReader br = new BufferedReader(fr);
             String user;
             while ((user = br.readLine()) != null) {
-                String[] user_data = user.split(";");
-                tableModel.addRow(new Object[]{
-                    user_data[0], user_data[1], user_data[2], user_data[3],
-                    user_data[4], user_data[5], user_data[6], user_data[7],
-                    user_data[8]});
+                if (!user.trim().isEmpty()) {
+                    String[] user_data = user.split(";");
+                    if (user_data.length >= 9) {
+                        tableModel.addRow(new Object[]{
+                            user_data[0], user_data[1], user_data[2], user_data[3],
+                            user_data[4], user_data[5], user_data[6], user_data[7],
+                            user_data[8]});
+                    }
+                }
+                
             }
+            br.close();
+            fr.close();
         } catch (IOException e){
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -171,6 +176,7 @@ public final class AdminMenu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 255, 255));
+        setMinimumSize(new java.awt.Dimension(1000, 660));
         setPreferredSize(new java.awt.Dimension(1000, 660));
 
         jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
@@ -362,7 +368,7 @@ public final class AdminMenu extends javax.swing.JFrame {
                 darkModeCheckBoxActionPerformed(evt);
             }
         });
-        RegistrationPanel.add(darkModeCheckBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 580, 110, 30));
+        RegistrationPanel.add(darkModeCheckBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 550, 110, 30));
 
         jTabbedPane1.addTab("User Management", RegistrationPanel);
 
@@ -461,7 +467,7 @@ public final class AdminMenu extends javax.swing.JFrame {
                 darkModeCheckBox1ItemStateChanged(evt);
             }
         });
-        TopUpPanel.add(darkModeCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 540, 110, 40));
+        TopUpPanel.add(darkModeCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 540, 110, 40));
 
         jTabbedPane1.addTab("Top Up Menu", TopUpPanel);
 
@@ -699,6 +705,8 @@ public final class AdminMenu extends javax.swing.JFrame {
                     role
                 );
                 bw.flush();
+                bw.close();
+                fw.close();
                 JOptionPane.showMessageDialog(null, "Successfully added a new " + role);
                 this.reloadData(model);
             }

@@ -1,5 +1,3 @@
-001;vendor001;customer001;Burger;10.00;Pending;hmmmverygood
-002;vendor002;customer002;Pizza;15.00;Pending
 ORD101;CUS201;VEN302;MI102,MI103;2025-07-26;Pending;Dine-In;25.0
 Review: The food was great!
 Review: I loved the ambience.

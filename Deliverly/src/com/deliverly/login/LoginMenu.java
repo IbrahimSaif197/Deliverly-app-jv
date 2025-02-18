@@ -19,7 +19,7 @@ import com.deliverly.main.vendor.VendorMenu;
  */
 public class LoginMenu extends javax.swing.JFrame {
     
-    private static String username;
+    public static String username;
     public LoginMenu() {
         initComponents();
         this.pack();
@@ -182,7 +182,7 @@ public class LoginMenu extends javax.swing.JFrame {
 
         Logo.setForeground(new java.awt.Color(0, 0, 0));
         Logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/data/black_on_trans-resized (1).png"))); // NOI18N
+        Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/data/dark.png"))); // NOI18N
 
         javax.swing.GroupLayout EastPanelLayout = new javax.swing.GroupLayout(EastPanel);
         EastPanel.setLayout(EastPanelLayout);

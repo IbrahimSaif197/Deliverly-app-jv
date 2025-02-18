@@ -54,6 +54,8 @@ public class CustomerMenu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        menuPanel.setBackground(new java.awt.Color(204, 255, 255));
+
         menuList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
@@ -108,6 +110,8 @@ public class CustomerMenu extends javax.swing.JFrame {
         );
 
         mainPanel.addTab("Menu", menuPanel);
+
+        orderHistoryPanel.setBackground(new java.awt.Color(204, 255, 255));
 
         orderHistoryList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -167,6 +171,8 @@ public class CustomerMenu extends javax.swing.JFrame {
 
         mainPanel.addTab("Orders", orderHistoryPanel);
 
+        complainsPanel.setBackground(new java.awt.Color(204, 255, 255));
+
         complainsTextArea.setColumns(20);
         complainsTextArea.setRows(5);
         complains.setViewportView(complainsTextArea);
@@ -205,6 +211,8 @@ public class CustomerMenu extends javax.swing.JFrame {
 
         mainPanel.addTab("Complains", complainsPanel);
 
+        transactionHistoryPanel.setBackground(new java.awt.Color(204, 255, 255));
+
         transactionTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null}
@@ -216,6 +224,7 @@ public class CustomerMenu extends javax.swing.JFrame {
         transactionTable.setColumnSelectionAllowed(true);
         jScrollPane3.setViewportView(transactionTable);
 
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Transaction History");
 
         javax.swing.GroupLayout transactionHistoryPanelLayout = new javax.swing.GroupLayout(transactionHistoryPanel);

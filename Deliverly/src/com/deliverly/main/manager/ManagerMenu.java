@@ -15,19 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.*;
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLightLaf;
-import java.awt.Color;
-import java.awt.Component;
 /**
  *
  * @author natsu
  */
 public final class ManagerMenu extends javax.swing.JFrame {
-
+    File orders_file = new File("src//data//orders.txt");
     File menus_file = new File("src//data//restaurants.txt");
-    DefaultTableModel model;
+    File complaints_file = new File("src//data//complaints.txt");
+    DefaultTableModel model, modelOrder, modelComplaints;
     LoginMenu login = new LoginMenu();
     
     
@@ -36,29 +32,82 @@ public final class ManagerMenu extends javax.swing.JFrame {
             tableModel.setRowCount(0);
             FileReader fr = new FileReader(menus_file);
             BufferedReader br = new BufferedReader(fr);
-            String user;
-            while ((user = br.readLine()) != null) {
-                String[] user_data = user.split(";");
+            String meal;
+            while ((meal = br.readLine()) != null) {
+                String[] meal_data = meal.split(";");
                 tableModel.addRow(new Object[]{
-                    user_data[0], user_data[1], user_data[2], user_data[3]
+                    meal_data[0], meal_data[1], meal_data[2], meal_data[4]
                     });
             }
         } catch (IOException e){
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
+    
+    public void reloadDataOrders(DefaultTableModel tableModel){
+        try {
+            tableModel.setRowCount(0);
+            FileReader fr = new FileReader(orders_file);
+            BufferedReader br = new BufferedReader(fr);
+            String order;
+            while ((order = br.readLine()) != null) {
+                if (!order.startsWith("ORD")) {
+                    continue;
+                }
+
+                String[] order_data = order.split(";");
+                tableModel.addRow(new Object[]{
+                    order_data[0], order_data[1], order_data[2], order_data[3],
+                    order_data[7]
+                });
+            }
+
+            br.close();
+            fr.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    public void reloadDataComplaints(DefaultTableModel tableModel){
+        try {
+            tableModel.setRowCount(0);
+            FileReader fr = new FileReader(complaints_file);
+            BufferedReader br = new BufferedReader(fr);
+            String complaint;
+            while ((complaint = br.readLine()) != null) {
+                if (!complaint.startsWith("CUS")) {
+                    continue;
+                }
+
+                String[] complaints_data = complaint.split(";");
+                tableModel.addRow(new Object[]{
+                    complaints_data[0], complaints_data[1], complaints_data[2]
+                });
+            }
+
+            br.close();
+            fr.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
     public ManagerMenu() {
         initComponents();
         LoggedUser.setText(login.getUsername());
-        
-        this.model = (DefaultTableModel) Menu.getModel();
+        this.modelComplaints = (DefaultTableModel) Complaints.getModel();
+        this.modelOrder = (DefaultTableModel) Revenue.getModel();
+        this.model = (DefaultTableModel) FoodMenu.getModel();
         this.reloadData(model);
-       
-        Menu.getSelectionModel().addListSelectionListener(event -> {
+        this.reloadDataOrders(modelOrder);
+        this.reloadDataComplaints(modelComplaints);
+        OverallRevenue.setText(estimatedRevenue());
+        TotalOrders.setText(totalOrders());
+        
+        FoodMenu.getSelectionModel().addListSelectionListener(event -> {
         if (!event.getValueIsAdjusting()) {
-            int selectedRow = Menu.getSelectedRow();
+            int selectedRow = FoodMenu.getSelectedRow();
             if (selectedRow != -1) {
-                String foodID = (String) Menu.getValueAt(selectedRow, 0);
+                String foodID = (String) FoodMenu.getValueAt(selectedRow, 0);
                 foodIDField.setText(foodID);
             }
         }
@@ -78,14 +127,25 @@ public final class ManagerMenu extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         LoggedUser = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        Revenue = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        OverallRevenue = new javax.swing.JLabel();
+        TotalOrders = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        Complaints = new javax.swing.JTable();
+        jLabel12 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        Menu = new javax.swing.JTable();
+        FoodMenu = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         foodIDField = new javax.swing.JTextField();
         DeleteButton = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         darkModeCheckBox = new javax.swing.JCheckBox();
 
@@ -107,20 +167,108 @@ public final class ManagerMenu extends javax.swing.JFrame {
         jLabel11.setText("Welcome back,");
         jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
-        jTabbedPane1.addTab("tab1", jPanel1);
+        Revenue.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Order ID", "Customer ID", "Vendor ID", "Date", "Price"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(Revenue);
+        if (Revenue.getColumnModel().getColumnCount() > 0) {
+            Revenue.getColumnModel().getColumn(0).setResizable(false);
+            Revenue.getColumnModel().getColumn(1).setResizable(false);
+            Revenue.getColumnModel().getColumn(2).setResizable(false);
+            Revenue.getColumnModel().getColumn(3).setResizable(false);
+            Revenue.getColumnModel().getColumn(4).setResizable(false);
+        }
+
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 720, 470));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("Overall Revenue : ");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 160, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Total Orders : ");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 120, -1, -1));
+
+        OverallRevenue.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        OverallRevenue.setForeground(new java.awt.Color(0, 0, 0));
+        OverallRevenue.setText("amount");
+        jPanel1.add(OverallRevenue, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 160, -1, -1));
+
+        TotalOrders.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        TotalOrders.setForeground(new java.awt.Color(0, 0, 0));
+        TotalOrders.setText("amount");
+        jPanel1.add(TotalOrders, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 120, -1, -1));
+
+        jTabbedPane1.addTab("Revenue Dashboard", jPanel1);
 
         jPanel2.setBackground(new java.awt.Color(204, 255, 255));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jTabbedPane1.addTab("tab2", jPanel2);
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel13.setText("Delivery Runners Performance");
+        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+
+        jTabbedPane1.addTab("Runner Performance", jPanel2);
 
         jPanel3.setBackground(new java.awt.Color(204, 255, 255));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jTabbedPane1.addTab("tab3", jPanel3);
+
+        Complaints.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "CustomerID", "Complaint", "Status"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(Complaints);
+        if (Complaints.getColumnModel().getColumnCount() > 0) {
+            Complaints.getColumnModel().getColumn(0).setResizable(false);
+            Complaints.getColumnModel().getColumn(1).setResizable(false);
+            Complaints.getColumnModel().getColumn(1).setPreferredWidth(500);
+            Complaints.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        jPanel3.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 900, 490));
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel12.setText("Customer Complaints");
+        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+
+        jTabbedPane1.addTab("Customer Complaints", jPanel3);
 
         jPanel4.setBackground(new java.awt.Color(204, 255, 255));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        Menu.setModel(new javax.swing.table.DefaultTableModel(
+        FoodMenu.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -131,7 +279,7 @@ public final class ManagerMenu extends javax.swing.JFrame {
                 "Food ID", "Food Name", "Description", "Price"
             }
         ));
-        jScrollPane1.setViewportView(Menu);
+        jScrollPane1.setViewportView(FoodMenu);
 
         jPanel4.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 97, 700, 441));
 
@@ -146,6 +294,11 @@ public final class ManagerMenu extends javax.swing.JFrame {
             }
         });
         jPanel4.add(DeleteButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(84, 250, 80, 30));
+
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel14.setText("Vendors Menu Editing");
+        jPanel4.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
         jTabbedPane1.addTab("Menu Edit", jPanel4);
 
@@ -219,6 +372,56 @@ public final class ManagerMenu extends javax.swing.JFrame {
             }
         });
     }
+    private String estimatedRevenue(){
+        double total = 0.0;
+        double company_percent = 0.20;
+        double company_revenue = 0.0;
+        
+        try {
+            FileReader fr = new FileReader(orders_file);
+            BufferedReader br = new BufferedReader(fr);
+            String order;
+            while ((order = br.readLine()) != null) {
+                if (!order.startsWith("ORD")) {
+                    continue;
+                }
+                String[] order_data = order.split(";"); 
+                
+                double price = Double.parseDouble(order_data[7]);
+                total += price;
+            }
+
+            br.close();
+            fr.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        company_revenue = total * company_percent;
+        String revenueStr = company_revenue + "RM";
+        
+        return revenueStr;
+        
+    }
+    
+    private String totalOrders(){
+        int orders = 0;
+        try {
+            FileReader fr = new FileReader(orders_file);
+            BufferedReader br = new BufferedReader(fr);
+            String order;
+            while ((order = br.readLine()) != null) {
+                if (order.startsWith("ORD")) {
+                    orders++;
+                }
+            }
+            br.close();
+            fr.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        String ordersStr = String.valueOf(orders);
+        return ordersStr;
+    }
     
     private void deleteFood() {
         try {
@@ -249,19 +452,30 @@ public final class ManagerMenu extends javax.swing.JFrame {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable Complaints;
     private javax.swing.JButton DeleteButton;
+    private javax.swing.JTable FoodMenu;
     private javax.swing.JLabel LoggedUser;
-    private javax.swing.JTable Menu;
+    private javax.swing.JLabel OverallRevenue;
+    private javax.swing.JTable Revenue;
+    private javax.swing.JLabel TotalOrders;
     private javax.swing.JCheckBox darkModeCheckBox;
     private javax.swing.JTextField foodIDField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 }

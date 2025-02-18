@@ -167,11 +167,8 @@ public class VendorMenu extends javax.swing.JFrame {
         jPanel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        orderButton.setBackground(new java.awt.Color(225, 198, 153));
         orderButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        orderButton.setForeground(new java.awt.Color(51, 51, 51));
         orderButton.setText("Order");
-        orderButton.setBorder(null);
         orderButton.setFocusPainted(false);
         orderButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -180,11 +177,8 @@ public class VendorMenu extends javax.swing.JFrame {
         });
         jPanel2.add(orderButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 5, 80, 30));
 
-        homeButton.setBackground(new java.awt.Color(225, 198, 153));
         homeButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        homeButton.setForeground(new java.awt.Color(51, 51, 51));
         homeButton.setText("Home");
-        homeButton.setBorder(null);
         homeButton.setFocusPainted(false);
         homeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -193,11 +187,8 @@ public class VendorMenu extends javax.swing.JFrame {
         });
         jPanel2.add(homeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 5, 80, 30));
 
-        orderHistoryButton.setBackground(new java.awt.Color(225, 198, 153));
         orderHistoryButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        orderHistoryButton.setForeground(new java.awt.Color(51, 51, 51));
         orderHistoryButton.setText("Order History");
-        orderHistoryButton.setBorder(null);
         orderHistoryButton.setFocusPainted(false);
         orderHistoryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -206,11 +197,8 @@ public class VendorMenu extends javax.swing.JFrame {
         });
         jPanel2.add(orderHistoryButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 5, 120, 30));
 
-        reviewButton.setBackground(new java.awt.Color(225, 198, 153));
         reviewButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        reviewButton.setForeground(new java.awt.Color(51, 51, 51));
         reviewButton.setText("Reviews");
-        reviewButton.setBorder(null);
         reviewButton.setFocusPainted(false);
         reviewButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -219,11 +207,8 @@ public class VendorMenu extends javax.swing.JFrame {
         });
         jPanel2.add(reviewButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 5, 80, 30));
 
-        revenueButton.setBackground(new java.awt.Color(225, 198, 153));
         revenueButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        revenueButton.setForeground(new java.awt.Color(51, 51, 51));
         revenueButton.setText("Revenue");
-        revenueButton.setBorder(null);
         revenueButton.setFocusPainted(false);
         revenueButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -232,11 +217,8 @@ public class VendorMenu extends javax.swing.JFrame {
         });
         jPanel2.add(revenueButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 5, 80, 30));
 
-        menuButton.setBackground(new java.awt.Color(225, 198, 153));
         menuButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        menuButton.setForeground(new java.awt.Color(51, 51, 51));
         menuButton.setText("Menu");
-        menuButton.setBorder(null);
         menuButton.setFocusPainted(false);
         menuButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -283,7 +265,6 @@ public class VendorMenu extends javax.swing.JFrame {
 
         itemIdField.setBackground(new java.awt.Color(255, 255, 255));
         itemIdField.setForeground(new java.awt.Color(51, 51, 51));
-        itemIdField.setText("jTextField2");
         itemIdField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemIdFieldActionPerformed(evt);
@@ -298,7 +279,6 @@ public class VendorMenu extends javax.swing.JFrame {
 
         itemNameField.setBackground(new java.awt.Color(255, 255, 255));
         itemNameField.setForeground(new java.awt.Color(51, 51, 51));
-        itemNameField.setText("jTextField2");
         itemNameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemNameFieldActionPerformed(evt);
@@ -313,7 +293,6 @@ public class VendorMenu extends javax.swing.JFrame {
 
         itemDescriptionField.setBackground(new java.awt.Color(255, 255, 255));
         itemDescriptionField.setForeground(new java.awt.Color(51, 51, 51));
-        itemDescriptionField.setText("jTextField2");
         itemDescriptionField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemDescriptionFieldActionPerformed(evt);
@@ -328,7 +307,6 @@ public class VendorMenu extends javax.swing.JFrame {
 
         itemPriceField.setBackground(new java.awt.Color(255, 255, 255));
         itemPriceField.setForeground(new java.awt.Color(51, 51, 51));
-        itemPriceField.setText("jTextField2");
         itemPriceField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemPriceFieldActionPerformed(evt);
@@ -336,11 +314,8 @@ public class VendorMenu extends javax.swing.JFrame {
         });
         menuPanel.add(itemPriceField, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 140, 150, 25));
 
-        createMenuItemButton.setBackground(new java.awt.Color(225, 198, 153));
         createMenuItemButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        createMenuItemButton.setForeground(new java.awt.Color(51, 51, 51));
         createMenuItemButton.setText("Create");
-        createMenuItemButton.setBorder(null);
         createMenuItemButton.setFocusPainted(false);
         createMenuItemButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -349,11 +324,8 @@ public class VendorMenu extends javax.swing.JFrame {
         });
         menuPanel.add(createMenuItemButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 180, 80, 30));
 
-        deleteMenuItemButton.setBackground(new java.awt.Color(225, 198, 153));
         deleteMenuItemButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        deleteMenuItemButton.setForeground(new java.awt.Color(51, 51, 51));
         deleteMenuItemButton.setText("Delete");
-        deleteMenuItemButton.setBorder(null);
         deleteMenuItemButton.setFocusPainted(false);
         deleteMenuItemButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -362,11 +334,9 @@ public class VendorMenu extends javax.swing.JFrame {
         });
         menuPanel.add(deleteMenuItemButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 180, 80, 30));
 
-        updateMenuItemButton.setBackground(new java.awt.Color(225, 198, 153));
         updateMenuItemButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        updateMenuItemButton.setForeground(new java.awt.Color(51, 51, 51));
         updateMenuItemButton.setText("Update");
-        updateMenuItemButton.setBorder(null);
+        updateMenuItemButton.setToolTipText("");
         updateMenuItemButton.setFocusPainted(false);
         updateMenuItemButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -454,10 +424,7 @@ public class VendorMenu extends javax.swing.JFrame {
         });
         orderPanel.add(orderStatusBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 120, 181, 25));
 
-        acceptOrderButton.setBackground(new java.awt.Color(225, 198, 153));
-        acceptOrderButton.setForeground(new java.awt.Color(51, 51, 51));
         acceptOrderButton.setText("Accept");
-        acceptOrderButton.setBorder(null);
         acceptOrderButton.setFocusPainted(false);
         acceptOrderButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -466,10 +433,7 @@ public class VendorMenu extends javax.swing.JFrame {
         });
         orderPanel.add(acceptOrderButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 170, 80, 30));
 
-        cancelOrderButton.setBackground(new java.awt.Color(215, 122, 97));
-        cancelOrderButton.setForeground(new java.awt.Color(51, 51, 51));
         cancelOrderButton.setText("Cancel");
-        cancelOrderButton.setBorder(null);
         cancelOrderButton.setFocusPainted(false);
         cancelOrderButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -511,10 +475,7 @@ public class VendorMenu extends javax.swing.JFrame {
         orderHistoryComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "daily", "monthly", "quarterly", "yearly" }));
         orderHistoryPanel.add(orderHistoryComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 106, 25));
 
-        loadOrderHistoryButton.setBackground(new java.awt.Color(225, 198, 153));
-        loadOrderHistoryButton.setForeground(new java.awt.Color(51, 51, 51));
         loadOrderHistoryButton.setText("Load");
-        loadOrderHistoryButton.setBorder(null);
         loadOrderHistoryButton.setFocusPainted(false);
         loadOrderHistoryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -562,10 +523,7 @@ public class VendorMenu extends javax.swing.JFrame {
         });
         reviewPanel.add(reviewOrderId, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 15, 159, 25));
 
-        loadReviewsButton.setBackground(new java.awt.Color(225, 198, 153));
-        loadReviewsButton.setForeground(new java.awt.Color(51, 51, 51));
         loadReviewsButton.setText("Load Reviews");
-        loadReviewsButton.setBorder(null);
         loadReviewsButton.setFocusPainted(false);
         loadReviewsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
