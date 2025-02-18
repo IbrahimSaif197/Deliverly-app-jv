@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import com.deliverly.login.ThemeManager;
 
 public class VendorMenu extends javax.swing.JFrame {
 
@@ -115,6 +116,7 @@ public class VendorMenu extends javax.swing.JFrame {
         reviewButton = new javax.swing.JButton();
         revenueButton = new javax.swing.JButton();
         menuButton = new javax.swing.JButton();
+        darkModeCheckBox = new javax.swing.JCheckBox();
         mainPanel = new javax.swing.JPanel();
         menuPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -175,7 +177,7 @@ public class VendorMenu extends javax.swing.JFrame {
                 orderButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(orderButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 5, 80, 30));
+        jPanel2.add(orderButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 5, 90, 30));
 
         homeButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         homeButton.setText("Home");
@@ -195,7 +197,7 @@ public class VendorMenu extends javax.swing.JFrame {
                 orderHistoryButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(orderHistoryButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 5, 120, 30));
+        jPanel2.add(orderHistoryButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 5, 120, 30));
 
         reviewButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         reviewButton.setText("Reviews");
@@ -205,7 +207,7 @@ public class VendorMenu extends javax.swing.JFrame {
                 reviewButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(reviewButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 5, 80, 30));
+        jPanel2.add(reviewButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(424, 5, 90, 30));
 
         revenueButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         revenueButton.setText("Revenue");
@@ -215,7 +217,7 @@ public class VendorMenu extends javax.swing.JFrame {
                 revenueButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(revenueButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 5, 80, 30));
+        jPanel2.add(revenueButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 5, 100, 30));
 
         menuButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         menuButton.setText("Menu");
@@ -227,7 +229,24 @@ public class VendorMenu extends javax.swing.JFrame {
         });
         jPanel2.add(menuButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 5, 80, 30));
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 914, 40));
+        darkModeCheckBox.setBackground(new java.awt.Color(255, 255, 255));
+        darkModeCheckBox.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        darkModeCheckBox.setForeground(new java.awt.Color(0, 0, 0));
+        darkModeCheckBox.setText("Dark Mode");
+        darkModeCheckBox.setContentAreaFilled(false);
+        darkModeCheckBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                darkModeCheckBoxItemStateChanged(evt);
+            }
+        });
+        darkModeCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                darkModeCheckBoxActionPerformed(evt);
+            }
+        });
+        jPanel2.add(darkModeCheckBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 0, 110, 30));
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 914, 50));
 
         mainPanel.setBackground(new java.awt.Color(204, 255, 255));
         mainPanel.setLayout(new java.awt.CardLayout());
@@ -549,7 +568,7 @@ public class VendorMenu extends javax.swing.JFrame {
 
         mainPanel.add(revenuePanel, "card7");
 
-        getContentPane().add(mainPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 76, 914, 560));
+        getContentPane().add(mainPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 46, 914, 590));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -789,6 +808,18 @@ public class VendorMenu extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_orderIDFieldActionPerformed
 
+    private void darkModeCheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_darkModeCheckBoxItemStateChanged
+        if (darkModeCheckBox.isSelected()) {
+            ThemeManager.setDarkMode(this);
+        } else {
+            ThemeManager.setLightMode(this);
+        }
+    }//GEN-LAST:event_darkModeCheckBoxItemStateChanged
+
+    private void darkModeCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_darkModeCheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_darkModeCheckBoxActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -830,6 +861,7 @@ public class VendorMenu extends javax.swing.JFrame {
     private javax.swing.JButton acceptOrderButton;
     private javax.swing.JButton cancelOrderButton;
     private javax.swing.JButton createMenuItemButton;
+    private javax.swing.JCheckBox darkModeCheckBox;
     private javax.swing.JButton deleteMenuItemButton;
     private javax.swing.JButton homeButton;
     private javax.swing.JPanel homePanel;
