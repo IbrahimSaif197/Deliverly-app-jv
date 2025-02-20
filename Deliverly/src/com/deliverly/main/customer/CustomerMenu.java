@@ -7,13 +7,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 
 public class CustomerMenu extends JFrame {
-    private String username;
-    private Customer customer;
-    private javax.swing.JPanel reviewsPanel;
+private String username;
+private Customer customer;
+private javax.swing.JPanel reviewsPanel;
     
-    public CustomerMenu(String username) {
+public CustomerMenu(String username) {
         this.username = username;
         this.customer = new Customer(username);
         initComponents();
@@ -21,46 +25,71 @@ public class CustomerMenu extends JFrame {
         loadReviews();
         loadMenuItems();
         loadOrderHistory();
+        loadTransactionHistory();
         orderedItemsList.setModel(new DefaultListModel<>()); 
-
     }
-    
 private void loadReviews() {
     DefaultListModel<String> reviewsModel = new DefaultListModel<>();
     
     try (BufferedReader br = new BufferedReader(new FileReader("src/data/orders.txt"))) {
         String line;
         while ((line = br.readLine()) != null) {
-            if (line.startsWith("Review:")) { // Identify review lines in the file
+            if (line.startsWith("Review:")) { 
                 reviewsModel.addElement(line.replace("Review:", "").trim());
             }
         }
     } catch (IOException e) {
         JOptionPane.showMessageDialog(this, "Error loading reviews: " + e.getMessage());
     }
-    
     reviewsList.setModel(reviewsModel);
 }
 private void loadMenuItems() {
-    DefaultListModel<String> menuModel = new DefaultListModel<>();
+    DefaultListModel<String> foodModel = new DefaultListModel<>();
+    DefaultListModel<String> beverageModel = new DefaultListModel<>();
+    DefaultListModel<String> dessertModel = new DefaultListModel<>();
 
     try (BufferedReader br = new BufferedReader(new FileReader("src/data/menu.txt"))) {
         String line;
+        boolean isFirstLine = true;
+
         while ((line = br.readLine()) != null) {
+            if (isFirstLine) {
+                isFirstLine = false; // Skip header
+                continue;
+            }
+
             String[] details = line.split(";");
-            if (details.length == 4) {
-                String itemName = details[1] + " - $" + details[3]; // Format: "Burger - $5.99"
-                menuModel.addElement(itemName);
+            if (details.length == 5) {
+                String itemName = details[1];
+                String category = details[2]; 
+                String price = details[3]; 
+
+                String formattedItem = itemName + " - Rm" + price;
+                
+                switch (category.toLowerCase()) {
+                    case "food":
+                        foodModel.addElement(formattedItem);
+                        break;
+                    case "beverage":
+                        beverageModel.addElement(formattedItem);
+                        break;
+                    case "dessert":
+                        dessertModel.addElement(formattedItem);
+                        break;
+                }
             }
         }
     } catch (IOException e) {
         JOptionPane.showMessageDialog(this, "Error loading menu: " + e.getMessage());
     }
 
-    menuList.setModel(menuModel);
+    foodList.setModel(foodModel);
+    beverageList.setModel(beverageModel);
+    dessertList.setModel(dessertModel);
 }
+
 private void submitReview() {
-    String selectedOrder = orderHistoryList.getSelectedValue(); // Get selected order
+    String selectedOrder = orderHistoryList.getSelectedValue(); 
     String reviewText = reviewTextArea.getText().trim();
 
     if (selectedOrder == null) {
@@ -71,7 +100,6 @@ private void submitReview() {
         JOptionPane.showMessageDialog(this, "Enter a review before submitting.");
         return;
     }
-
     try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
         bw.newLine(); 
         bw.write("Review: " + reviewText);
@@ -84,23 +112,65 @@ private void submitReview() {
 private void loadOrderHistory() {
     DefaultListModel<String> orderModel = new DefaultListModel<>();
 
+    String userId = customer.getCustomerIDFromUsersFile(username);
+
+    if (userId.equals("ERROR")) {
+        JOptionPane.showMessageDialog(this, "Error retrieving Customer ID.");
+        return;
+    }
+    HashMap<String, String> menuItems = new HashMap<>();
+    HashMap<String, String> menuPrices = new HashMap<>();
+
+    try (BufferedReader br = new BufferedReader(new FileReader("src/data/menu.txt"))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            if (line.startsWith("ItemID")) continue; 
+
+            String[] details = line.split(";");
+            if (details.length >= 4) {
+                String itemID = details[0];  
+                String itemName = details[1]; 
+                String price = details[3];   
+
+                menuItems.put(itemID, itemName);
+                menuPrices.put(itemID, price);
+            }
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error loading menu items: " + e.getMessage());
+        return;
+    }
+
     try (BufferedReader br = new BufferedReader(new FileReader("src/data/orders.txt"))) {
         String line;
         while ((line = br.readLine()) != null) {
             String[] orderDetails = line.split(";");
 
-            // Ensure line contains a valid order (not a review)
-            if (orderDetails.length >= 7) {
-                String orderID = orderDetails[0];
-                String customerID = orderDetails[1]; // Extract Customer ID
-                String itemName = orderDetails[3];
-                String orderDate = orderDetails[4];
-                String status = orderDetails[5];
-                String price = orderDetails[7]; // Price is at index 7
+            if (orderDetails.length >= 8) {
+                String orderID = orderDetails[0];  
+                String orderCustomerID = orderDetails[1]; 
+                String vendorID = orderDetails[2]; 
+                String itemIDs = orderDetails[3];  
+                String orderDate = orderDetails[4]; 
+                String status = orderDetails[5];  
+                String deliveryMethod = orderDetails[6]; 
+                String totalPrice = orderDetails[7]; 
 
-                // Filter orders by current user
-                if (customerID.equals(username)) {
-                    String orderEntry = orderID + " | " + itemName + " | $" + price + " | " + status;
+                if (orderCustomerID.equals(userId)) {
+                    StringBuilder itemDetails = new StringBuilder();
+                    String[] itemArray = itemIDs.split(",");
+
+                    for (String itemID : itemArray) {
+                        if (menuItems.containsKey(itemID)) {
+                            itemDetails.append(menuItems.get(itemID)).append(" (Rm").append(menuPrices.get(itemID)).append("), ");
+                        }
+                    }
+
+                    if (itemDetails.length() > 0) {
+                        itemDetails.setLength(itemDetails.length() - 2);
+                    }
+
+                    String orderEntry = orderID + " | " + itemDetails + " | " + deliveryMethod + " | Rm" + totalPrice + " | " + status;
                     orderModel.addElement(orderEntry);
                 }
             }
@@ -109,8 +179,86 @@ private void loadOrderHistory() {
         JOptionPane.showMessageDialog(this, "Error loading order history: " + e.getMessage());
     }
 
-    
     orderHistoryList.setModel(orderModel);
+}
+
+private void loadTransactionHistory() {
+    String userId = customer.getCustomerIDFromUsersFile(username);
+    
+    if (userId.equals("ERROR")) {
+        JOptionPane.showMessageDialog(this, "Error retrieving Customer ID.");
+        return;
+    }
+
+    DefaultTableModel model = new DefaultTableModel();
+    model.setColumnIdentifiers(new String[]{"Card Number", "Date", "Amount"});
+
+    try (BufferedReader br = new BufferedReader(new FileReader("src/data/receipts.txt"))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] data = line.split(";");
+
+            if (data.length >= 6 && data[0].equals(userId)) { 
+                String cardNumber = data[2];   
+                String date = data[4];         
+                String amount = data[6];       
+
+                model.addRow(new Object[]{cardNumber, date, amount});
+            }
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error loading transaction history: " + e.getMessage());
+    }
+
+    transactionTable.setModel(model);
+}
+private String generateOrderID() {
+    int randomID = (int) (Math.random() * 900) + 100; 
+    return "ORD" + randomID;
+}
+private String getVendorIDForItem(String itemName) {
+    try (BufferedReader br = new BufferedReader(new FileReader("src/data/menu.txt"))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] menuDetails = line.split(";");
+            if (menuDetails.length >= 5 && menuDetails[1].equalsIgnoreCase(itemName.trim())) {
+                return menuDetails[4]; 
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return "VEN000"; 
+}
+private String getMenuItemID(String itemName) {
+    try (BufferedReader br = new BufferedReader(new FileReader("src/data/menu.txt"))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] menuDetails = line.split(";");
+            if (menuDetails.length >= 2 && menuDetails[1].equalsIgnoreCase(itemName.trim())) {
+                return menuDetails[0]; 
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return "MI000"; 
+}
+private void addToOrderList(javax.swing.JList<String> sourceList) {
+    String selectedItem = sourceList.getSelectedValue();
+    
+    if (selectedItem != null) {
+        DefaultListModel<String> model;
+        
+        if (orderedItemsList.getModel() instanceof DefaultListModel) {
+            model = (DefaultListModel<String>) orderedItemsList.getModel();
+        } else {
+            model = new DefaultListModel<>();
+            orderedItemsList.setModel(model);
+        }
+        
+        model.addElement(selectedItem); 
+    }
 }
 
 
@@ -120,13 +268,18 @@ private void loadOrderHistory() {
 
         mainPanel = new javax.swing.JTabbedPane();
         menuPanel = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        menuList = new javax.swing.JList<>();
         jLabel3 = new javax.swing.JLabel();
         deliveryOption = new javax.swing.JComboBox<>();
         placeOrderButton = new javax.swing.JButton();
-        orderedItemsList = new javax.swing.JList<>();
         jLabel5 = new javax.swing.JLabel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        FoodItemsList = new javax.swing.JScrollPane();
+        foodList = new javax.swing.JList<>();
+        beveragesItemsList = new javax.swing.JScrollPane();
+        beverageList = new javax.swing.JList<>();
+        dessertItemsList = new javax.swing.JScrollPane();
+        dessertList = new javax.swing.JList<>();
+        orderedItemsList = new javax.swing.JList<>();
         orderHistoryPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         orderHistoryList = new javax.swing.JList<>();
@@ -136,6 +289,7 @@ private void loadOrderHistory() {
         submitReviewButton = new javax.swing.JButton();
         reviewsList = new javax.swing.JList<>();
         reorderButton = new javax.swing.JButton();
+        deliveryOption1 = new javax.swing.JComboBox<>();
         transactionHistoryPanel = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         transactionTable = new javax.swing.JTable();
@@ -151,18 +305,6 @@ private void loadOrderHistory() {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(225, 254, 255));
 
-        menuList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        menuList.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                menuListMouseClicked(evt);
-            }
-        });
-        jScrollPane2.setViewportView(menuList);
-
         jLabel3.setText("Delivery Options");
 
         deliveryOption.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dine-in", "Take-away", "Delivery" }));
@@ -176,13 +318,60 @@ private void loadOrderHistory() {
             }
         });
 
+        jLabel5.setText("Menu");
+
+        foodList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        foodList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                foodListMouseClicked(evt);
+            }
+        });
+        FoodItemsList.setViewportView(foodList);
+
+        jTabbedPane1.addTab("Food", FoodItemsList);
+
+        beverageList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        beverageList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                beverageListMouseClicked(evt);
+            }
+        });
+        beveragesItemsList.setViewportView(beverageList);
+
+        jTabbedPane1.addTab("Beverages", beveragesItemsList);
+
+        dessertList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        dessertList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dessertListMouseClicked(evt);
+            }
+        });
+        dessertItemsList.setViewportView(dessertList);
+
+        jTabbedPane1.addTab("Desserts", dessertItemsList);
+
         orderedItemsList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-
-        jLabel5.setText("Menu");
+        orderedItemsList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                orderedItemsListMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout menuPanelLayout = new javax.swing.GroupLayout(menuPanel);
         menuPanel.setLayout(menuPanelLayout);
@@ -191,36 +380,42 @@ private void loadOrderHistory() {
             .addGroup(menuPanelLayout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(menuPanelLayout.createSequentialGroup()
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(menuPanelLayout.createSequentialGroup()
+                                .addGap(47, 47, 47)
+                                .addComponent(placeOrderButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(menuPanelLayout.createSequentialGroup()
+                                .addGap(39, 39, 39)
+                                .addComponent(orderedItemsList, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(menuPanelLayout.createSequentialGroup()
+                                .addGap(47, 47, 47)
+                                .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(deliveryOption, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(placeOrderButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(orderedItemsList, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(deliveryOption, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(384, Short.MAX_VALUE))
+                .addGap(387, 447, Short.MAX_VALUE))
         );
         menuPanelLayout.setVerticalGroup(
             menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(menuPanelLayout.createSequentialGroup()
                 .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(menuPanelLayout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(jLabel3))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menuPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel5)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGap(55, 55, 55)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(menuPanelLayout.createSequentialGroup()
+                        .addGap(68, 68, 68)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(deliveryOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)
-                        .addComponent(orderedItemsList, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(placeOrderButton))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(153, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(orderedItemsList, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(placeOrderButton)))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
 
         mainPanel.addTab("Menu", menuPanel);
@@ -252,29 +447,38 @@ private void loadOrderHistory() {
         });
 
         reorderButton.setText("Reorder");
+        reorderButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reorderButtonActionPerformed(evt);
+            }
+        });
+
+        deliveryOption1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dine-in", "Take-away", "Delivery" }));
+        deliveryOption1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        deliveryOption1.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
 
         javax.swing.GroupLayout orderHistoryPanelLayout = new javax.swing.GroupLayout(orderHistoryPanel);
         orderHistoryPanel.setLayout(orderHistoryPanelLayout);
         orderHistoryPanelLayout.setHorizontalGroup(
             orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(orderHistoryPanelLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
                 .addGroup(orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
                     .addGroup(orderHistoryPanelLayout.createSequentialGroup()
-                        .addGap(114, 114, 114)
+                        .addGap(52, 52, 52)
                         .addComponent(reorderButton)
-                        .addGap(167, 167, 167)
-                        .addComponent(submitReviewButton))
-                    .addGroup(orderHistoryPanelLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(orderHistoryPanelLayout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(reviewsList, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel4))))
-                .addContainerGap(290, Short.MAX_VALUE))
+                        .addGap(55, 55, 55)
+                        .addComponent(deliveryOption1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addGroup(orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(reviewsList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, orderHistoryPanelLayout.createSequentialGroup()
+                        .addComponent(submitReviewButton)
+                        .addGap(85, 85, 85)))
+                .addContainerGap(187, Short.MAX_VALUE))
         );
         orderHistoryPanelLayout.setVerticalGroup(
             orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -282,18 +486,18 @@ private void loadOrderHistory() {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(orderHistoryPanelLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(7, 7, 7)
-                        .addGroup(orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(submitReviewButton)
-                            .addComponent(reorderButton)))
+                .addGroup(orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(orderHistoryPanelLayout.createSequentialGroup()
                         .addComponent(reviewsList, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(91, Short.MAX_VALUE))
+                        .addGap(56, 56, 56)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(deliveryOption1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(reorderButton)
+                    .addComponent(submitReviewButton))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
 
         mainPanel.addTab("Orders", orderHistoryPanel);
@@ -407,7 +611,7 @@ private void loadOrderHistory() {
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE))
+                .addComponent(mainPanel))
         );
 
         setSize(new java.awt.Dimension(872, 538));
@@ -417,14 +621,6 @@ private void loadOrderHistory() {
     private void submitReviewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitReviewButtonActionPerformed
         submitReview();
     }//GEN-LAST:event_submitReviewButtonActionPerformed
-
-    private void menuListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuListMouseClicked
-String selectedItem = menuList.getSelectedValue();
-    if (selectedItem != null) {
-        DefaultListModel<String> model = (DefaultListModel<String>) orderedItemsList.getModel();
-        model.addElement(selectedItem); // Add selected menu item to ordered items list
-    }
-    }//GEN-LAST:event_menuListMouseClicked
 
     private void placeOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_placeOrderButtonActionPerformed
                 
@@ -441,26 +637,53 @@ String selectedItem = menuList.getSelectedValue();
         return;
     }
 
-    double totalAmount = 0;
     String deliveryMethod = deliveryOption.getSelectedItem().toString();
+    double totalAmount = 0;
+    StringBuilder orderedItemIDs = new StringBuilder(); 
+
+    try (BufferedReader br = new BufferedReader(new FileReader("src/data/menu.txt"))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] details = line.split(";");
+            if (details.length == 5) {
+                String itemID = details[0];
+                String itemName = details[1];
+                double price = Double.parseDouble(details[3]);
+
+                for (int i = 0; i < model.getSize(); i++) {
+                    String selectedItem = model.getElementAt(i);
+                    if (selectedItem.startsWith(itemName)) {
+                        totalAmount += price;
+                        if (orderedItemIDs.length() > 0) {
+                            orderedItemIDs.append(","); 
+                        }
+                        orderedItemIDs.append(itemID);
+                    }
+                }
+            }
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error reading menu: " + e.getMessage());
+        return;
+    }
+
+    if (orderedItemIDs.length() == 0) {
+        JOptionPane.showMessageDialog(this, "Error: No valid items found in menu!");
+        return;
+    }
+
+    String orderID = "ORD" + (100 + (int) (Math.random() * 900)); 
+    String vendorID = "VEN302"; 
+    String status = "Pending";
+    String date = java.time.LocalDate.now().toString();
 
     try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
-        for (int i = 0; i < model.getSize(); i++) {
-            String selectedItem = model.getElementAt(i);
-            String[] parts = selectedItem.split(" - \\$");
-            String itemName = parts[0];
-            double price = (parts.length > 1) ? Double.parseDouble(parts[1]) : 0.00;
-            totalAmount += price;
-
-            bw.write(customerID + ";" + itemName + ";" + price + ";" + deliveryMethod);
-            bw.newLine();
-        }
+        bw.newLine();
+        bw.write(orderID + ";" + customerID + ";" + vendorID + ";" + orderedItemIDs + ";" + date + ";" + status + ";" + deliveryMethod + ";" + totalAmount);
         JOptionPane.showMessageDialog(this, "Order placed successfully!");
-
-        model.clear();
-
+        
+        model.clear(); 
         new PaymentWindow(customerID, totalAmount).setVisible(true);
-
     } catch (IOException e) {
         JOptionPane.showMessageDialog(this, "Error saving order: " + e.getMessage());
     }
@@ -474,40 +697,132 @@ String selectedItem = menuList.getSelectedValue();
         return;
     }
 
-    // Get the correct Customer ID using the stored username
-    String customerID = customer.getCustomerIDFromUsersFile(customer.getUsername()); // ✅ Pass username as parameter
+    
+    String customerID = customer.getCustomerIDFromUsersFile(customer.getUsername()); 
 
     if (customerID.equals("ERROR")) {
         JOptionPane.showMessageDialog(this, "Error retrieving Customer ID. Complaint not submitted.");
         return;
     }
 
-    String status = "Unsolved"; // Default status for new complaints
+    String status = "Unsolved"; 
 
-    // Format complaint correctly as "CUS001;Complaint Text;Unsolved"
+    
     String complaintEntry = customerID + ";" + complaint + ";" + status;
 
     try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/complaints.txt", true))) {
-        bw.newLine(); // Ensure new complaint starts on a new line
+        bw.newLine(); 
         bw.write(complaintEntry);
-        bw.flush(); // ✅ Ensure data is written
+        bw.flush(); 
         JOptionPane.showMessageDialog(this, "Complaint submitted successfully!");
-        complainsTextArea.setText(""); // Clear the text area after submission
+        complainsTextArea.setText(""); 
     } catch (IOException e) {
         JOptionPane.showMessageDialog(this, "Error saving complaint: " + e.getMessage());
     }
     }//GEN-LAST:event_submitComplainButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void reorderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reorderButtonActionPerformed
+String selectedOrder = orderHistoryList.getSelectedValue();
     
+    if (selectedOrder == null) {
+        JOptionPane.showMessageDialog(this, "Please select an order to reorder.");
+        return;
+    }
+
+    String customerID = customer.getCustomerIDFromUsersFile(username);
+    if (customerID.equals("ERROR")) {
+        JOptionPane.showMessageDialog(this, "Error retrieving Customer ID. Cannot place order.");
+        return;
+    }
+
+    String[] orderDetails = selectedOrder.split("\\|");
+
+    if (orderDetails.length < 3) {
+        JOptionPane.showMessageDialog(this, "Invalid order format. Cannot reorder.");
+        return;
+    }
+
+    double totalAmount = 0;
+    StringBuilder menuItemIDs = new StringBuilder();
+    String vendorID = null;
+
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
+        for (String orderItem : orderDetails) {
+            String[] itemParts = orderItem.trim().split(" - Rm");
+
+            if (itemParts.length < 2) continue;
+
+            String itemName = itemParts[0].trim();
+            double price;
+            try {                price = Double.parseDouble(itemParts[1].trim());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Error parsing price: " + itemParts[1]);
+                return;            }
+            totalAmount += price;
+            String menuItemID = getMenuItemID(itemName);
+            if (!menuItemIDs.isEmpty()) {
+                menuItemIDs.append(",");
+            }
+            menuItemIDs.append(menuItemID);
+
+            if (vendorID == null) {
+                vendorID = getVendorIDForItem(itemName);
+            }
+        }
+        if (vendorID == null) vendorID = "VEN000"; 
+
+        String deliveryMethod = deliveryOption.getSelectedItem().toString();
+        String orderID = generateOrderID();
+        String orderDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        String orderStatus = "Pending";
+
+        String formattedOrder = orderID + ";" + customerID + ";" + vendorID + ";" + menuItemIDs.toString() + ";"
+                                + orderDate + ";" + orderStatus + ";" + deliveryMethod + ";" + totalAmount;
+        bw.write(formattedOrder);
+        bw.newLine();
+
+        JOptionPane.showMessageDialog(this, "Order placed successfully with " + deliveryMethod + "! Redirecting to payment...");
+
+        loadOrderHistory();
+
+        new PaymentWindow(customerID, totalAmount).setVisible(true);
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error saving reordered item: " + e.getMessage());
+        return;    }
+    }//GEN-LAST:event_reorderButtonActionPerformed
+
+    private void orderedItemsListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderedItemsListMouseClicked
+  if (evt.getClickCount() == 2) { 
+        int selectedIndex = orderedItemsList.getSelectedIndex();
+        if (selectedIndex != -1) {
+        DefaultListModel<String> model = (DefaultListModel<String>) orderedItemsList.getModel();
+        model.remove(selectedIndex); }    }
+    }//GEN-LAST:event_orderedItemsListMouseClicked
+
+    private void beverageListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_beverageListMouseClicked
+        addToOrderList(beverageList);
+    }//GEN-LAST:event_beverageListMouseClicked
+
+    private void dessertListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dessertListMouseClicked
+        addToOrderList(dessertList);
+    }//GEN-LAST:event_dessertListMouseClicked
+
+    private void foodListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_foodListMouseClicked
+        addToOrderList(foodList);
+    }//GEN-LAST:event_foodListMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane FoodItemsList;
+    private javax.swing.JList<String> beverageList;
+    private javax.swing.JScrollPane beveragesItemsList;
     private javax.swing.JScrollPane complains;
     private javax.swing.JPanel complainsPanel;
     private javax.swing.JTextArea complainsTextArea;
     private javax.swing.JComboBox<String> deliveryOption;
+    private javax.swing.JComboBox<String> deliveryOption1;
+    private javax.swing.JScrollPane dessertItemsList;
+    private javax.swing.JList<String> dessertList;
+    private javax.swing.JList<String> foodList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -516,11 +831,10 @@ String selectedItem = menuList.getSelectedValue();
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane mainPanel;
-    private javax.swing.JList<String> menuList;
     private javax.swing.JPanel menuPanel;
     private javax.swing.JList<String> orderHistoryList;
     private javax.swing.JPanel orderHistoryPanel;

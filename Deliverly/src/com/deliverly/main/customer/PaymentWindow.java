@@ -107,70 +107,66 @@ public class PaymentWindow extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void confirmPaymentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmPaymentButtonActionPerformed
-       String paymentMethod = cashRadioButton.isSelected() ? "Cash" : "Card";
-    String date = java.time.LocalDate.now().toString();
+        String paymentMethod = cashRadioButton.isSelected() ? "Cash" : "Card";
+        String date = java.time.LocalDate.now().toString();
 
-    String cardNumber = "N/A";
-    String cvc = "N/A";
-    String cardDate = "N/A";
+        String cardNumber = "N/A";
+        String cvc = "N/A";
+        String cardDate = "N/A";
 
-    // Validate if the user selected a payment method
-    if (!cashRadioButton.isSelected() && !cardRadioButton.isSelected()) {
-        JOptionPane.showMessageDialog(this, "Please select a payment method!");
-        return;
-    }
-
-    // If Card is selected, ensure all fields are filled
-    if (paymentMethod.equals("Card")) {
-        cardNumber = jTextField1.getText().trim();
-        cvc = jTextField2.getText().trim();
-        cardDate = jTextField3.getText().trim();
-
-        if (cardNumber.isEmpty() || cvc.isEmpty() || cardDate.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter all card details!");
+        if (!cashRadioButton.isSelected() && !cardRadioButton.isSelected()) {
+            JOptionPane.showMessageDialog(this, "Please select a payment method!");
             return;
         }
 
-        // Validate CVC (should be 3 digits)
-        if (!cvc.matches("\\d{3}")) {
-            JOptionPane.showMessageDialog(this, "Invalid CVC! Enter a 3-digit number.");
-            return;
-        }
-        
-        // Validate Card Number (should be 16 digits)
-        if (!cardNumber.matches("\\d{16}")) {
-            JOptionPane.showMessageDialog(this, "Invalid Card Number! Enter a 16-digit number.");
-            return;
-        }
-        // Validate Card Expiry Date (should be 4 digits, MMYY format)
-        if (!cardDate.matches("\\d{4}")) {
-            JOptionPane.showMessageDialog(this, "Invalid Expiry Date! Enter in MMYY format.");
-            return;
-        }
-    }
+        if (paymentMethod.equals("Card")) {
+            cardNumber = jTextField1.getText().trim();
+            cvc = jTextField2.getText().trim();
+            cardDate = jTextField3.getText().trim();
 
-    // ✅ Fetch Correct User ID & Username from users.txt
-    Customer customer = new Customer(customerID);  // Assuming customerID is username
-    String correctUserID = customer.getCustomerIDFromUsersFile(customerID); // Get User ID
-    String correctUsername = customerID;  // Store the actual username
+            if (cardNumber.isEmpty() || cvc.isEmpty() || cardDate.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter all card details!");
+                return;
+            }
 
-    if (correctUserID.equals("ERROR")) {
-        JOptionPane.showMessageDialog(this, "Error retrieving Customer ID. Payment not saved.");
-        return;
-    }
+            if (!cvc.matches("\\d{3}")) {
+                JOptionPane.showMessageDialog(this, "Invalid CVC! Enter a 3-digit number.");
+                return;
+            }
 
-    // ✅ Save Receipt with actual User ID and Username
-    try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/receipts.txt", true))) {
-        bw.newLine();
-        bw.write(correctUserID + ";" + correctUsername + ";" + cardNumber + ";" + cvc + ";" + date + ";" + cardDate + ";" + totalAmount);
-        JOptionPane.showMessageDialog(this, "Payment Successful! Receipt saved.");
-        this.dispose(); // Close payment window
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(this, "Error saving receipt: " + e.getMessage());
-    }
+            if (!cardNumber.matches("\\d{16}")) {
+                JOptionPane.showMessageDialog(this, "Invalid Card Number! Enter a 16-digit number.");
+                return;
+            }
+            if (!cardDate.matches("\\d{4}")) {
+                JOptionPane.showMessageDialog(this, "Invalid Expiry Date! Enter in MMYY format.");
+                return;
+            }
+        }
+
+        Customer customer = new Customer(customerID);  
+String[] userDetails = customer.getUserIDAndUsername(customerID); 
+
+String correctUserID = userDetails[0]; 
+String correctUsername = userDetails[1]; 
+
+if (correctUserID.equals("ERROR")) {
+    JOptionPane.showMessageDialog(this, "Error retrieving Customer ID. Payment not saved.");
+    return;
+}
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/receipts.txt", true))) {
+    bw.newLine();
+    bw.write(correctUserID + ";" + correctUsername + ";" + cardNumber + ";" + cvc + ";" + date + ";" + cardDate + ";" + totalAmount);
+    JOptionPane.showMessageDialog(this, "Payment Successful! Receipt saved.");
+    this.dispose(); 
+} catch (IOException e) {
+    JOptionPane.showMessageDialog(this, "Error saving receipt: " + e.getMessage());
+}
     }//GEN-LAST:event_confirmPaymentButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

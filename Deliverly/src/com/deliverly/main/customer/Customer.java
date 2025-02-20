@@ -45,6 +45,36 @@ public class Customer {
         }
         return "ERROR"; // If user not found
     }
+    public String[] getUserIDAndUsername(String identifier) {
+    File file = new File(usersFile); // Ensure correct file path
+
+    if (!file.exists()) {
+        System.out.println("ERROR: users.txt not found at " + file.getAbsolutePath());
+        return new String[]{"ERROR", "ERROR"};
+    }
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] parts = line.split(";"); // Split user details
+            if (parts.length > 1) {
+                String storedCustomerID = parts[0].trim(); // First column = Customer ID
+                String storedUsername = parts[1].trim();   // Second column = Username
+
+                System.out.println("DEBUG: Checking " + storedUsername + " and " + storedCustomerID + " against " + identifier);
+
+                // If identifier matches either Customer ID or Username
+                if (storedUsername.equalsIgnoreCase(identifier.trim()) || storedCustomerID.equalsIgnoreCase(identifier.trim())) {
+                    return new String[]{storedCustomerID, storedUsername}; // ✅ Return both ID and Username
+                }
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return new String[]{"ERROR", "ERROR"}; // If user not found
+}
+
 
     public void submitComplaint(String complaint) {
         String customerID = getCustomerIDFromUsersFile(this.username); // ✅ Pass username correctly
