@@ -274,7 +274,7 @@ public class LoginMenu extends javax.swing.JFrame {
             } else {
                 this.dispose();                
                 if(user.split(";")[0].contains("CUS") == true){
-                    new CustomerMenu().setVisible(true);
+                    new CustomerMenu(usernameField.getText()).setVisible(true);
                 }
                 else if(user.split(";")[0].contains("RNR") == true){
                     new RunnerMenu().setVisible(true);
