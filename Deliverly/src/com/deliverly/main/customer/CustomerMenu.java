@@ -5,12 +5,12 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.text.DecimalFormat;
 
 public class CustomerMenu extends JFrame {
 private String username;
@@ -111,15 +111,16 @@ private void submitReview() {
 }
 private void loadOrderHistory() {
     DefaultListModel<String> orderModel = new DefaultListModel<>();
-
     String userId = customer.getCustomerIDFromUsersFile(username);
 
     if (userId.equals("ERROR")) {
         JOptionPane.showMessageDialog(this, "Error retrieving Customer ID.");
         return;
     }
+
     HashMap<String, String> menuItems = new HashMap<>();
     HashMap<String, String> menuPrices = new HashMap<>();
+    DecimalFormat df = new DecimalFormat("0.00"); 
 
     try (BufferedReader br = new BufferedReader(new FileReader("src/data/menu.txt"))) {
         String line;
@@ -130,7 +131,7 @@ private void loadOrderHistory() {
             if (details.length >= 4) {
                 String itemID = details[0];  
                 String itemName = details[1]; 
-                String price = details[3];   
+                String price = details[3];    
 
                 menuItems.put(itemID, itemName);
                 menuPrices.put(itemID, price);
@@ -154,7 +155,7 @@ private void loadOrderHistory() {
                 String orderDate = orderDetails[4]; 
                 String status = orderDetails[5];  
                 String deliveryMethod = orderDetails[6]; 
-                String totalPrice = orderDetails[7]; 
+                double totalPrice = Double.parseDouble(orderDetails[7]); 
 
                 if (orderCustomerID.equals(userId)) {
                     StringBuilder itemDetails = new StringBuilder();
@@ -170,7 +171,8 @@ private void loadOrderHistory() {
                         itemDetails.setLength(itemDetails.length() - 2);
                     }
 
-                    String orderEntry = orderID + " | " + itemDetails + " | " + deliveryMethod + " | Rm" + totalPrice + " | " + status;
+                    String formattedPrice = df.format(totalPrice);
+                    String orderEntry = orderID + " | " + itemDetails + " | " + deliveryMethod + " | Rm" + formattedPrice + " | " + status;
                     orderModel.addElement(orderEntry);
                 }
             }
@@ -178,7 +180,6 @@ private void loadOrderHistory() {
     } catch (IOException e) {
         JOptionPane.showMessageDialog(this, "Error loading order history: " + e.getMessage());
     }
-
     orderHistoryList.setModel(orderModel);
 }
 
@@ -189,9 +190,10 @@ private void loadTransactionHistory() {
         JOptionPane.showMessageDialog(this, "Error retrieving Customer ID.");
         return;
     }
-
     DefaultTableModel model = new DefaultTableModel();
     model.setColumnIdentifiers(new String[]{"Card Number", "Date", "Amount"});
+
+    DecimalFormat df = new DecimalFormat("0.00"); 
 
     try (BufferedReader br = new BufferedReader(new FileReader("src/data/receipts.txt"))) {
         String line;
@@ -201,9 +203,10 @@ private void loadTransactionHistory() {
             if (data.length >= 6 && data[0].equals(userId)) { 
                 String cardNumber = data[2];   
                 String date = data[4];         
-                String amount = data[6];       
+                double amount = Double.parseDouble(data[6]); 
+                String formattedAmount = df.format(amount);  
 
-                model.addRow(new Object[]{cardNumber, date, amount});
+                model.addRow(new Object[]{cardNumber, date, formattedAmount});
             }
         }
     } catch (IOException e) {
@@ -671,22 +674,25 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         JOptionPane.showMessageDialog(this, "Error: No valid items found in menu!");
         return;
     }
-
     String orderID = "ORD" + (100 + (int) (Math.random() * 900)); 
     String vendorID = "VEN302"; 
     String status = "Pending";
     String date = java.time.LocalDate.now().toString();
+    loadOrderHistory();
 
     try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
-        bw.newLine();
-        bw.write(orderID + ";" + customerID + ";" + vendorID + ";" + orderedItemIDs + ";" + date + ";" + status + ";" + deliveryMethod + ";" + totalAmount);
-        JOptionPane.showMessageDialog(this, "Order placed successfully!");
-        
-        model.clear(); 
-        new PaymentWindow(customerID, totalAmount).setVisible(true);
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(this, "Error saving order: " + e.getMessage());
-    }
+    bw.newLine();  
+    bw.write(orderID + ";" + customerID + ";" + vendorID + ";" + orderedItemIDs + ";" 
+             + date + ";" + status + ";" + deliveryMethod + ";" + totalAmount);
+    bw.flush();  
+    JOptionPane.showMessageDialog(this, "Order placed successfully!");
+    model.clear(); 
+    PaymentWindow paymentWindow = new PaymentWindow(customerID, totalAmount);
+    paymentWindow.setVisible(true);
+
+} catch (IOException e) {
+    JOptionPane.showMessageDialog(this, "Error saving order: " + e.getMessage());
+}
     }//GEN-LAST:event_placeOrderButtonActionPerformed
 
     private void submitComplainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitComplainButtonActionPerformed
@@ -714,7 +720,7 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         bw.newLine(); 
         bw.write(complaintEntry);
         bw.flush(); 
-        JOptionPane.showMessageDialog(this, "Complaint submitted successfully!");
+        JOptionPane.showMessageDialog(this, "Thank you for reaching out! 🙌 Your complaint has been submitted successfully. Our team is on it, and we’ll work to resolve it as soon as possible. We appreciate your patience and value your feedback! 💙✨");
         complainsTextArea.setText(""); 
     } catch (IOException e) {
         JOptionPane.showMessageDialog(this, "Error saving complaint: " + e.getMessage());
@@ -736,59 +742,67 @@ String selectedOrder = orderHistoryList.getSelectedValue();
     }
 
     String[] orderDetails = selectedOrder.split("\\|");
-
-    if (orderDetails.length < 3) {
+    
+    if (orderDetails.length < 4) {
         JOptionPane.showMessageDialog(this, "Invalid order format. Cannot reorder.");
         return;
     }
 
+    String itemDetails = orderDetails[1].trim(); 
+    String deliveryMethod = orderDetails[2].trim(); 
     double totalAmount = 0;
     StringBuilder menuItemIDs = new StringBuilder();
     String vendorID = null;
 
-    try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
-        for (String orderItem : orderDetails) {
-            String[] itemParts = orderItem.trim().split(" - Rm");
+    try (BufferedReader br = new BufferedReader(new FileReader("src/data/menu.txt"))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] menuDetails = line.split(";");
+            if (menuDetails.length == 5) {
+                String itemID = menuDetails[0];
+                String itemName = menuDetails[1];
+                double price = Double.parseDouble(menuDetails[3]);
 
-            if (itemParts.length < 2) continue;
-
-            String itemName = itemParts[0].trim();
-            double price;
-            try {                price = Double.parseDouble(itemParts[1].trim());
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Error parsing price: " + itemParts[1]);
-                return;            }
-            totalAmount += price;
-            String menuItemID = getMenuItemID(itemName);
-            if (!menuItemIDs.isEmpty()) {
-                menuItemIDs.append(",");
-            }
-            menuItemIDs.append(menuItemID);
-
-            if (vendorID == null) {
-                vendorID = getVendorIDForItem(itemName);
+                if (itemDetails.contains(itemName)) {
+                    totalAmount += price;
+                    if (menuItemIDs.length() > 0) {
+                        menuItemIDs.append(",");
+                    }
+                    menuItemIDs.append(itemID);
+                    
+                    if (vendorID == null) {
+                        vendorID = menuDetails[4]; 
+                    }
+                }
             }
         }
-        if (vendorID == null) vendorID = "VEN000"; 
-
-        String deliveryMethod = deliveryOption.getSelectedItem().toString();
-        String orderID = generateOrderID();
-        String orderDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        String orderStatus = "Pending";
-
-        String formattedOrder = orderID + ";" + customerID + ";" + vendorID + ";" + menuItemIDs.toString() + ";"
-                                + orderDate + ";" + orderStatus + ";" + deliveryMethod + ";" + totalAmount;
-        bw.write(formattedOrder);
-        bw.newLine();
-
-        JOptionPane.showMessageDialog(this, "Order placed successfully with " + deliveryMethod + "! Redirecting to payment...");
-
-        loadOrderHistory();
-
-        new PaymentWindow(customerID, totalAmount).setVisible(true);
     } catch (IOException e) {
-        JOptionPane.showMessageDialog(this, "Error saving reordered item: " + e.getMessage());
-        return;    }
+        JOptionPane.showMessageDialog(this, "Error reading menu: " + e.getMessage());
+        return;
+    }
+
+    if (menuItemIDs.length() == 0) {
+        JOptionPane.showMessageDialog(this, "Error: No valid items found in menu!");
+        return;
+    }
+
+    String orderID = generateOrderID();
+    String orderDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    String orderStatus = "Pending";
+
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
+    bw.newLine(); 
+    bw.write(orderID + ";" + customerID + ";" + vendorID + ";" + menuItemIDs.toString() + ";"
+             + orderDate + ";" + orderStatus + ";" + deliveryMethod + ";" + totalAmount);
+    bw.flush(); 
+    JOptionPane.showMessageDialog(this, "Order placed successfully with " + deliveryMethod + "! Redirecting to payment...");
+
+    loadOrderHistory();
+    new PaymentWindow(customerID, totalAmount).setVisible(true);
+
+} catch (IOException e) {
+    JOptionPane.showMessageDialog(this, "Error saving reordered item: " + e.getMessage());
+}
     }//GEN-LAST:event_reorderButtonActionPerformed
 
     private void orderedItemsListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderedItemsListMouseClicked
