@@ -1,71 +1,56 @@
-ItemID;ItemName;Category;Price
-M101;Burger;Fast Food;5.99
-M102;Pizza;Fast Food;8.50
-M103;Pasta;Italian;7.25
-M104;Sushi;Japanese;12.99
-M105;Salad;Healthy;4.75
-M106;Tacos;Mexican;6.99
-M107;Steak;Grill;15.99
-M108;Chicken Wings;Fast Food;9.25
-M109;Fried Rice;Asian;5.50
-M110;Burrito;Mexican;7.99
-M111;Ramen;Japanese;10.75
-M112;Cheeseburger;Fast Food;6.99
-M113;Lobster;Seafood;18.99
-M114;Fish and Chips;Seafood;11.50
-M115;Dumplings;Chinese;6.75
-M116;BBQ Ribs;Grill;14.50
-M117;Hot Dog;Fast Food;4.50
-M118;Panini;Sandwich;7.25
-M119;Croissant;Bakery;3.50
-M120;French Toast;Breakfast;5.99
-M121;Omelette;Breakfast;6.50
-M122;Pancakes;Breakfast;5.75
-M123;Milkshake;Dessert;4.99
-M124;Ice Cream;Dessert;3.99
-M125;Chocolate Cake;Dessert;6.99
-M126;Apple Pie;Dessert;4.50
-M127;Caesar Salad;Healthy;6.25
-M128;Greek Salad;Healthy;6.75
-M129;Veggie Burger;Vegetarian;7.50
-M130;Grilled Cheese;Sandwich;5.25
-M131;Shawarma;Middle Eastern;8.99
-M132;Falafel Wrap;Middle Eastern;6.99
-M133;Pita & Hummus;Middle Eastern;5.25
-M134;Fettuccine Alfredo;Italian;10.50
-M135;Lasagna;Italian;11.75
-M136;Spaghetti Bolognese;Italian;9.99
-M137;Pad Thai;Thai;8.75
-M138;Tom Yum Soup;Thai;7.99
-M139;Spring Rolls;Asian;4.99
-M140;Samosa;Indian;5.25
-M141;Butter Chicken;Indian;11.99
-M142;Biryani;Indian;12.50
-M143;Gyro;Greek;8.50
-M144;Moussaka;Greek;10.75
-M145;Beef Stir Fry;Asian;9.25
-M146;Tofu Stir Fry;Vegetarian;8.25
-M147;Stuffed Peppers;Vegetarian;7.99
-M148;Mango Smoothie;Beverage;4.25
-M149;Lemonade;Beverage;2.99
-M150;Espresso;Coffee;2.50
-M151;Latte;Coffee;3.75
-M152;Cappuccino;Coffee;3.99
-M153;Iced Coffee;Coffee;3.25
-M154;Club Sandwich;Sandwich;7.50
-M155;Turkey Sandwich;Sandwich;6.99
-M156;Roast Beef Sandwich;Sandwich;7.99
-M157;Corned Beef Sandwich;Deli;8.50
-M158;Avocado Toast;Breakfast;6.25
-M159;Granola & Yogurt;Breakfast;5.75
-M160;Miso Soup;Japanese;3.99
-M161;Tempura;Japanese;9.50
-M162;Clam Chowder;Soup;7.25
-M163;French Onion Soup;Soup;6.99
-M164;Lobster Bisque;Soup;8.99
-M165;Meatloaf;Comfort Food;10.25
-M166;Mac and Cheese;Comfort Food;7.75
-M167;Shepherd's Pie;Comfort Food;11.25
-M168;Chili;Comfort Food;9.99
-M169;Peking Duck;Chinese;18.50
-M170;General Tso's Chicken;Chinese;10.99
+MI101;Burger;Food;5.99;VEN302
+MI102;Pizza;Food;8.50;VEN302
+MI103;Pasta;Food;7.25;VEN302
+MI104;Sushi;Food;12.99;VEN302
+MI105;Salad;Food;4.75;VEN302
+MI106;Tacos;Food;6.99;VEN302
+MI107;Steak;Food;15.99;VEN302
+MI108;Chicken Wings;Food;9.25;VEN302
+MI109;Fried Rice;Food;5.50;VEN302
+MI110;Burrito;Food;7.99;VEN302
+MI111;Ramen;Food;10.75;VEN302
+MI112;Cheeseburger;Food;6.99;VEN302
+MI113;Lobster;Food;18.99;VEN302
+MI114;Fish and Chips;Food;11.50;VEN302
+MI115;Dumplings;Food;6.75;VEN302
+MI116;BBQ Ribs;Food;14.50;VEN302
+MI117;Hot Dog;Food;4.50;VEN302
+MI118;Panini;Food;7.25;VEN302
+MI119;Mac and Cheese;Food;7.75;VEN302
+MI120;Meatloaf;Food;10.25;VEN302
+MI121;Caesar Salad;Food;6.25;VEN301
+MI122;Greek Salad;Food;6.75;VEN301
+MI123;Veggie Burger;Food;7.50;VEN301
+MI124;Grilled Cheese;Food;5.25;VEN301
+MI125;Shawarma;Food;8.99;VEN301
+MI126;Falafel Wrap;Food;6.99;VEN301
+MI127;Pita & Hummus;Food;5.25;VEN301
+MI128;Lasagna;Food;11.75;VEN301
+MI129;Spaghetti Bolognese;Food;9.99;VEN301
+MI130;Pad Thai;Food;8.75;VEN301
+MI131;Tom Yum Soup;Food;7.99;VEN301
+MI132;Butter Chicken;Food;11.99;VEN301
+MI133;Biryani;Food;12.50;VEN301
+MI134;Gyro;Food;8.50;VEN301
+MI135;Stuffed Peppers;Food;7.99;VEN301
+MI136;Club Sandwich;Food;7.50;VEN301
+MI137;Turkey Sandwich;Food;6.99;VEN301
+MI138;Roast Beef Sandwich;Food;7.99;VEN301
+MI139;Chili;Food;9.99;VEN301
+MI140;General Tso's Chicken;Food;10.99;VEN301
+MI141;Croissant;Dessert;3.50;VEN302
+MI142;French Toast;Dessert;5.99;VEN302
+MI143;Pancakes;Dessert;5.75;VEN302
+MI144;Chocolate Cake;Dessert;6.99;VEN302
+MI145;Apple Pie;Dessert;4.50;VEN302
+MI146;Milkshake;Dessert;4.99;VEN301
+MI147;Ice Cream;Dessert;3.99;VEN301
+MI148;Avocado Toast;Dessert;6.25;VEN301
+MI149;Granola & Yogurt;Dessert;5.75;VEN301
+MI150;Omelette;Dessert;6.50;VEN301
+MI151;Mango Smoothie;Beverage;4.25;VEN302
+MI152;Lemonade;Beverage;2.99;VEN302
+MI153;Espresso;Beverage;2.50;VEN302
+MI154;Latte;Beverage;3.75;VEN301
+MI155;Cappuccino;Beverage;3.99;VEN301
+MI156;Iced Coffee;Beverage;3.25;VEN301
