@@ -10,3 +10,9 @@ Review: It was very cold
 Review: I want a refund!
 ORD105;CUS205;VEN302;MI106;2025-07-27;Pending;Delivery;20.0
 Review: Very good!
+CUS001;Pasta;7.25;Delivery
+CUS001;Tacos;6.99;Delivery
+CUS001;Pizza;8.5;Take-away
+CUS001;Sushi;12.99;Take-away
+CUS001;Burger;5.99;Dine-in
+CUS001;Pasta;7.25;Dine-in
