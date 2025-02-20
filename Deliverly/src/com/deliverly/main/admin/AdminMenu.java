@@ -974,6 +974,7 @@ public final class AdminMenu extends javax.swing.JFrame {
             receipt_bw.write(receiptData);
             receipt_bw.close();
             JOptionPane.showMessageDialog(null, "Topped-Up Successfully");
+            sendNotification(userID.getText().trim(), "Your receipt has been generated successfully.");
             reloadData(model);
             
 
@@ -1080,6 +1081,20 @@ public final class AdminMenu extends javax.swing.JFrame {
         }
         
     }
+    
+    private void sendNotification(String customerId, String message) {
+        try {
+            FileWriter fw = new FileWriter("src//data//notifications.txt", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(customerId + ";" + message);
+            bw.newLine();
+            bw.close();
+            JOptionPane.showMessageDialog(null, "Notification has been sent successfully to the Customer!");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error happened when sending to the customer " + e.getMessage());
+        }
+    }
+
     
     private boolean isValidCardNumber(String cardNumber) {
         return cardNumber.length() == 16 && cardNumber.matches("\\d+");

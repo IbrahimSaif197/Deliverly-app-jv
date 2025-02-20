@@ -53,12 +53,21 @@ public class ThemeManager {
     private static void updateUIColors(Container container, Color bgColor, Color fgColor) {
         if (container == null) return;
 
-        container.setBackground(bgColor);
-
         for (Component component : container.getComponents()) {
             if (component instanceof JPanel) {
-                component.setBackground(bgColor);
-                updateUIColors((JPanel) component, bgColor, fgColor);
+                JPanel panel = (JPanel) component;
+                if (panel.getBackground().equals(Color.GRAY)) {
+                    panel.setBackground(bgColor);
+                }
+
+                if (panel.getBackground().equals(new Color(153, 255, 255)) || panel.getBackground().equals(Color.GRAY)) {
+                    panel.setBackground(Color.GRAY);
+                } else {
+                    panel.setBackground(bgColor);
+                }
+
+                updateUIColors(panel, bgColor, fgColor);
+
             } else if (component instanceof JLabel || component instanceof JCheckBox) {
                 component.setForeground(fgColor);
             } else if (component instanceof JButton) {
@@ -116,4 +125,5 @@ public class ThemeManager {
             }
         }
     }
+
 }
