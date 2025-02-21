@@ -1,2 +1,4 @@
-CusID;Info;status Example
+CompID;CusID;Info;status Example
 CUS001;Food Orders Deliver Late;Unsolved
+CUS001;asdad;Unsolved
+CUS001;My order took waaaaay to long to arrive and it was cold;Unsolved
