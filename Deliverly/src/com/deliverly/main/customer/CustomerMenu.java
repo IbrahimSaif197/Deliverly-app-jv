@@ -1,14 +1,26 @@
 package com.deliverly.main.customer;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 public class CustomerMenu extends JFrame {
     private String username;
     private Customer customer;
+    private String ID;
 
-    public CustomerMenu(String username) {
+
+    public CustomerMenu(String ID, String username) {
+        this.ID = ID;
         this.username = username;
         this.customer = new Customer(username);
         initComponents();
+        checkNotifications(username);
         jLabel2.setText(username);
     }
 
@@ -297,6 +309,55 @@ private void reorderButtonActionPerformed(java.awt.event.ActionEvent evt) {
         JOptionPane.showMessageDialog(this, "Please select an order to reorder.");
     }
 }
+    private void checkNotifications(String customerUsername) {
+        try {
+            File notificationsFile = new File("src//data//notifications.txt");
+            if (!notificationsFile.exists()) {
+                JOptionPane.showMessageDialog(null, "No new notifications.");
+                return;
+            }
+
+            BufferedReader br = new BufferedReader(new FileReader(notificationsFile));
+            List<String> updatedNotifications = new ArrayList<>();
+            String line;
+            boolean hasNotification = false;
+
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(";", 2);
+
+                if (data.length == 2) {
+                    String storedUsername = data[0].trim(); // Trim spaces
+                    String message = data[1].trim();
+
+                    System.out.println("Found notification -> Username: " + storedUsername + ", Message: " + message);
+
+                    if (storedUsername.equalsIgnoreCase(customerUsername.trim())) { // Case insensitive check
+                        JOptionPane.showMessageDialog(null, "Notification: " + message);
+                        hasNotification = true;
+                    } else {
+                        updatedNotifications.add(line);
+                    }
+                }
+            }
+            br.close();
+
+            FileWriter fw = new FileWriter(notificationsFile);
+            BufferedWriter bw = new BufferedWriter(fw);
+            for (String notif : updatedNotifications) {
+                bw.write(notif);
+                bw.newLine();
+            }
+            bw.close();
+
+            if (!hasNotification) {
+                JOptionPane.showMessageDialog(null, "No new notifications.");
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error checking notifications: " + e.getMessage());
+        }
+    }
+
+
 
     /**
      * @param args the command line arguments
