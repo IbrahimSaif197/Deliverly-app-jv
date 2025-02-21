@@ -29,5 +29,5 @@ CUS833;homefull;home;Ahmed;03039284;Serdang;serd@gmail.com;200;customer
 CUS3442;as3q;asq;mamoud;0339499;Home;as3q@gmail.com;2205;customer
 ADM321;3bodi;aboodyaslam1;Abdullah Yaslam;0142260991;One South;3bodi@gmail.com;0;admin
 CUS324;3bodiCUS;aboodyaslam1;Abdullah Yaslam;0142260991;One South;3bodi@gmail.com;0;customer
-VEN332;vendor00322;vendorpass003;Vendor Three;1212121212;232 EDFr;vendor.three@email.com;0;vendor
+VEN332;vendor00322;vendorpass003;Vendor Three;1212121212;232 EDFr;vendor.three@email.com;20;vendor
 CUS333;qukialmahdi;qusai0987;Qusai;0172748390;Claus;qusai@almahdi.com;9000000;customer

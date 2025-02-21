@@ -56,15 +56,7 @@ public class ThemeManager {
         for (Component component : container.getComponents()) {
             if (component instanceof JPanel) {
                 JPanel panel = (JPanel) component;
-                if (panel.getBackground().equals(Color.GRAY)) {
-                    panel.setBackground(bgColor);
-                }
-
-                if (panel.getBackground().equals(new Color(153, 255, 255)) || panel.getBackground().equals(Color.GRAY)) {
-                    panel.setBackground(Color.GRAY);
-                } else {
-                    panel.setBackground(bgColor);
-                }
+                
 
                 updateUIColors(panel, bgColor, fgColor);
 

@@ -1,4 +1,4 @@
 CompID;CusID;Info;status Example
-CUS001;Food Orders Deliver Late;Unsolved
-CUS001;asdad;Unsolved
-CUS001;My order took waaaaay to long to arrive and it was cold;Unsolved
+COM001;CUS001;Solved;Solved
+COM002;CUS001;asdad;Unsolved
+COM003;CUS001;My order took waaaaay to long to arrive and it was cold;Unsolved
