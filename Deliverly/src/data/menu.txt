@@ -1,0 +1,56 @@
+MI101;Burger;Food;5.99;VEN302
+MI102;Pizza;Food;8.50;VEN302
+MI103;Pasta;Food;7.25;VEN302
+MI104;Sushi;Food;12.99;VEN302
+MI105;Salad;Food;4.75;VEN302
+MI106;Tacos;Food;6.99;VEN302
+MI107;Steak;Food;15.99;VEN302
+MI108;Chicken Wings;Food;9.25;VEN302
+MI109;Fried Rice;Food;5.50;VEN302
+MI110;Burrito;Food;7.99;VEN302
+MI111;Ramen;Food;10.75;VEN302
+MI112;Cheeseburger;Food;6.99;VEN302
+MI113;Lobster;Food;18.99;VEN302
+MI114;Fish and Chips;Food;11.50;VEN302
+MI115;Dumplings;Food;6.75;VEN302
+MI116;BBQ Ribs;Food;14.50;VEN302
+MI117;Hot Dog;Food;4.50;VEN302
+MI118;Panini;Food;7.25;VEN302
+MI119;Mac and Cheese;Food;7.75;VEN302
+MI120;Meatloaf;Food;10.25;VEN302
+MI121;Caesar Salad;Food;6.25;VEN301
+MI122;Greek Salad;Food;6.75;VEN301
+MI123;Veggie Burger;Food;7.50;VEN301
+MI124;Grilled Cheese;Food;5.25;VEN301
+MI125;Shawarma;Food;8.99;VEN301
+MI126;Falafel Wrap;Food;6.99;VEN301
+MI127;Pita & Hummus;Food;5.25;VEN301
+MI128;Lasagna;Food;11.75;VEN301
+MI129;Spaghetti Bolognese;Food;9.99;VEN301
+MI130;Pad Thai;Food;8.75;VEN301
+MI131;Tom Yum Soup;Food;7.99;VEN301
+MI132;Butter Chicken;Food;11.99;VEN301
+MI133;Biryani;Food;12.50;VEN301
+MI134;Gyro;Food;8.50;VEN301
+MI135;Stuffed Peppers;Food;7.99;VEN301
+MI136;Club Sandwich;Food;7.50;VEN301
+MI137;Turkey Sandwich;Food;6.99;VEN301
+MI138;Roast Beef Sandwich;Food;7.99;VEN301
+MI139;Chili;Food;9.99;VEN301
+MI140;General Tso's Chicken;Food;10.99;VEN301
+MI141;Croissant;Dessert;3.50;VEN302
+MI142;French Toast;Dessert;5.99;VEN302
+MI143;Pancakes;Dessert;5.75;VEN302
+MI144;Chocolate Cake;Dessert;6.99;VEN302
+MI145;Apple Pie;Dessert;4.50;VEN302
+MI146;Milkshake;Dessert;4.99;VEN301
+MI147;Ice Cream;Dessert;3.99;VEN301
+MI148;Avocado Toast;Dessert;6.25;VEN301
+MI149;Granola & Yogurt;Dessert;5.75;VEN301
+MI150;Omelette;Dessert;6.50;VEN301
+MI151;Mango Smoothie;Beverage;4.25;VEN302
+MI152;Lemonade;Beverage;2.99;VEN302
+MI153;Espresso;Beverage;2.50;VEN302
+MI154;Latte;Beverage;3.75;VEN301
+MI155;Cappuccino;Beverage;3.99;VEN301
+MI156;Iced Coffee;Beverage;3.25;VEN301
