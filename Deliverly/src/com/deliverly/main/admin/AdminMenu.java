@@ -576,6 +576,7 @@ public final class AdminMenu extends javax.swing.JFrame {
 
     private void goBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goBackActionPerformed
         this.dispose();
+        new LoginMenu().setVisible(true);
     }//GEN-LAST:event_goBackActionPerformed
 
     private void CreateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateButtonActionPerformed
@@ -728,7 +729,7 @@ public final class AdminMenu extends javax.swing.JFrame {
 
 
     private boolean isPhoneValid(String phone) {
-        return phone.matches("^\\+?[0-9]{10}$");
+        return phone.matches("^\\+?[0-9]{10,15}$");
     }
     
     private void roleSelection() {
@@ -828,7 +829,7 @@ public final class AdminMenu extends javax.swing.JFrame {
             for (String line : users) {
                 if (line.startsWith(ID.getText().trim() + ";")) {
                     found = true;
-                    continue; // Skip this line
+                    continue;
                 }
                 updatedUsers.add(line);
             }
@@ -907,13 +908,13 @@ public final class AdminMenu extends javax.swing.JFrame {
 
             String cardNumberStr = CardNumber.getText().trim();
             if (!isValidCardNumber(cardNumberStr)) {
-                JOptionPane.showMessageDialog(null, "Card number must be exactly 16 digits!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Card number must be 16 digits!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             String cvcStr = CVC.getText().trim();
             if (!isValidCVC(cvcStr)) {
-                JOptionPane.showMessageDialog(null, "CVC must be exactly 3 digits!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "CVC must be 3 digits!", "Invalid Input", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
@@ -965,8 +966,8 @@ public final class AdminMenu extends javax.swing.JFrame {
                 customerName,
                 cardNumberStr,
                 cvcStr,
-                transactionDate,    // Transaction date
-                expiryDate,         // Card expiry date
+                transactionDate,    
+                expiryDate,         
                 added_amount
             );
 
@@ -974,7 +975,7 @@ public final class AdminMenu extends javax.swing.JFrame {
             receipt_bw.write(receiptData);
             receipt_bw.close();
             JOptionPane.showMessageDialog(null, "Topped-Up Successfully");
-            sendNotification(userID.getText().trim(), "Your receipt has been generated successfully.");
+            sendNotification(userID.getText().trim(), "You have topped up " + added_amount + " on " + transactionDate);
             reloadData(model);
             
 

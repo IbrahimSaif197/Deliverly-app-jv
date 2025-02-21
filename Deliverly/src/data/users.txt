@@ -1,7 +1,8 @@
 user_id;username;password;name;phone_number;address;email;credits;role
 CUS001;c;c;John Doe;555-1234;123 Elm St, Springfield, IL;john.doe@email.com;322;customer
+CUS001;c;c;John Doe;555-1234;123 Elm St, Springfield, IL;john.doe@email.com;774;customer
 CUS002;janedoe456;password456;Jane Doe;555-5678;456 Oak St, Springfield, IL;jane.doe@email.com;200;customer
-CUS003;michael789;password789;Michael Smith;555-8765;789 Pine St, Springfield, IL;michael.smith@email.com;8800;customer
+CUS003;michael789;password789;Michael Smith;555-8765;789 Pine St, Springfield, IL;michael.smith@email.com;9000;customer
 CUS004;sarah321;password321;Sarah Lee;555-4321;321 Maple St, Springfield, IL;sarah.lee@email.com;400;customer
 CUS005;kevin654;password654;Kevin Brown;555-6543;654 Birch St, Springfield, IL;kevin.brown@email.com;200;customer
 ADM001;a;a;Admin One;a;789 Elm St, Springfield, IL;admin.one@email.com;200;admin
@@ -29,5 +30,5 @@ CUS833;homefull;home;Ahmed;03039284;Serdang;serd@gmail.com;200;customer
 CUS3442;as3q;asq;mamoud;0339499;Home;as3q@gmail.com;2205;customer
 ADM321;3bodi;aboodyaslam1;Abdullah Yaslam;0142260991;One South;3bodi@gmail.com;0;admin
 CUS324;3bodiCUS;aboodyaslam1;Abdullah Yaslam;0142260991;One South;3bodi@gmail.com;0;customer
-VEN332;vendor00322;vendorpass003;Vendor Three;1212121212;232 EDFr;vendor.three@email.com;0;vendor
+VEN332;vendor00322;vendorpass003;Vendor Three;1212121212;232 EDFr;vendor.three@email.com;20;vendor
 CUS333;qukialmahdi;qusai0987;Qusai;0172748390;Claus;qusai@almahdi.com;9000000;customer

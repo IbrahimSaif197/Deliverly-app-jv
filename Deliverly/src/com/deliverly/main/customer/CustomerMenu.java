@@ -2,6 +2,7 @@ package com.deliverly.main.customer;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,6 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerMenu extends JFrame {
 private String username;
@@ -27,7 +30,56 @@ public CustomerMenu(String username) {
         loadOrderHistory();
         loadTransactionHistory();
         orderedItemsList.setModel(new DefaultListModel<>()); 
+        checkNotifications(username);
     }
+private void checkNotifications(String customerUsername) {
+        try {
+            File notificationsFile = new File("src//data//notifications.txt");
+            if (!notificationsFile.exists()) {
+                JOptionPane.showMessageDialog(null, "No new notifications.");
+                return;
+            }
+
+            BufferedReader br = new BufferedReader(new FileReader(notificationsFile));
+            List<String> updatedNotifications = new ArrayList<>();
+            String line;
+            boolean hasNotification = false;
+
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(";", 2);
+
+                if (data.length == 2) {
+                    String storedUsername = data[0].trim(); // Trim spaces
+                    String message = data[1].trim();
+
+                    System.out.println("Found notification -> Username: " + storedUsername + ", Message: " + message);
+
+                    if (storedUsername.equalsIgnoreCase(customerUsername.trim())) { // Case insensitive check
+                        JOptionPane.showMessageDialog(null, "Notification: " + message);
+                        hasNotification = true;
+                    } else {
+                        updatedNotifications.add(line);
+                    }
+                }
+            }
+            br.close();
+
+            FileWriter fw = new FileWriter(notificationsFile);
+            BufferedWriter bw = new BufferedWriter(fw);
+            for (String notif : updatedNotifications) {
+                bw.write(notif);
+                bw.newLine();
+            }
+            bw.close();
+
+            if (!hasNotification) {
+                JOptionPane.showMessageDialog(null, "No new notifications.");
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error checking notifications: " + e.getMessage());
+        }
+    }
+
 private void loadReviews() {
     DefaultListModel<String> reviewsModel = new DefaultListModel<>();
     
@@ -306,7 +358,9 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(225, 254, 255));
+        setBackground(new java.awt.Color(101, 233, 238));
+
+        menuPanel.setBackground(new java.awt.Color(230, 240, 255));
 
         jLabel3.setText("Delivery Options");
 
@@ -314,7 +368,16 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         deliveryOption.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         deliveryOption.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
 
+        placeOrderButton.setBackground(new java.awt.Color(52, 152, 219));
+        placeOrderButton.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        placeOrderButton.setForeground(new java.awt.Color(255, 255, 255));
         placeOrderButton.setText("Place Order");
+        placeOrderButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        placeOrderButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                placeOrderButtonMouseEntered(evt);
+            }
+        });
         placeOrderButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 placeOrderButtonActionPerformed(evt);
@@ -388,15 +451,14 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
                         .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(menuPanelLayout.createSequentialGroup()
                                 .addGap(47, 47, 47)
-                                .addComponent(placeOrderButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(menuPanelLayout.createSequentialGroup()
-                                .addGap(39, 39, 39)
-                                .addComponent(orderedItemsList, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(menuPanelLayout.createSequentialGroup()
-                                .addGap(47, 47, 47)
                                 .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(deliveryOption, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(deliveryOption, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(menuPanelLayout.createSequentialGroup()
+                                .addGap(39, 39, 39)
+                                .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(orderedItemsList, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                                    .addComponent(placeOrderButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(387, 447, Short.MAX_VALUE))
         );
@@ -422,6 +484,8 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         );
 
         mainPanel.addTab("Menu", menuPanel);
+
+        orderHistoryPanel.setBackground(new java.awt.Color(255, 235, 235));
 
         orderHistoryList.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -505,6 +569,8 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
 
         mainPanel.addTab("Orders", orderHistoryPanel);
 
+        transactionHistoryPanel.setBackground(new java.awt.Color(240, 255, 240));
+
         transactionTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null}
@@ -545,13 +611,24 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
 
         mainPanel.addTab("Transaction History", transactionHistoryPanel);
 
+        complainsPanel.setBackground(new java.awt.Color(255, 255, 230));
+
         complainsTextArea.setColumns(20);
         complainsTextArea.setRows(5);
         complains.setViewportView(complainsTextArea);
 
         jLabel6.setText("Write your complain");
 
+        submitComplain.setBackground(new java.awt.Color(231, 76, 60));
+        submitComplain.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        submitComplain.setForeground(new java.awt.Color(255, 255, 255));
         submitComplain.setText("Submit");
+        submitComplain.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        submitComplain.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                submitComplainMouseEntered(evt);
+            }
+        });
         submitComplain.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 submitComplainButtonActionPerformed(evt);
@@ -568,23 +645,23 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
                         .addGap(297, 297, 297)
                         .addComponent(complains, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(complainsPanelLayout.createSequentialGroup()
-                        .addGap(339, 339, 339)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(complainsPanelLayout.createSequentialGroup()
                         .addGap(365, 365, 365)
-                        .addComponent(submitComplain)))
+                        .addComponent(submitComplain, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(complainsPanelLayout.createSequentialGroup()
+                        .addGap(340, 340, 340)
+                        .addComponent(jLabel6)))
                 .addContainerGap(341, Short.MAX_VALUE))
         );
         complainsPanelLayout.setVerticalGroup(
             complainsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(complainsPanelLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addGap(49, 49, 49)
                 .addComponent(jLabel6)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(complains, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(submitComplain)
-                .addContainerGap(131, Short.MAX_VALUE))
+                .addContainerGap(135, Short.MAX_VALUE))
         );
 
         mainPanel.addTab("Complains", complainsPanel);
@@ -658,7 +735,7 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
                     if (selectedItem.startsWith(itemName)) {
                         totalAmount += price;
                         if (orderedItemIDs.length() > 0) {
-                            orderedItemIDs.append(","); 
+                            orderedItemIDs.append(",");
                         }
                         orderedItemIDs.append(itemID);
                     }
@@ -674,47 +751,31 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         JOptionPane.showMessageDialog(this, "Error: No valid items found in menu!");
         return;
     }
-    String orderID = "ORD" + (100 + (int) (Math.random() * 900)); 
-    String vendorID = "VEN302"; 
-    String status = "Pending";
-    String date = java.time.LocalDate.now().toString();
-    loadOrderHistory();
 
-    try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
-    bw.newLine();  
-    bw.write(orderID + ";" + customerID + ";" + vendorID + ";" + orderedItemIDs + ";" 
-             + date + ";" + status + ";" + deliveryMethod + ";" + totalAmount);
-    bw.flush();  
-    JOptionPane.showMessageDialog(this, "Order placed successfully!");
-    model.clear(); 
-    PaymentWindow paymentWindow = new PaymentWindow(customerID, totalAmount);
+    String orderID = generateOrderID();
+    String vendorID = "VEN302";
+    
+    PaymentWindow paymentWindow = new PaymentWindow(customerID, totalAmount, orderID, vendorID, orderedItemIDs.toString(), deliveryMethod);
     paymentWindow.setVisible(true);
-
-} catch (IOException e) {
-    JOptionPane.showMessageDialog(this, "Error saving order: " + e.getMessage());
-}
     }//GEN-LAST:event_placeOrderButtonActionPerformed
 
     private void submitComplainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitComplainButtonActionPerformed
-    String complaint = complainsTextArea.getText().trim();
+   String complaint = complainsTextArea.getText().trim();
 
     if (complaint.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Please enter a complaint.");
-        return;
-    }
-
+        return;    }
     
     String customerID = customer.getCustomerIDFromUsersFile(customer.getUsername()); 
 
     if (customerID.equals("ERROR")) {
         JOptionPane.showMessageDialog(this, "Error retrieving Customer ID. Complaint not submitted.");
-        return;
-    }
-
-    String status = "Unsolved"; 
-
+        return;    }
     
-    String complaintEntry = customerID + ";" + complaint + ";" + status;
+    String status = "Unsolved"; 
+    String complaintID = generateComplaintID();
+
+    String complaintEntry = complaintID + ";" + customerID + ";" + complaint + ";" + status;
 
     try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/complaints.txt", true))) {
         bw.newLine(); 
@@ -725,6 +786,29 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
     } catch (IOException e) {
         JOptionPane.showMessageDialog(this, "Error saving complaint: " + e.getMessage());
     }
+}
+
+private String generateComplaintID() {
+    String lastComplaintID = "COM000"; 
+
+    try (BufferedReader br = new BufferedReader(new FileReader("src/data/complaints.txt"))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            if (!line.trim().isEmpty()) {
+                String[] parts = line.split(";");
+                if (parts.length > 0 && parts[0].startsWith("COM")) {
+                    lastComplaintID = parts[0];
+                }
+            }
+        }
+    } catch (IOException e) {
+        System.out.println("Error reading complaints file: " + e.getMessage());
+    }
+
+    int lastID = Integer.parseInt(lastComplaintID.substring(3));
+    int newID = lastID + 1;
+
+    return "COM" + String.format("%03d", newID); 
     }//GEN-LAST:event_submitComplainButtonActionPerformed
 
     private void reorderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reorderButtonActionPerformed
@@ -732,21 +816,18 @@ String selectedOrder = orderHistoryList.getSelectedValue();
     
     if (selectedOrder == null) {
         JOptionPane.showMessageDialog(this, "Please select an order to reorder.");
-        return;
-    }
+        return;    }
 
     String customerID = customer.getCustomerIDFromUsersFile(username);
     if (customerID.equals("ERROR")) {
         JOptionPane.showMessageDialog(this, "Error retrieving Customer ID. Cannot place order.");
-        return;
-    }
+        return;    }
 
     String[] orderDetails = selectedOrder.split("\\|");
     
     if (orderDetails.length < 4) {
         JOptionPane.showMessageDialog(this, "Invalid order format. Cannot reorder.");
-        return;
-    }
+        return;    }
 
     String itemDetails = orderDetails[1].trim(); 
     String deliveryMethod = orderDetails[2].trim(); 
@@ -783,26 +864,15 @@ String selectedOrder = orderHistoryList.getSelectedValue();
 
     if (menuItemIDs.length() == 0) {
         JOptionPane.showMessageDialog(this, "Error: No valid items found in menu!");
-        return;
-    }
+        return;    }
 
     String orderID = generateOrderID();
     String orderDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
     String orderStatus = "Pending";
 
-    try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
-    bw.newLine(); 
-    bw.write(orderID + ";" + customerID + ";" + vendorID + ";" + menuItemIDs.toString() + ";"
-             + orderDate + ";" + orderStatus + ";" + deliveryMethod + ";" + totalAmount);
-    bw.flush(); 
-    JOptionPane.showMessageDialog(this, "Order placed successfully with " + deliveryMethod + "! Redirecting to payment...");
+    JOptionPane.showMessageDialog(this, "Redirecting to payment...");
 
-    loadOrderHistory();
-    new PaymentWindow(customerID, totalAmount).setVisible(true);
-
-} catch (IOException e) {
-    JOptionPane.showMessageDialog(this, "Error saving reordered item: " + e.getMessage());
-}
+    new PaymentWindow(customerID, totalAmount, orderID, vendorID, menuItemIDs.toString(), deliveryMethod).setVisible(true);
     }//GEN-LAST:event_reorderButtonActionPerformed
 
     private void orderedItemsListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderedItemsListMouseClicked
@@ -824,6 +894,14 @@ String selectedOrder = orderHistoryList.getSelectedValue();
     private void foodListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_foodListMouseClicked
         addToOrderList(foodList);
     }//GEN-LAST:event_foodListMouseClicked
+
+    private void placeOrderButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_placeOrderButtonMouseEntered
+ placeOrderButton.setBackground(new java.awt.Color(41, 128, 185));
+    }//GEN-LAST:event_placeOrderButtonMouseEntered
+
+    private void submitComplainMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submitComplainMouseEntered
+submitComplain.setBackground(new java.awt.Color(52, 152, 219));
+    }//GEN-LAST:event_submitComplainMouseEntered
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane FoodItemsList;
