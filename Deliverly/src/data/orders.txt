@@ -1,15 +1,9 @@
 ORD101;CUS001;VEN302;MI102,MI103;None;Pending;Dine-In;25.0;1
-Review: so bad i dont want to eat there anymore
-Review: so bad i dont want to eat there anymore
-Review: The food was great!
-Review: I loved the ambiance.
 ORD102;CUS202;VEN302;MI101;RNR002;Pending;Delivery;15.0;0
 ORD103;CUS203;VEN302;MI102,MI104;2024-07-25;Pending;Take-Away;55.00;5.0
 Review: The delivery was on time.
 ORD104;CUS204;VEN302;MI105;RNR001;Accepted;Delivery;110.0;1.3
 Review: I was not satisfied with my order!
-Review: It was very cold
-Review: I want a refund!
 ORD105;CUS205;VEN302;MI106;None;Pending;Delivery;20.0;5.0
 Review: Very good!
 ORD106;CUS206;VEN303;MI107,MI108;RNR001;Delivered;Dine-In;40.0;0.0
@@ -22,73 +16,44 @@ Review: The restaurant was clean and welcoming.
 ORD110;CUS210;VEN305;MI113;RNR001;Delivered;Take-Away;25.0;0.0
 Review: The order was canceled without notice!
 ORD111;CUS211;VEN305;MI114;RNR001;Delivered;Delivery;90.0;0.0
-Review: Arrived hot and fresh!
 ORD112;CUS212;VEN306;MI115,MI116;RNR001;Delivered;Take-Away;50.0;0.0
-Review: Good portion sizes, but a bit expensive.
 ORD113;CUS213;VEN306;MI117;RNR001;Delivered;Dine-In;35.0;5.0
-Review: Friendly staff and great service.
 ORD114;CUS214;VEN307;MI118;RNR001;Delivered;Delivery;20.0;0.0
-Review: Took too long to arrive.
 ORD115;CUS215;VEN307;MI119,MI120;RNR001;Delivered;Take-Away;45.0;2.0
-Review: Disappointed, my meal was missing an item.
 ORD116;CUS216;VEN308;MI121;RNR001;Delivered;Dine-In;55.0;0.0
-Review: Best meal I've had in a while!
 ORD117;CUS217;VEN308;MI122;RNR001;Pending;Delivery;30.0;4.0
-Review: I hope it arrives soon!
 ORD118;CUS218;VEN309;MI123,MI124;RNR001;Delivered;Take-Away;40.0;0.0
-Review: The packaging was great, and the food was fresh.
 ORD119;CUS219;VEN309;MI125;RNR001;Accepted;Dine-In;18.0;1.0
-Review: The staff was rude, and the food took too long.
 ORD120;CUS220;VEN310;MI126,MI127;RNR001;Delivered;Delivery;50.0;0.0
-Review: Excellent taste, but the delivery was a bit delayed.
 ORD121;CUS221;VEN310;MI128;2025-08-04;Pending;Take-Away;22.0;5.0
-Review: Loved the flavors, will definitely order again.
 ORD122;CUS222;VEN311;MI129,MI130;RNR001;Delivered;Delivery;30.0;0.0
-Review: I had a bad experience, the food wasn’t as described.
 ORD123;CUS223;VEN311;MI131;RNR001;Rejected;Dine-In;60.0;5.0
-Review: The food was amazing, and the staff was friendly.
 ORD124;CUS224;VEN312;MI132,MI133;2025-08-05;Pending;Take-Away;75.0;5.0
-Review: Very good portions, would recommend!
 ORD125;CUS225;VEN312;MI134;None;Pending;Delivery;40.0;2.0
-Review: I wasn’t happy with the taste, very bland.
 ORD126;CUS226;VEN313;MI135,MI136;RNR001;Pending;Dine-In;45.0;5.0
-Review: Great experience, the dessert was a highlight!
 ORD127;CUS227;VEN313;MI137;2025-08-06;Pending;Delivery;85.0;5.0
-Review: Delicious! I’ll definitely come back for more.
 ORD128;CUS228;VEN314;MI138,MI139;None;Pending;Take-Away;55.0;1.0
-Review: Food was cold when it arrived.
 ORD129;CUS229;VEN314;MI140;RNR001;Pending;Delivery;95.0;5.0
-Review: Excellent service and great food.
 ORD130;CUS230;VEN315;MI141;2025-08-07;Pending;Dine-In;60.0;5.0
-Review: Nice ambiance, and the staff was courteous.
 ORD131;CUS231;VEN315;MI142,MI143;None;Pending;Take-Away;25.0;2.0
-Review: I didn’t like the flavor, would not order again.
 ORD132;CUS232;VEN316;MI144,MI145;2025-08-08;Pending;Delivery;50.0;4.0
-Review: Great meal, but the delivery was a bit slow.
 ORD133;CUS233;VEN316;MI146;RNR001;Pending;Take-Away;65.0;5.0
-Review: The meal was tasty and well-packaged.
 ORD134;CUS234;VEN317;MI147;None;Pending;Dine-In;20.0;2.0
-Review: The food was bland and the service was slow.
 ORD135;CUS235;VEN317;MI148,MI149;2025-08-09;Pending;Take-Away;40.0;5.0
-Review: Amazing experience, I will return for sure!
 ORD136;CUS236;VEN318;MI150;None;Pending;Delivery;28.0;1.0
-Review: Not worth the price, very disappointed.
 ORD137;CUS237;VEN318;MI151,MI152;2025-08-10;Pending;Delivery;50.0;5.0
-Review: Fast and efficient, the food was delicious.
 ORD138;CUS238;VEN319;MI153;RNR001;Pending;Take-Away;72.0;5.0
-Review: The order was perfect, loved everything!
 ORD139;CUS239;VEN319;MI154,MI155;None;Pending;Dine-In;60.0;2.0
-Review: Not the best experience, won’t be back.
 ORD140;CUS240;VEN320;MI156;2025-08-11;Pending;Delivery;80.0;4.0
-Review: Everything was great except the dessert.
 ORD229;CUS001;VEN302;MI105,MI110,MI153;2025-02-22;Pending;Dine-in;15.24
-ORD657;CUS001;VEN302;MI104,MI109;2025-02-22;Pending;Dine-in;18.49;2
-Review: sad
-Review: so bad i dont want to eat there anymore
-ORD657;CUS001;VEN302;MI104,MI109;2025-02-22;Pending;Dine-in;3;2
-Review: sad
-Review: so bad i dont want to eat there anymore
-ORD452;CUS001;VEN302;MI104,MI109;2025-02-22;Pending;Dine-in;18.49;1
-Review: so bad i dont want to eat there anymore
-Review: asdadaad
+ORD657;CUS001;VEN302;MI104,MI109;2025-02-22;Pending;Dine-in;18.49;3
 ORD387;CUS001;VEN302;MI105;2025-02-22;Pending;Dine-in;4.75;1
+ORD344;CUS001;VEN302;MI104,MI141;2025-02-22;Pending;Dine-in;16.49;4.0
+ORD616;CUS001;VEN302;MI102,MI103;2025-02-22;Pending;Delivery;15.75;4.0
+Review: the fries were a bit dry
+ORD162;CUS001;VEN302;MI104,MI108,MI143,MI152;2025-02-22;Pending;Delivery;30.98;4.0
+ORD646;CUS001;VEN302;MI103,MI106;2025-02-22;Pending;Delivery;14.24;4.0
+ORD643;CUS001;VEN302;MI102,MI103;2025-02-22;Pending;Delivery;15.75;4.0
+ORD874;CUS001;VEN302;MI104,MI109;2025-02-22;Pending;Take-away;18.49;4.0
+ORD920;CUS001;VEN302;MI104,MI108,MI143,MI152;2025-02-22;Pending;Take-away;30.98;4.0
+ORD522;CUS001;VEN302;MI104,MI141;2025-02-22;Pending;Delivery;16.49;4.0
