@@ -19,7 +19,7 @@ import com.deliverly.main.vendor.VendorMenu;
  */
 public class LoginMenu extends javax.swing.JFrame {
     
-    private static String username;
+    public static String username;
     public LoginMenu() {
         initComponents();
         this.pack();
@@ -276,7 +276,7 @@ public class LoginMenu extends javax.swing.JFrame {
                 if(user.split(";")[0].contains("CUS") == true){
                     new CustomerMenu().setVisible(true);
                 }
-                else if(user.split(";")[0].contains("RNR") == true){
+           else if(user.split(";")[0].contains("RNR") == true){
                     new RunnerMenu().setVisible(true);
                 }
                 else if(user.split(";")[0].contains("VEN") == true){

@@ -13,15 +13,8 @@ VEN303;vendor003;vendorpass003;Vendor Three;555-4321;432 Cedar St, Springfield, 
 VEN004;vendor004;vendorpass004;Vendor Four;555-3210;321 Walnut St, Springfield, IL;vendor.four@email.com;200;vendor
 VEN005;vendor005;vendorpass005;Vendor Five;555-2109;210 Spruce St, Springfield, IL;vendor.five@email.com;200;vendor
 VEN006;vendor006;vendorpass006;Vendor Six;555-1098;109 Maple St, Springfield, IL;vendor.six@email.com;200;vendor
-RNR001;runner001;runnerpass001;Runner One;555-9087;908 Oak St, Springfield, IL;runner.one@email.com;785;runner
+RNR001;r;r;Runner One;555-9087;908 Oak St, Springfield, IL;runner.one@email.com;785;runner
 RNR002;runner002;runnerpass002;Runner Two;555-8076;807 Pine St, Springfield, IL;runner.two@email.com;209;runner
-RNR003;runner003;runnerpass003;Runner Three;555-7065;706 Cedar St, Springfield, IL;runner.three@email.com;200;runner
-RNR004;runner004;runnerpass004;Runner Four;555-6054;605 Walnut St, Springfield, IL;runner.four@email.com;200;runner
-RNR005;runner005;runnerpass005;Runner Five;555-5043;504 Spruce St, Springfield, IL;runner.five@email.com;1100;runner
-RNR006;runner006;runnerpass006;Runner Six;555-4032;403 Maple St, Springfield, IL;runner.six@email.com;200;runner
-RNR007;runner007;runnerpass007;Runner Seven;555-3021;302 Birch St, Springfield, IL;runner.seven@email.com;200;runner
-RNR008;runner008;runnerpass008;Runner Eight;555-2010;201 Elm St, Springfield, IL;runner.eight@email.com;200;runner
-RNR009;runner009;runnerpass009;Runner Nine;555-1009;100 Oak St, Springfield, IL;runner.nine@email.com;200;runner
 MGR001;m;m;Manager One;555-9870;987 Elm St, Springfield, IL;manager.one@email.com;200;manager
 MGR002;manager002;managerpass002;Manager Two;555-8760;876 Oak St, Springfield, IL;manager.two@email.com;200;manager
 MGR003;manager003;managerpass003;Manager Three;555-7650;765 Pine St, Springfield, IL;manager.three@email.com;200;manager
