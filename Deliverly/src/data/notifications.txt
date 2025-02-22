@@ -1,5 +1,6 @@
 username;message
-v2;You have a new order
+v2;You have a new order from CUS001!
+v1;You have a new order from CUS001!
 v1;You have a new order from CUS001!
 v1;You have a new order from CUS001!
 v1;You have a new order from CUS001!
