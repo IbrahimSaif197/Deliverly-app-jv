@@ -2,3 +2,25 @@ CompID;CusID;Info;status Example
 COM001;CUS001;Solved;Solved
 COM002;CUS001;asdad;Unsolved
 COM003;CUS001;My order took waaaaay to long to arrive and it was cold;Unsolved
+COM004;CUS002;Received the wrong item;Unsolved
+COM005;CUS003;Food was cold on arrival;Solved
+COM006;CUS004;Order was missing an item;Unsolved
+COM007;CUS005;Delivery took longer than expected;Unsolved
+COM008;CUS006;Incorrect billing amount;Unsolved
+COM009;CUS007;Food packaging was damaged;Unsolved
+COM010;CUS008;Rider was rude during delivery;Unsolved
+COM011;CUS009;Received a different order;Unsolved
+COM012;CUS010;Portion size was too small;Unsolved
+COM013;CUS011;Food was not fresh;Unsolved
+COM014;CUS012;Order was completely missing;Unsolved
+COM015;CUS013;Long waiting time for delivery;Unsolved
+COM016;CUS014;Payment was charged twice;Unsolved
+COM017;CUS015;App crashed during payment;Unsolved
+COM018;CUS016;Rider delivered to the wrong address;Unsolved
+COM019;CUS017;Food had a strange smell;Unsolved
+COM020;CUS018;Restaurant refused refund request;Unsolved
+COM021;CUS019;Driver did not follow delivery instructions;Unsolved
+COM022;CUS020;Extra charges added to my bill;Unsolved
+COM023;CUS021;Order tracking was not updating;Unsolved
+COM024;CUS022;Food arrived late and was soggy;Unsolved
+

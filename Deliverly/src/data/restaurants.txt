@@ -1,3 +1,2 @@
 MI1;fa7sa;7loa nek;20.0;VEN302
 MI3;eggs;eggs ;20.0;VEN302
-MI5;naan cheese;cheese bread;4.5;VEN302

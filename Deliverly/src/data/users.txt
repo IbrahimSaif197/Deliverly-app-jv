@@ -12,7 +12,7 @@ VEN301;v2;v2;Vendor Two;555-5432;543 Birch St, Springfield, IL;vendor.two@email.
 VEN303;vendor003;vendorpass003;Vendor Three;555-4321;432 Cedar St, Springfield, IL;vendor.three@email.com;200;vendor
 VEN004;vendor004;vendorpass004;Vendor Four;555-3210;321 Walnut St, Springfield, IL;vendor.four@email.com;200;vendor
 VEN005;vendor005;vendorpass005;Vendor Five;555-2109;210 Spruce St, Springfield, IL;vendor.five@email.com;200;vendor
-RNR001;runner001;runnerpass001;Runner One;555-9087;908 Oak St, Springfield, IL;runner.one@email.com;785;runner
+RNR001;r;r;Runner One;555-9087;908 Oak St, Springfield, IL;runner.one@email.com;785;runner
 RNR002;runner002;runnerpass002;Runner Two;555-8076;807 Pine St, Springfield, IL;runner.two@email.com;209;runner
 RNR003;runner003;runnerpass003;Runner Three;555-7065;706 Cedar St, Springfield, IL;runner.three@email.com;200;runner
 RNR004;runner004;runnerpass004;Runner Four;555-6054;605 Walnut St, Springfield, IL;runner.four@email.com;200;runner

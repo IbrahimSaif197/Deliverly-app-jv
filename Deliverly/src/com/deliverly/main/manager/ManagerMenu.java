@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -22,10 +23,11 @@ import javax.swing.table.DefaultTableModel;
  * @author natsu
  */
 public final class ManagerMenu extends javax.swing.JFrame {
+    File users_file = new File("src//data//users.txt");
     File orders_file = new File("src//data//orders.txt");
-    File menus_file = new File("src//data//restaurants.txt");
+    File menus_file = new File("src//data//menu.txt");
     File complaints_file = new File("src//data//complaints.txt");
-    DefaultTableModel model, modelOrder, modelComplaints;
+    DefaultTableModel model, modelOrder, modelComplaints, modelRunner;
     LoginMenu login = new LoginMenu();
     
     
@@ -39,6 +41,26 @@ public final class ManagerMenu extends javax.swing.JFrame {
                 String[] meal_data = meal.split(";");
                 tableModel.addRow(new Object[]{
                     meal_data[0], meal_data[1], meal_data[2], meal_data[4]
+                    });
+            }
+        } catch (IOException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
+    public void reloadDataRunner(DefaultTableModel tableModel){
+        try {
+            tableModel.setRowCount(0);
+            FileReader fr = new FileReader(users_file);
+            BufferedReader br = new BufferedReader(fr);
+            String runner;
+            while ((runner = br.readLine()) != null) {
+                if (!runner.startsWith("RNR")) {
+                    continue;
+                }
+                String[] meal_data = runner.split(";");
+                tableModel.addRow(new Object[]{
+                    meal_data[0], meal_data[3]
                     });
             }
         } catch (IOException e){
@@ -100,9 +122,11 @@ public final class ManagerMenu extends javax.swing.JFrame {
         this.modelComplaints = (DefaultTableModel) Complaints.getModel();
         this.modelOrder = (DefaultTableModel) Revenue.getModel();
         this.model = (DefaultTableModel) FoodMenu.getModel();
+        this.modelRunner = (DefaultTableModel) Runners.getModel();
         this.reloadData(model);
         this.reloadDataOrders(modelOrder);
         this.reloadDataComplaints(modelComplaints);
+        this.reloadDataRunner(modelRunner);
         OverallRevenue.setText(estimatedRevenue());
         TotalOrders.setText(totalOrders());
         
@@ -146,7 +170,7 @@ public final class ManagerMenu extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        Runners = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         Complaints = new javax.swing.JTable();
@@ -244,18 +268,31 @@ public final class ManagerMenu extends javax.swing.JFrame {
         jLabel5.setText("Total Delivery Runners: ");
         jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 100, -1, -1));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        Runners.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Runner ID", "Runner Name", "Rating"
             }
-        ));
-        jScrollPane4.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(Runners);
+        if (Runners.getColumnModel().getColumnCount() > 0) {
+            Runners.getColumnModel().getColumn(0).setResizable(false);
+            Runners.getColumnModel().getColumn(1).setResizable(false);
+            Runners.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         jPanel2.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 680, 500));
 
@@ -450,7 +487,8 @@ public final class ManagerMenu extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
         company_revenue = total * company_percent;
-        String revenueStr = company_revenue + "RM";
+        DecimalFormat df = new DecimalFormat("0.00");
+        String revenueStr = df.format(company_revenue) + " RM";
         
         return revenueStr;
         
@@ -559,6 +597,7 @@ public final class ManagerMenu extends javax.swing.JFrame {
     private javax.swing.JLabel LoggedUser;
     private javax.swing.JLabel OverallRevenue;
     private javax.swing.JTable Revenue;
+    private javax.swing.JTable Runners;
     private javax.swing.JButton Solve;
     private javax.swing.JLabel TotalOrders;
     private javax.swing.JCheckBox darkModeCheckBox;
@@ -582,6 +621,5 @@ public final class ManagerMenu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
