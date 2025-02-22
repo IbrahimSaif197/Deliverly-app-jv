@@ -362,6 +362,7 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         submitComplain = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(101, 233, 238));
@@ -375,7 +376,6 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         deliveryOption.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
 
         placeOrderButton.setBackground(new java.awt.Color(52, 152, 219));
-        placeOrderButton.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         placeOrderButton.setForeground(new java.awt.Color(255, 255, 255));
         placeOrderButton.setText("Proceed to payment");
         placeOrderButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -469,7 +469,7 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(deliveryOption, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(387, 421, Short.MAX_VALUE))
+                .addGap(387, 450, Short.MAX_VALUE))
         );
         menuPanelLayout.setVerticalGroup(
             menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -644,7 +644,6 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         jLabel6.setText("Write your complain");
 
         submitComplain.setBackground(new java.awt.Color(231, 76, 60));
-        submitComplain.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         submitComplain.setForeground(new java.awt.Color(255, 255, 255));
         submitComplain.setText("Submit");
         submitComplain.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -688,7 +687,7 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
                 .addComponent(complains, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(submitComplain)
-                .addContainerGap(135, Short.MAX_VALUE))
+                .addContainerGap(136, Short.MAX_VALUE))
         );
 
         mainPanel.addTab("Complains", complainsPanel);
@@ -699,6 +698,13 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
         jLabel2.setText("User");
 
+        jButton1.setText("Refresh");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -708,15 +714,21 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(17, 17, 17))
             .addComponent(mainPanel)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(mainPanel))
         );
@@ -784,6 +796,7 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
     
     PaymentWindow paymentWindow = new PaymentWindow(customerID, totalAmount, orderID, vendorID, orderedItemIDs.toString(), deliveryMethod);
     paymentWindow.setVisible(true);
+    loadOrderHistory();
     }//GEN-LAST:event_placeOrderButtonActionPerformed
 
     private void submitComplainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitComplainButtonActionPerformed
@@ -836,6 +849,7 @@ private String generateComplaintID() {
     int newID = lastID + 1;
 
     return "COM" + String.format("%03d", newID); 
+    
     }//GEN-LAST:event_submitComplainButtonActionPerformed
 
     private void reorderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reorderButtonActionPerformed
@@ -900,6 +914,7 @@ String selectedOrder = orderHistoryList.getSelectedValue();
     JOptionPane.showMessageDialog(this, "Redirecting to payment...");
 
     new PaymentWindow(customerID, totalAmount, orderID, vendorID, menuItemIDs.toString(), deliveryMethod).setVisible(true);
+    loadOrderHistory();
     }//GEN-LAST:event_reorderButtonActionPerformed
 
     private void orderedItemsListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderedItemsListMouseClicked
@@ -939,6 +954,13 @@ placeOrderButton.setBackground(new java.awt.Color(52, 152, 219));
 submitComplain.setBackground(new java.awt.Color(231,76,60));
     }//GEN-LAST:event_submitComplainMouseExited
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        loadReviews();
+        loadMenuItems();
+        loadOrderHistory();
+        loadTransactionHistory();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane FoodItemsList;
     private javax.swing.JList<String> beverageList;
@@ -951,6 +973,7 @@ submitComplain.setBackground(new java.awt.Color(231,76,60));
     private javax.swing.JScrollPane dessertItemsList;
     private javax.swing.JList<String> dessertList;
     private javax.swing.JList<String> foodList;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
