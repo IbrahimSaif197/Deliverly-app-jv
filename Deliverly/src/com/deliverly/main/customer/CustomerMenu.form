@@ -95,17 +95,17 @@
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="jLabel3" min="-2" pref="91" max="-2" attributes="0"/>
                                           <Component id="deliveryOption" min="-2" pref="103" max="-2" attributes="0"/>
+                                          <Component id="jLabel3" min="-2" pref="91" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
                           </Group>
                           <Component id="jLabel5" min="-2" pref="68" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="387" pref="450" max="32767" attributes="0"/>
+                      <EmptySpace min="393" pref="456" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -629,35 +629,34 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace pref="288" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="complains" min="-2" pref="220" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="297" max="-2" attributes="0"/>
-                              <Component id="complains" min="-2" pref="220" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="365" max="-2" attributes="0"/>
-                              <Component id="submitComplain" min="-2" pref="60" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="340" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
                               <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="341" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="350" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="374" max="-2" attributes="0"/>
+                      <Component id="submitComplain" min="-2" pref="60" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                       <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="complains" min="-2" pref="218" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="submitComplain" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="136" max="32767" attributes="0"/>
+                      <EmptySpace pref="150" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

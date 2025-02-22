@@ -464,12 +464,12 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
                                     .addComponent(orderedItemsList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(placeOrderButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(menuPanelLayout.createSequentialGroup()
-                                .addGap(53, 53, 53)
+                                .addGap(41, 41, 41)
                                 .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(deliveryOption, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(deliveryOption, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(387, 450, Short.MAX_VALUE))
+                .addGap(393, 456, Short.MAX_VALUE))
         );
         menuPanelLayout.setVerticalGroup(
             menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -665,29 +665,29 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         complainsPanel.setLayout(complainsPanelLayout);
         complainsPanelLayout.setHorizontalGroup(
             complainsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(complainsPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, complainsPanelLayout.createSequentialGroup()
+                .addContainerGap(288, Short.MAX_VALUE)
                 .addGroup(complainsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(complains, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(complainsPanelLayout.createSequentialGroup()
-                        .addGap(297, 297, 297)
-                        .addComponent(complains, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(complainsPanelLayout.createSequentialGroup()
-                        .addGap(365, 365, 365)
-                        .addComponent(submitComplain, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(complainsPanelLayout.createSequentialGroup()
-                        .addGap(340, 340, 340)
+                        .addGap(59, 59, 59)
                         .addComponent(jLabel6)))
-                .addContainerGap(341, Short.MAX_VALUE))
+                .addGap(350, 350, 350))
+            .addGroup(complainsPanelLayout.createSequentialGroup()
+                .addGap(374, 374, 374)
+                .addComponent(submitComplain, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         complainsPanelLayout.setVerticalGroup(
             complainsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(complainsPanelLayout.createSequentialGroup()
-                .addGap(49, 49, 49)
+                .addGap(35, 35, 35)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(complains, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(submitComplain)
-                .addContainerGap(136, Short.MAX_VALUE))
+                .addContainerGap(150, Short.MAX_VALUE))
         );
 
         mainPanel.addTab("Complains", complainsPanel);
