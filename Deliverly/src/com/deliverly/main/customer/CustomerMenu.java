@@ -141,9 +141,9 @@ private void loadMenuItems() {
 }
 
 private void submitReview() {
-    String selectedOrder = orderHistoryList.getSelectedValue(); 
+    String selectedOrder = orderHistoryList.getSelectedValue();
     String reviewText = reviewTextArea.getText().trim();
-    String selectedRating = rating.getSelectedItem().toString(); 
+    String selectedRating = rating.getSelectedItem().toString();
 
     if (selectedOrder == null) {
         JOptionPane.showMessageDialog(this, "Select an order to review.");
@@ -154,16 +154,54 @@ private void submitReview() {
         return;
     }
 
-    try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
-        bw.newLine(); 
-        bw.write("Review: " + reviewText + " | Rating: " + selectedRating); 
-        JOptionPane.showMessageDialog(this, "Review submitted successfully with rating: " + selectedRating);
+    String orderID = selectedOrder.split("\\|")[0].trim();
+
+    File ordersFile = new File("src/data/orders.txt");
+    File tempFile = new File("src/data/orders_temp.txt");
+
+    boolean orderFound = false;
+
+    try (BufferedReader br = new BufferedReader(new FileReader(ordersFile));
+         BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile))) {
+
+        String line;
+
+        while ((line = br.readLine()) != null) {
+            String trimmedLine = line.trim();
+            String[] orderDetails = trimmedLine.split(";");
+
+            if (trimmedLine.startsWith("ORD") && orderDetails.length >= 9 && orderDetails[0].equals(orderID)) {
+                orderDetails[8] = selectedRating; 
+                line = String.join(";", orderDetails); 
+                orderFound = true;
+            }
+
+            bw.write(line);
+            bw.newLine();
+        }
+
+        if (orderFound) {
+            bw.write("Review: " + reviewText);
+            bw.newLine();
+            JOptionPane.showMessageDialog(this, "Review submitted successfully with rating: " + selectedRating);
+        } else {
+            JOptionPane.showMessageDialog(this, "Error: Order ID not found! Review not saved.");
+        }
+
     } catch (IOException e) {
         JOptionPane.showMessageDialog(this, "Error saving review: " + e.getMessage());
     }
-    
+
+    if (orderFound && ordersFile.delete()) {
+        tempFile.renameTo(ordersFile);
+    }
+
     loadReviews();
 }
+
+
+
+
 
 private void loadOrderHistory() {
     DefaultListModel<String> orderModel = new DefaultListModel<>();
@@ -176,18 +214,17 @@ private void loadOrderHistory() {
 
     HashMap<String, String> menuItems = new HashMap<>();
     HashMap<String, String> menuPrices = new HashMap<>();
-    DecimalFormat df = new DecimalFormat("0.00"); 
+    DecimalFormat df = new DecimalFormat("0.00");
 
+    // Load menu items and prices
     try (BufferedReader br = new BufferedReader(new FileReader("src/data/menu.txt"))) {
         String line;
         while ((line = br.readLine()) != null) {
-            if (line.startsWith("ItemID")) continue; 
-
             String[] details = line.split(";");
             if (details.length >= 4) {
-                String itemID = details[0];  
-                String itemName = details[1]; 
-                String price = details[3];    
+                String itemID = details[0];
+                String itemName = details[1];
+                String price = details[3];
 
                 menuItems.put(itemID, itemName);
                 menuPrices.put(itemID, price);
@@ -198,46 +235,69 @@ private void loadOrderHistory() {
         return;
     }
 
+    // Load order history from orders.txt
     try (BufferedReader br = new BufferedReader(new FileReader("src/data/orders.txt"))) {
         String line;
+        StringBuilder orderDetailsBuilder = new StringBuilder();
+        boolean orderFound = false;
+
         while ((line = br.readLine()) != null) {
-            String[] orderDetails = line.split(";");
-
-            if (orderDetails.length >= 8) {
-                String orderID = orderDetails[0];  
-                String orderCustomerID = orderDetails[1]; 
-                String vendorID = orderDetails[2]; 
-                String itemIDs = orderDetails[3];  
-                String orderDate = orderDetails[4]; 
-                String status = orderDetails[5];  
-                String deliveryMethod = orderDetails[6]; 
-                double totalPrice = Double.parseDouble(orderDetails[7]); 
-
-                if (orderCustomerID.equals(userId)) {
-                    StringBuilder itemDetails = new StringBuilder();
-                    String[] itemArray = itemIDs.split(",");
-
-                    for (String itemID : itemArray) {
-                        if (menuItems.containsKey(itemID)) {
-                            itemDetails.append(menuItems.get(itemID)).append(" (Rm").append(menuPrices.get(itemID)).append("), ");
-                        }
-                    }
-
-                    if (itemDetails.length() > 0) {
-                        itemDetails.setLength(itemDetails.length() - 2);
-                    }
-
-                    String formattedPrice = df.format(totalPrice);
-                    String orderEntry = orderID + " | " + itemDetails + " | " + deliveryMethod + " | Rm" + formattedPrice + " | " + status;
-                    orderModel.addElement(orderEntry);
+            if (line.startsWith("ORD")) { 
+                if (orderFound) {
+                    orderModel.addElement(orderDetailsBuilder.toString());
                 }
+                
+                // Start parsing a new order
+                String[] orderDetails = line.split(";");
+                if (orderDetails.length >= 9) {
+                    String orderID = orderDetails[0];
+                    String orderCustomerID = orderDetails[1];
+                    String itemIDs = orderDetails[3];
+                    String status = orderDetails[5];
+                    String deliveryMethod = orderDetails[6];
+                    double totalPrice = Double.parseDouble(orderDetails[7]);
+                    String rating = orderDetails[8];
+
+                    if (orderCustomerID.equals(userId)) {
+                        orderFound = true;
+                        StringBuilder itemDetails = new StringBuilder();
+                        String[] itemArray = itemIDs.split(",");
+
+                        for (String itemID : itemArray) {
+                            if (menuItems.containsKey(itemID)) {
+                                itemDetails.append(menuItems.get(itemID))
+                                        .append(" (Rm").append(menuPrices.get(itemID)).append("), ");
+                            }
+                        }
+
+                        if (itemDetails.length() > 0) {
+                            itemDetails.setLength(itemDetails.length() - 2);
+                        }
+
+                        String formattedPrice = df.format(totalPrice);
+                        orderDetailsBuilder = new StringBuilder(orderID + " | " + itemDetails +
+                                " | " + deliveryMethod + " | Rm" + formattedPrice + 
+                                " | Status: " + status + " | Rating: " + rating);
+                    } else {
+                        orderFound = false;
+                    }
+                }
+            } else if (line.startsWith("Review:") && orderFound) {
+                orderDetailsBuilder.append("\n   ").append(line);
             }
+        }
+
+        if (orderFound) {
+            orderModel.addElement(orderDetailsBuilder.toString());
         }
     } catch (IOException e) {
         JOptionPane.showMessageDialog(this, "Error loading order history: " + e.getMessage());
     }
+
     orderHistoryList.setModel(orderModel);
 }
+
+
 
 private void loadTransactionHistory() {
     String userId = customer.getCustomerIDFromUsersFile(username);
@@ -555,18 +615,18 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
                     .addGroup(orderHistoryPanelLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                         .addGroup(orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(reviewsList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, orderHistoryPanelLayout.createSequentialGroup()
                                 .addComponent(submitReviewButton)
-                                .addGap(27, 27, 27)
+                                .addGap(18, 18, 18)
                                 .addComponent(rating, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(35, 35, 35)))
+                                .addGap(45, 45, 45))
+                            .addComponent(reviewsList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(187, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, orderHistoryPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(orderHistoryPanelLayout.createSequentialGroup()
+                        .addGap(227, 227, 227)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(238, 238, 238))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         orderHistoryPanelLayout.setVerticalGroup(
             orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -200,12 +200,14 @@ private void saveOrder() {
     try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
         bw.newLine(); 
         bw.write(orderID + ";" + customerID + ";" + vendorID + ";" + orderedItems + ";"
-                 + java.time.LocalDate.now() + ";" + "Pending" + ";" + deliveryMethod + ";" + totalAmount);
+                 + java.time.LocalDate.now() + ";" + "Pending" + ";" + deliveryMethod + ";" 
+                 + totalAmount + ";4.0"); 
         bw.flush();
         JOptionPane.showMessageDialog(this, "Order placed successfully!");
     } catch (IOException e) {
         JOptionPane.showMessageDialog(this, "Error saving order: " + e.getMessage());
     }
+
     }//GEN-LAST:event_confirmPaymentButtonActionPerformed
 
     private void jTextField1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField1MouseClicked
