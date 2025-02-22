@@ -24,3 +24,4 @@ COM022;CUS020;Extra charges added to my bill;Unsolved
 COM023;CUS021;Order tracking was not updating;Unsolved
 COM024;CUS022;Food arrived late and was soggy;Unsolved
 COM025;CUS001;it seemed as if the staff didnt care;Unsolved
+COM026;CUS001;my credit isn't updating properly;Unsolved
