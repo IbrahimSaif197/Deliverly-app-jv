@@ -98,8 +98,6 @@ public class VendorDataHandler {
         }
     }
     
-
-    // Order Management
     public List<Order> loadOrders() {
         List<Order> orders = new ArrayList<>();
          try (BufferedReader br = new BufferedReader(new FileReader(ordersFile))) {
@@ -141,6 +139,30 @@ public class VendorDataHandler {
              JOptionPane.showMessageDialog(null, "Error updating order: " + e.getMessage());
         }
     }
+public List<String> loadVendorNotifications() {
+    List<String> notifications = new ArrayList<>();
+
+    File notificationsFile = new File("src/data/notifications.txt");
+
+    try (BufferedReader br = new BufferedReader(new FileReader(notificationsFile))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] data = line.split(";", 2);
+            if (data.length == 2) {
+                String recipient = data[0]; // Vendor ID or username
+                String message = data[1];
+
+                if (recipient.equalsIgnoreCase(this.vendorId)) {
+                    notifications.add(message);
+                }
+            }
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(null, "Error loading notifications: " + e.getMessage());
+    }
+
+    return notifications;
+}
 
 
     public List<Order> loadOrderHistory(String period) {
