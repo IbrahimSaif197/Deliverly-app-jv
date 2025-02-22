@@ -1,15 +1,15 @@
 ORD101;CUS201;VEN302;MI102,MI103;2025-07-26;Pending;Dine-In;25.0
-Review: The food was great!
-Review: I loved the ambience.
+Review: The food was great! | Rating: 4
+Review: I loved the ambience. | Rating: 5
 ORD102;CUS202;VEN302;MI101;2025-07-26;Pending;Delivery;15.0
 ORD103;CUS203;VEN302;MI102,MI104;2024-07-25;Completed;Take-Away;55.00
-Review: The delivery was on time.
+Review: The delivery was on time. | Rating: 4
 ORD104;CUS204;VEN302;MI105;2025-07-26;Accepted;Delivery;110.0
 Review: I was not satisfied with my order!
-Review: It was very cold
-Review: I want a refund!
+Review: It was very cold | Rating: 2
+Review: I want a refund! | Rating: 1
 ORD105;CUS205;VEN302;MI106;2025-07-27;Pending;Delivery;20.0
-Review: Very good!
+Review: Very good!| Rating: 5
 ORD794;CUS001;VEN302;MI106,MI109;2025-02-20;Pending;Dine-in;12.49
 ORD963;CUS001;VEN302;MI109,MI113,MI145,MI149,MI152,MI155;2025-02-21;Pending;Dine-in;41.72
 ORD325;CUS001;VEN000;;2025-02-21;Pending;Dine-in;0.0
@@ -23,5 +23,5 @@ ORD949;CUS001;VEN302;MI106,MI141,MI155;2025-02-21;Pending;Take-away;14.48
 ORD179;CUS001;VEN302;MI105,MI110,MI153;2025-02-21;Pending;Dine-in;15.24
 ORD496;CUS001;VEN302;MI105,MI109;2025-02-21;Pending;Dine-in;10.25
 ORD379;CUS001;VEN301;MI134,MI138,MI150,MI156;2025-02-21;Pending;Take-away;26.24
-Review: I LOVED it
+Review: I LOVED it | Rating: 4
 Review: the fries were dry | Rating: 2
