@@ -46,7 +46,7 @@ MI146;Milkshake;Dessert;4.99;VEN301
 MI147;Ice Cream;Dessert;3.99;VEN301
 MI148;Avocado Toast;Dessert;6.25;VEN301
 MI149;Granola & Yogurt;Dessert;5.75;VEN301
-MI150;Omelette;Dessert;6.50;VEN301
+MI150;Omelette;Food;6.5;VEN301
 MI151;Mango Smoothie;Beverage;4.25;VEN302
 MI152;Lemonade;Beverage;2.99;VEN302
 MI153;Espresso;Beverage;2.50;VEN302
