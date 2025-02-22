@@ -49,12 +49,12 @@ private void checkNotifications(String customerUsername) {
                 String[] data = line.split(";", 2);
 
                 if (data.length == 2) {
-                    String storedUsername = data[0].trim(); // Trim spaces
+                    String storedUsername = data[0].trim(); 
                     String message = data[1].trim();
 
                     System.out.println("Found notification -> Username: " + storedUsername + ", Message: " + message);
 
-                    if (storedUsername.equalsIgnoreCase(customerUsername.trim())) { // Case insensitive check
+                    if (storedUsername.equalsIgnoreCase(customerUsername.trim())) { 
                         JOptionPane.showMessageDialog(null, "Notification: " + message);
                         hasNotification = true;
                     } else {
@@ -143,7 +143,7 @@ private void loadMenuItems() {
 private void submitReview() {
     String selectedOrder = orderHistoryList.getSelectedValue(); 
     String reviewText = reviewTextArea.getText().trim();
-    String selectedRating = rating.getSelectedItem().toString(); // Get selected rating
+    String selectedRating = rating.getSelectedItem().toString(); 
 
     if (selectedOrder == null) {
         JOptionPane.showMessageDialog(this, "Select an order to review.");
@@ -156,7 +156,7 @@ private void submitReview() {
 
     try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
         bw.newLine(); 
-        bw.write("Review: " + reviewText + " | Rating: " + selectedRating); // Include rating
+        bw.write("Review: " + reviewText + " | Rating: " + selectedRating); 
         JOptionPane.showMessageDialog(this, "Review submitted successfully with rating: " + selectedRating);
     } catch (IOException e) {
         JOptionPane.showMessageDialog(this, "Error saving review: " + e.getMessage());
