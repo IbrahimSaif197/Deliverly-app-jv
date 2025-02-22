@@ -143,6 +143,7 @@ private void loadMenuItems() {
 private void submitReview() {
     String selectedOrder = orderHistoryList.getSelectedValue(); 
     String reviewText = reviewTextArea.getText().trim();
+    String selectedRating = rating.getSelectedItem().toString(); // Get selected rating
 
     if (selectedOrder == null) {
         JOptionPane.showMessageDialog(this, "Select an order to review.");
@@ -152,15 +153,18 @@ private void submitReview() {
         JOptionPane.showMessageDialog(this, "Enter a review before submitting.");
         return;
     }
+
     try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
         bw.newLine(); 
-        bw.write("Review: " + reviewText);
-        JOptionPane.showMessageDialog(this, "Review submitted successfully!");
+        bw.write("Review: " + reviewText + " | Rating: " + selectedRating); // Include rating
+        JOptionPane.showMessageDialog(this, "Review submitted successfully with rating: " + selectedRating);
     } catch (IOException e) {
         JOptionPane.showMessageDialog(this, "Error saving review: " + e.getMessage());
     }
+    
     loadReviews();
 }
+
 private void loadOrderHistory() {
     DefaultListModel<String> orderModel = new DefaultListModel<>();
     String userId = customer.getCustomerIDFromUsersFile(username);
@@ -345,6 +349,8 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         reviewsList = new javax.swing.JList<>();
         reorderButton = new javax.swing.JButton();
         deliveryOption1 = new javax.swing.JComboBox<>();
+        rating = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
         transactionHistoryPanel = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         transactionTable = new javax.swing.JTable();
@@ -371,11 +377,14 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         placeOrderButton.setBackground(new java.awt.Color(52, 152, 219));
         placeOrderButton.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         placeOrderButton.setForeground(new java.awt.Color(255, 255, 255));
-        placeOrderButton.setText("Place Order");
+        placeOrderButton.setText("Proceed to payment");
         placeOrderButton.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         placeOrderButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 placeOrderButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                placeOrderButtonMouseExited(evt);
             }
         });
         placeOrderButton.addActionListener(new java.awt.event.ActionListener() {
@@ -450,17 +459,17 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
                         .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(menuPanelLayout.createSequentialGroup()
-                                .addGap(47, 47, 47)
-                                .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(deliveryOption, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(menuPanelLayout.createSequentialGroup()
                                 .addGap(39, 39, 39)
                                 .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(orderedItemsList, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                                    .addComponent(placeOrderButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                    .addComponent(orderedItemsList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(placeOrderButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(menuPanelLayout.createSequentialGroup()
+                                .addGap(53, 53, 53)
+                                .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(deliveryOption, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(387, 447, Short.MAX_VALUE))
+                .addGap(387, 421, Short.MAX_VALUE))
         );
         menuPanelLayout.setVerticalGroup(
             menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -524,6 +533,10 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         deliveryOption1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         deliveryOption1.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
 
+        rating.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5" }));
+
+        jLabel8.setText("Rating");
+
         javax.swing.GroupLayout orderHistoryPanelLayout = new javax.swing.GroupLayout(orderHistoryPanel);
         orderHistoryPanel.setLayout(orderHistoryPanelLayout);
         orderHistoryPanelLayout.setHorizontalGroup(
@@ -538,14 +551,22 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
                         .addComponent(reorderButton)
                         .addGap(55, 55, 55)
                         .addComponent(deliveryOption1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                 .addGroup(orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(reviewsList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(orderHistoryPanelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                        .addGroup(orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(reviewsList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, orderHistoryPanelLayout.createSequentialGroup()
+                                .addComponent(submitReviewButton)
+                                .addGap(27, 27, 27)
+                                .addComponent(rating, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(35, 35, 35)))
+                        .addContainerGap(187, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, orderHistoryPanelLayout.createSequentialGroup()
-                        .addComponent(submitReviewButton)
-                        .addGap(85, 85, 85)))
-                .addContainerGap(187, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(238, 238, 238))))
         );
         orderHistoryPanelLayout.setVerticalGroup(
             orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -556,14 +577,17 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
                 .addGroup(orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(orderHistoryPanelLayout.createSequentialGroup()
                         .addComponent(reviewsList, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(56, 56, 56)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel8))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(deliveryOption1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(reorderButton)
-                    .addComponent(submitReviewButton))
+                    .addComponent(submitReviewButton)
+                    .addComponent(rating, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(92, Short.MAX_VALUE))
         );
 
@@ -627,6 +651,9 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         submitComplain.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 submitComplainMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                submitComplainMouseExited(evt);
             }
         });
         submitComplain.addActionListener(new java.awt.event.ActionListener() {
@@ -900,8 +927,17 @@ String selectedOrder = orderHistoryList.getSelectedValue();
     }//GEN-LAST:event_placeOrderButtonMouseEntered
 
     private void submitComplainMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submitComplainMouseEntered
-submitComplain.setBackground(new java.awt.Color(52, 152, 219));
+submitComplain.setBackground(new java.awt.Color(255,255,102));
+
     }//GEN-LAST:event_submitComplainMouseEntered
+
+    private void placeOrderButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_placeOrderButtonMouseExited
+placeOrderButton.setBackground(new java.awt.Color(52, 152, 219));
+    }//GEN-LAST:event_placeOrderButtonMouseExited
+
+    private void submitComplainMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submitComplainMouseExited
+submitComplain.setBackground(new java.awt.Color(231,76,60));
+    }//GEN-LAST:event_submitComplainMouseExited
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane FoodItemsList;
@@ -922,6 +958,7 @@ submitComplain.setBackground(new java.awt.Color(52, 152, 219));
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -932,6 +969,7 @@ submitComplain.setBackground(new java.awt.Color(52, 152, 219));
     private javax.swing.JPanel orderHistoryPanel;
     private javax.swing.JList<String> orderedItemsList;
     private javax.swing.JButton placeOrderButton;
+    private javax.swing.JComboBox<String> rating;
     private javax.swing.JButton reorderButton;
     private javax.swing.JTextArea reviewTextArea;
     private javax.swing.JList<String> reviewsList;
