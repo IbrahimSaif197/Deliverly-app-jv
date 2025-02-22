@@ -78,7 +78,17 @@ private void updateUserCredit(String customerID, double newCredit) {
             tempFile.delete(); 
         }
     }
-
+private void saveOrder() {
+        DecimalFormat df = new DecimalFormat("#.##");
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
+            bw.newLine();
+            bw.write(orderID + ";" + customerID + ";" + vendorID + ";" + orderedItems + ";"
+                + java.time.LocalDate.now() + ";Pending;" + deliveryMethod + ";"
+                + df.format(totalAmount) + ";4.0"); // Rating as placeholder
+            bw.flush();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error saving order: " + e.getMessage());
+        }}
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -200,49 +210,69 @@ private void updateUserCredit(String customerID, double newCredit) {
     private void confirmPaymentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmPaymentButtonActionPerformed
     String paymentMethod;
     
-        if (cashRadioButton.isSelected()) {
-            paymentMethod = "Cash";
-        } else if (cardRadioButton.isSelected()) {
-            paymentMethod = "Card";
-        } else if (creditRadioButton.isSelected()) {
-            paymentMethod = "Credit";
-        } else {
-            JOptionPane.showMessageDialog(this, "Please select a payment method!");
+    if (cashRadioButton.isSelected()) {
+        paymentMethod = "Cash";
+    } else if (cardRadioButton.isSelected()) {
+        paymentMethod = "Card";
+    } else if (creditRadioButton.isSelected()) {
+        paymentMethod = "Credit";
+    } else {
+        JOptionPane.showMessageDialog(this, "Please select a payment method!");
+        return;
+    }
+
+    String date = java.time.LocalDate.now().toString(); // Ensure date is always recorded
+    String cardNumber = "N/A";
+    String cvc = "N/A";
+    String cardDate = "N/A";
+
+    if (paymentMethod.equals("Card")) {
+        cardNumber = jTextField1.getText().trim();
+        cvc = jTextField2.getText().trim();
+        cardDate = jTextField3.getText().trim();
+
+        if (cardNumber.isEmpty() || cvc.isEmpty() || cardDate.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter all card details!");
             return;
         }
 
-        if (paymentMethod.equals("Credit")) {
-            double availableCredit = getUserCredit(customerID);
-            if (availableCredit < totalAmount) {
-                JOptionPane.showMessageDialog(this, "Insufficient credit! Available: RM " + String.format("%.2f", availableCredit));
-                return;
-            }
-            updateUserCredit(customerID, availableCredit - totalAmount);
+        if (!cvc.matches("\\d{3}")) {
+            JOptionPane.showMessageDialog(this, "Invalid CVC! Enter a 3-digit number.");
+            return;
         }
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/receipts.txt", true))) {
-            bw.newLine();
-            bw.write(customerID + ";" + paymentMethod + ";" + totalAmount);
-            JOptionPane.showMessageDialog(this, "Payment Successful! Saving order...");
-            saveOrder();
-            this.dispose();
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error saving receipt: " + e.getMessage());
+        if (!cardNumber.matches("\\d{16}")) {
+            JOptionPane.showMessageDialog(this, "Invalid Card Number! Enter a 16-digit number.");
+            return;
+        }
+
+        if (!cardDate.matches("\\d{4}")) {
+            JOptionPane.showMessageDialog(this, "Invalid Expiry Date! Enter in MMYY format.");
+            return;
         }
     }
 
-    private void saveOrder() {
-        DecimalFormat df = new DecimalFormat("#.##");
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
-            bw.newLine();
-            bw.write(orderID + ";" + customerID + ";" + vendorID + ";" + orderedItems + ";"
-                + java.time.LocalDate.now() + ";Pending;" + deliveryMethod + ";"
-                + df.format(totalAmount) + ";4.0"); // Rating as placeholder
-            bw.flush();
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error saving order: " + e.getMessage());
+    if (paymentMethod.equals("Credit")) {
+        double availableCredit = getUserCredit(customerID);
+
+        if (availableCredit < totalAmount) {
+            JOptionPane.showMessageDialog(this, "Insufficient credit! Available: RM " + String.format("%.2f", availableCredit));
+            return;
         }
 
+        updateUserCredit(customerID, availableCredit - totalAmount);
+    }
+
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/receipts.txt", true))) {
+        bw.newLine();
+        bw.write(customerID + ";c;" + cardNumber + ";" + cvc + ";" + date + ";" + cardDate + ";" + String.format("%.2f", totalAmount) + ";" + paymentMethod);
+        JOptionPane.showMessageDialog(this, "Payment Successful! Saving order...");
+
+        saveOrder();
+        this.dispose();
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error saving receipt: " + e.getMessage());
+    }
     }//GEN-LAST:event_confirmPaymentButtonActionPerformed
 
     private void jTextField1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField1MouseClicked

@@ -254,7 +254,6 @@ private void loadOrderHistory() {
         return;
     }
 
-    // Load order history from orders.txt
     try (BufferedReader br = new BufferedReader(new FileReader("src/data/orders.txt"))) {
         String line;
         StringBuilder orderDetailsBuilder = new StringBuilder();
@@ -266,7 +265,6 @@ private void loadOrderHistory() {
                     orderModel.addElement(orderDetailsBuilder.toString());
                 }
                 
-                // Start parsing a new order
                 String[] orderDetails = line.split(";");
                 if (orderDetails.length >= 9) {
                     String orderID = orderDetails[0];
@@ -316,8 +314,6 @@ private void loadOrderHistory() {
     orderHistoryList.setModel(orderModel);
 }
 
-
-
 private void loadTransactionHistory() {
     String userId = customer.getCustomerIDFromUsersFile(username);
     
@@ -325,22 +321,25 @@ private void loadTransactionHistory() {
         JOptionPane.showMessageDialog(this, "Error retrieving Customer ID.");
         return;
     }
-    DefaultTableModel model = new DefaultTableModel();
-    model.setColumnIdentifiers(new String[]{"Card Number", "Date", "Amount"});
 
-    DecimalFormat df = new DecimalFormat("0.00"); 
+    DefaultTableModel model = new DefaultTableModel();
+    model.setColumnIdentifiers(new String[]{"Payment Method", "Card Number", "Date", "Amount"});
+
+    DecimalFormat df = new DecimalFormat("0.00");
 
     try (BufferedReader br = new BufferedReader(new FileReader("src/data/receipts.txt"))) {
         String line;
         while ((line = br.readLine()) != null) {
             String[] data = line.split(";");
 
-            if (data.length >= 6 && data[0].equals(userId)) { 
+            if (data.length >= 8 && data[0].equals(userId)) { 
+                String paymentMethod = data[7]; // Last column (Cash, Card, Credit)
                 String cardNumber = data[2];   
                 String date = data[4];         
                 double amount = Double.parseDouble(data[6]); 
                 String formattedAmount = String.format("%.2f", amount);
-                model.addRow(new Object[]{cardNumber, date, formattedAmount});  
+
+                model.addRow(new Object[]{paymentMethod, cardNumber, date, formattedAmount});  
             }
         }
     } catch (IOException e) {
@@ -349,6 +348,7 @@ private void loadTransactionHistory() {
 
     transactionTable.setModel(model);
 }
+
 private String generateOrderID() {
     int randomID = (int) (Math.random() * 900) + 100; 
     return "ORD" + randomID;
