@@ -153,6 +153,8 @@ public final class ManagerMenu extends javax.swing.JFrame {
         this.reloadDataRunner(modelRunner);
         OverallRevenue.setText(estimatedRevenue());
         TotalOrders.setText(totalOrders());
+        numberOfRunners.setText(totalRunners());
+        AvgRating.setText(averageRating());
         
         FoodMenu.getSelectionModel().addListSelectionListener(event -> {
         if (!event.getValueIsAdjusting()) {
@@ -195,6 +197,9 @@ public final class ManagerMenu extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         Runners = new javax.swing.JTable();
+        numberOfRunners = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        AvgRating = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         Complaints = new javax.swing.JTable();
@@ -290,7 +295,7 @@ public final class ManagerMenu extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Total Delivery Runners: ");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 100, -1, -1));
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 100, -1, -1));
 
         Runners.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -319,6 +324,21 @@ public final class ManagerMenu extends javax.swing.JFrame {
         }
 
         jPanel2.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 680, 500));
+
+        numberOfRunners.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        numberOfRunners.setForeground(new java.awt.Color(0, 0, 0));
+        numberOfRunners.setText("number");
+        jPanel2.add(numberOfRunners, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 100, 50, -1));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("Average Rating of Runners: ");
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 140, -1, -1));
+
+        AvgRating.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        AvgRating.setForeground(new java.awt.Color(0, 0, 0));
+        AvgRating.setText("Avg");
+        jPanel2.add(AvgRating, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 140, -1, -1));
 
         jTabbedPane1.addTab("Runner Performance", jPanel2);
 
@@ -517,6 +537,59 @@ public final class ManagerMenu extends javax.swing.JFrame {
         return revenueStr;
         
     }
+    private String totalRunners(){
+        int runners = 0;
+        try {
+            FileReader fr = new FileReader(users_file);
+            BufferedReader br = new BufferedReader(fr);
+            String runner;
+            while ((runner = br.readLine()) != null) {
+                if (runner.startsWith("RNR")) {
+                    runners++;
+                }
+            }
+            br.close();
+            fr.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        String runnersStr = String.valueOf(runners);
+        return runnersStr;
+    }
+    
+    private String averageRating() {
+        double totalRating = 0.0; 
+        int runners = 0;
+
+        try {
+            FileReader fr = new FileReader(ratings_file);
+            BufferedReader br = new BufferedReader(fr);
+            String line;
+            br.readLine();
+
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("RNR")) { 
+                    String[] parts = line.split(";"); 
+                    if (parts.length >= 2) { 
+                        double rating = Double.parseDouble(parts[1].trim());
+                        totalRating += rating;
+                        runners++;
+                    }
+                }
+            }
+            br.close();
+            fr.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        
+        if (runners > 0) {
+            double average = totalRating / runners; 
+            return String.format("%.2f", average);
+        } else {
+            return "No ratings found";
+        }
+    }
     
     private String totalOrders(){
         int orders = 0;
@@ -614,6 +687,7 @@ public final class ManagerMenu extends javax.swing.JFrame {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel AvgRating;
     private javax.swing.JTextField CompID;
     private javax.swing.JTable Complaints;
     private javax.swing.JButton DeleteButton;
@@ -635,6 +709,7 @@ public final class ManagerMenu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -645,5 +720,6 @@ public final class ManagerMenu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel numberOfRunners;
     // End of variables declaration//GEN-END:variables
 }
