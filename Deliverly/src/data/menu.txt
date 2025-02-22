@@ -4,7 +4,6 @@ MI103;Pasta;Food;7.25;VEN302
 MI104;Sushi;Food;12.99;VEN302
 MI105;Salad;Food;4.75;VEN302
 MI106;Tacos;Food;6.99;VEN302
-MI107;Steak;Food;15.99;VEN302
 MI108;Chicken Wings;Food;9.25;VEN302
 MI109;Fried Rice;Food;5.50;VEN302
 MI110;Burrito;Food;7.99;VEN302

@@ -960,7 +960,6 @@ public final class AdminMenu extends javax.swing.JFrame {
 
             String expiryDate = String.format("%02d/%04d", month, year);
 
-            // Updated receipt format to include both dates
             String receiptData = String.format("%s;%s;%s;%s;%s;%s;%d",
                 userID.getText().trim(),
                 customerName,
@@ -991,11 +990,11 @@ public final class AdminMenu extends javax.swing.JFrame {
             List<String> lines = Files.readAllLines(users_file.toPath());
             List<String> updatedData = new ArrayList<>();
 
-            // Get password correctly from JPasswordField
+            // Get password
             char[] passwordChars = password.getPassword();
             String passwordStr = new String(passwordChars);
 
-            // Create the new user data string
+            // Create user
             String newUserData = String.format("%s;%s;%s;%s;%s;%s;%s;%s;%s",
                 ID.getText().trim(),
                 username.getText().trim(),
