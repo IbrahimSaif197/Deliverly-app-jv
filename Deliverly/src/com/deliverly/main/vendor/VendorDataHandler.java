@@ -15,7 +15,7 @@ public class VendorDataHandler {
     private String vendorId;
 
     public VendorDataHandler(String vendorId) {
-        this.menuItemsFile = new File("src//data//restaurants.txt");
+        this.menuItemsFile = new File("src//data//menu.txt");
         this.ordersFile = new File("src//data//orders.txt");
         this.usersFile = new File("src//data//users.txt");
         this.vendorId = vendorId;
