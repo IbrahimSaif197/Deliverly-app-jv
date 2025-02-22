@@ -18,7 +18,6 @@ import java.util.List;
 public class CustomerMenu extends JFrame {
 private String username;
 private Customer customer;
-private javax.swing.JPanel reviewsPanel;
     
 public CustomerMenu(String username) {
         this.username = username;
@@ -33,6 +32,21 @@ public CustomerMenu(String username) {
         orderedItemsList.setModel(new DefaultListModel<>()); 
         checkNotifications(username);
     }
+private String getOrderStatus(String orderID) {
+    try (BufferedReader br = new BufferedReader(new FileReader("src/data/orders.txt"))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] orderDetails = line.split(";");
+            if (orderDetails.length >= 6 && orderDetails[0].equals(orderID)) {
+                return orderDetails[5].trim(); // Status is in the 6th column
+            }
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error reading order file: " + e.getMessage());
+    }
+    return "Unknown"; // Default if not found
+}
+
 private void checkNotifications(String customerUsername) {
         try {
             File notificationsFile = new File("src//data//notifications.txt");
@@ -162,6 +176,77 @@ private void loadMenuItems() {
     beverageList.setModel(beverageModel);
     dessertList.setModel(dessertModel);
 }
+private void cancelOrder() {
+    String selectedOrder = orderHistoryList.getSelectedValue();
+
+    if (selectedOrder == null) {
+        JOptionPane.showMessageDialog(this, "Please select an order to cancel.");
+        return;
+    }
+
+    String[] orderDetails = selectedOrder.split("\\|");
+    if (orderDetails.length < 4) {
+        JOptionPane.showMessageDialog(this, "Invalid order format. Cannot cancel.");
+        return;
+    }
+
+    String orderID = orderDetails[0].trim();
+    String orderStatus = getOrderStatus(orderID); // Fetch order status from file
+
+    if (!orderStatus.equalsIgnoreCase("Pending")) {
+        JOptionPane.showMessageDialog(this, "You can only cancel pending orders!");
+        return;
+    }
+
+    // Refund Credit if Paid Using Credit
+    double totalAmount = Double.parseDouble(orderDetails[3].replace("Rm", "").trim());
+    refundCreditToCustomer(totalAmount);
+
+    // Remove Order from File
+    if (removeOrderFromFile(orderID)) {
+        JOptionPane.showMessageDialog(this, "Order " + orderID + " has been canceled.");
+        loadOrderHistory(); // Refresh order history
+    } else {
+        JOptionPane.showMessageDialog(this, "Error canceling order.");
+    }
+}
+
+private void refundCreditToCustomer(double refundAmount) {
+    String customerID = customer.getCustomerIDFromUsersFile(username);
+    double currentCredit = customer.getUserCredit(customerID);
+    double newCredit = currentCredit + refundAmount;
+    customer.updateUserCredit(customerID, newCredit);
+    JOptionPane.showMessageDialog(this, "RM " + refundAmount + " refunded to your credit.");
+}
+
+private boolean removeOrderFromFile(String orderID) {
+    File ordersFile = new File("src/data/orders.txt");
+    File tempFile = new File("src/data/orders_temp.txt");
+    boolean orderRemoved = false;
+
+    try (BufferedReader br = new BufferedReader(new FileReader(ordersFile));
+         BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile))) {
+
+        String line;
+        while ((line = br.readLine()) != null) {
+            if (!line.startsWith(orderID)) { 
+                bw.write(line);
+                bw.newLine();
+            } else {
+                orderRemoved = true; 
+            }
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error removing order: " + e.getMessage());
+        return false;
+    }
+
+    if (orderRemoved && ordersFile.delete()) {
+        tempFile.renameTo(ordersFile);
+    }
+    
+    return orderRemoved;
+}
 
 private void submitReview() {
     String selectedOrder = orderHistoryList.getSelectedValue();
@@ -235,7 +320,6 @@ private void loadOrderHistory() {
     HashMap<String, String> menuPrices = new HashMap<>();
     DecimalFormat df = new DecimalFormat("0.00");
 
-    // Load menu items and prices
     try (BufferedReader br = new BufferedReader(new FileReader("src/data/menu.txt"))) {
         String line;
         while ((line = br.readLine()) != null) {
@@ -429,6 +513,7 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         deliveryOption1 = new javax.swing.JComboBox<>();
         rating = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
+        cancelOrder = new javax.swing.JButton();
         transactionHistoryPanel = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         transactionTable = new javax.swing.JTable();
@@ -617,6 +702,13 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
 
         jLabel8.setText("Rating");
 
+        cancelOrder.setText("Cancel");
+        cancelOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelOrderActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout orderHistoryPanelLayout = new javax.swing.GroupLayout(orderHistoryPanel);
         orderHistoryPanel.setLayout(orderHistoryPanelLayout);
         orderHistoryPanelLayout.setHorizontalGroup(
@@ -647,6 +739,10 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
                         .addGap(227, 227, 227)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(orderHistoryPanelLayout.createSequentialGroup()
+                .addGap(126, 126, 126)
+                .addComponent(cancelOrder)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         orderHistoryPanelLayout.setVerticalGroup(
             orderHistoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -668,7 +764,9 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
                     .addComponent(reorderButton)
                     .addComponent(submitReviewButton)
                     .addComponent(rating, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(92, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cancelOrder)
+                .addContainerGap(57, Short.MAX_VALUE))
         );
 
         mainPanel.addTab("Orders", orderHistoryPanel);
@@ -1048,12 +1146,18 @@ submitComplain.setBackground(new java.awt.Color(231,76,60));
         loadOrderHistory();
         loadTransactionHistory();
         loadUserBalance();
+        checkNotifications(username);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void cancelOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelOrderActionPerformed
+cancelOrder();
+    }//GEN-LAST:event_cancelOrderActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane FoodItemsList;
     private javax.swing.JList<String> beverageList;
     private javax.swing.JScrollPane beveragesItemsList;
+    private javax.swing.JButton cancelOrder;
     private javax.swing.JScrollPane complains;
     private javax.swing.JPanel complainsPanel;
     private javax.swing.JTextArea complainsTextArea;

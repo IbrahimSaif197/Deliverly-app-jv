@@ -44,36 +44,7 @@ public class Customer {
             e.printStackTrace();
         }
         return "ERROR";     }
-    public String[] getUserIDAndUsername(String identifier) {
-    File file = new File(usersFile); 
-
-    if (!file.exists()) {
-        System.out.println("ERROR: users.txt not found at " + file.getAbsolutePath());
-        return new String[]{"ERROR", "ERROR"};
-    }
-
-    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] parts = line.split(";"); 
-            if (parts.length > 1) {
-                String storedCustomerID = parts[0].trim(); 
-                String storedUsername = parts[1].trim();   
-
-                System.out.println("DEBUG: Checking " + storedUsername + " and " + storedCustomerID + " against " + identifier);
-
-                if (storedUsername.equalsIgnoreCase(identifier.trim()) || storedCustomerID.equalsIgnoreCase(identifier.trim())) {
-                    return new String[]{storedCustomerID, storedUsername}; 
-                }
-            }
-        }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-    return new String[]{"ERROR", "ERROR"}; 
-}
-
-
+    
     public void submitComplaint(String complaint) {
         String customerID = getCustomerIDFromUsersFile(this.username); 
 
@@ -91,6 +62,53 @@ public class Customer {
             JOptionPane.showMessageDialog(null, "Error saving complaint: " + e.getMessage());
         }
     }
+public double getUserCredit(String customerID) {
+    try (BufferedReader br = new BufferedReader(new FileReader("src/data/users.txt"))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] userDetails = line.split(";");
+            if (userDetails.length >= 8 && userDetails[0].equals(customerID)) {
+                return Double.parseDouble(userDetails[7]); // 8th column is the credit balance
+            }
+        }
+    } catch (IOException | NumberFormatException e) {
+        System.out.println("Error retrieving user credit: " + e.getMessage());
+    }
+    return 0.0; // Default if not found
+}
+public void updateUserCredit(String customerID, double newCredit) {
+    File usersFile = new File("src/data/users.txt");
+    StringBuilder updatedContent = new StringBuilder();
+    boolean updated = false;
+
+    try (BufferedReader br = new BufferedReader(new FileReader(usersFile))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] userDetails = line.split(";");
+            if (userDetails.length >= 8 && userDetails[0].equals(customerID)) {
+                userDetails[7] = String.format("%.2f", newCredit); 
+                line = String.join(";", userDetails);
+                updated = true;
+            }
+            updatedContent.append(line).append("\n");
+        }
+    } catch (IOException e) {
+        System.out.println("Error reading user file: " + e.getMessage());
+        return;
+    }
+
+    if (updated) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(usersFile, false))) { 
+            bw.write(updatedContent.toString()); 
+            bw.flush();
+            System.out.println("Credit updated successfully!");
+        } catch (IOException e) {
+            System.out.println("Error updating user credit: " + e.getMessage());
+        }
+    } else {
+        System.out.println("Customer ID not found. No changes made.");
+    }
+}
 
     public void placeOrder(String orderDetails) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(ordersFile, true))) {
