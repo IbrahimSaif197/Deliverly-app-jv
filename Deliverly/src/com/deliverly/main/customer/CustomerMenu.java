@@ -29,6 +29,7 @@ public CustomerMenu(String username) {
         loadMenuItems();
         loadOrderHistory();
         loadTransactionHistory();
+        loadUserBalance();
         orderedItemsList.setModel(new DefaultListModel<>()); 
         checkNotifications(username);
     }
@@ -79,6 +80,28 @@ private void checkNotifications(String customerUsername) {
             JOptionPane.showMessageDialog(null, "Error checking notifications: " + e.getMessage());
         }
     }
+private void loadUserBalance() {
+    String customerID = customer.getCustomerIDFromUsersFile(username);
+    if (customerID.equals("ERROR")) {
+        JOptionPane.showMessageDialog(this, "Error retrieving Customer ID.");
+        return;
+    }
+
+    try (BufferedReader br = new BufferedReader(new FileReader("src/data/users.txt"))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] userDetails = line.split(";");
+            if (userDetails.length >= 8 && userDetails[0].equals(customerID)) { 
+                String balance = userDetails[7]; 
+                jLabel9.setText("RM " + balance);
+                return;
+            }
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error loading balance: " + e.getMessage());
+    }
+}
+
 
 private void loadReviews() {
     DefaultListModel<String> reviewsModel = new DefaultListModel<>();
@@ -418,6 +441,8 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(101, 233, 238));
@@ -760,6 +785,11 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
             }
         });
 
+        jLabel9.setText("credit");
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel10.setText("Balance :");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -769,6 +799,10 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(17, 17, 17))
@@ -780,7 +814,9 @@ private void addToOrderList(javax.swing.JList<String> sourceList) {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel2))
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel9)
+                        .addComponent(jLabel10))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jButton1)))
@@ -909,10 +945,11 @@ private String generateComplaintID() {
 
     private void reorderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reorderButtonActionPerformed
 String selectedOrder = orderHistoryList.getSelectedValue();
-    
+
     if (selectedOrder == null) {
         JOptionPane.showMessageDialog(this, "Please select an order to reorder.");
-        return;    }
+        return;
+    }
 
     String customerID = customer.getCustomerIDFromUsersFile(username);
     if (customerID.equals("ERROR")) {
@@ -920,13 +957,14 @@ String selectedOrder = orderHistoryList.getSelectedValue();
         return;    }
 
     String[] orderDetails = selectedOrder.split("\\|");
-    
+
     if (orderDetails.length < 4) {
         JOptionPane.showMessageDialog(this, "Invalid order format. Cannot reorder.");
         return;    }
 
-    String itemDetails = orderDetails[1].trim(); 
-    String deliveryMethod = orderDetails[2].trim(); 
+    String itemDetails = orderDetails[1].trim();
+    
+    String selectedDeliveryMethod = deliveryOption1.getSelectedItem().toString(); 
     double totalAmount = 0;
     StringBuilder menuItemIDs = new StringBuilder();
     String vendorID = null;
@@ -946,29 +984,24 @@ String selectedOrder = orderHistoryList.getSelectedValue();
                         menuItemIDs.append(",");
                     }
                     menuItemIDs.append(itemID);
-                    
+
                     if (vendorID == null) {
-                        vendorID = menuDetails[4]; 
+                        vendorID = menuDetails[4];
                     }
                 }
             }
         }
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(this, "Error reading menu: " + e.getMessage());
-        return;
-    }
+    } catch (IOException e) {        JOptionPane.showMessageDialog(this, "Error reading menu: " + e.getMessage());        return;    }
 
     if (menuItemIDs.length() == 0) {
         JOptionPane.showMessageDialog(this, "Error: No valid items found in menu!");
         return;    }
-
     String orderID = generateOrderID();
-    String orderDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-    String orderStatus = "Pending";
 
-    JOptionPane.showMessageDialog(this, "Redirecting to payment...");
+    JOptionPane.showMessageDialog(this, "Redirecting to payment with delivery method: " + selectedDeliveryMethod);
 
-    new PaymentWindow(customerID, totalAmount, orderID, vendorID, menuItemIDs.toString(), deliveryMethod).setVisible(true);
+    new PaymentWindow(customerID, totalAmount, orderID, vendorID, menuItemIDs.toString(), selectedDeliveryMethod).setVisible(true);
+    
     loadOrderHistory();
     }//GEN-LAST:event_reorderButtonActionPerformed
 
@@ -1014,6 +1047,7 @@ submitComplain.setBackground(new java.awt.Color(231,76,60));
         loadMenuItems();
         loadOrderHistory();
         loadTransactionHistory();
+        loadUserBalance();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1030,6 +1064,7 @@ submitComplain.setBackground(new java.awt.Color(231,76,60));
     private javax.swing.JList<String> foodList;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1037,6 +1072,7 @@ submitComplain.setBackground(new java.awt.Color(231,76,60));
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
