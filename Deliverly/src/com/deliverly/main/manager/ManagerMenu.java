@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
@@ -27,6 +29,7 @@ public final class ManagerMenu extends javax.swing.JFrame {
     File orders_file = new File("src//data//orders.txt");
     File menus_file = new File("src//data//menu.txt");
     File complaints_file = new File("src//data//complaints.txt");
+    File ratings_file = new File("src//data//ratings.txt");
     DefaultTableModel model, modelOrder, modelComplaints, modelRunner;
     LoginMenu login = new LoginMenu();
     
@@ -48,22 +51,43 @@ public final class ManagerMenu extends javax.swing.JFrame {
         }
     }
     
-    public void reloadDataRunner(DefaultTableModel tableModel){
+    public void reloadDataRunner(DefaultTableModel tableModel) {
         try {
             tableModel.setRowCount(0);
-            FileReader fr = new FileReader(users_file);
-            BufferedReader br = new BufferedReader(fr);
+
+            Map<String, String> ratingsMap = new HashMap<>();
+            FileReader ratingsFr = new FileReader(ratings_file);
+            BufferedReader ratingsBr = new BufferedReader(ratingsFr);
+            String ratingLine;
+            while ((ratingLine = ratingsBr.readLine()) != null) {
+                if (ratingLine.startsWith("runner ID")) {
+                    continue;
+                }
+                String[] ratingData = ratingLine.split(";");
+                if (ratingData.length >= 2) {
+                    String runnerId = ratingData[0].trim();
+                    String rating = ratingData[1].trim();
+                    ratingsMap.put(runnerId, rating);
+                }
+            }
+            ratingsBr.close();
+            FileReader usersFr = new FileReader(users_file);
+            BufferedReader usersBr = new BufferedReader(usersFr);
             String runner;
-            while ((runner = br.readLine()) != null) {
+            while ((runner = usersBr.readLine()) != null) {
                 if (!runner.startsWith("RNR")) {
                     continue;
                 }
-                String[] meal_data = runner.split(";");
-                tableModel.addRow(new Object[]{
-                    meal_data[0], meal_data[3]
-                    });
+                String[] runnerData = runner.split(";");
+                String runnerId = runnerData[0].trim();
+                String runnerName = runnerData[3].trim(); 
+                String runnerRating = ratingsMap.getOrDefault(runnerId, "N/A");
+
+                tableModel.addRow(new Object[]{runnerId, runnerName, runnerRating});
             }
-        } catch (IOException e){
+            usersBr.close();
+
+        } catch (IOException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
