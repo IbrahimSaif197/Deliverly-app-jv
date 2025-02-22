@@ -199,10 +199,6 @@ private void submitReview() {
     loadReviews();
 }
 
-
-
-
-
 private void loadOrderHistory() {
     DefaultListModel<String> orderModel = new DefaultListModel<>();
     String userId = customer.getCustomerIDFromUsersFile(username);
@@ -320,9 +316,8 @@ private void loadTransactionHistory() {
                 String cardNumber = data[2];   
                 String date = data[4];         
                 double amount = Double.parseDouble(data[6]); 
-                String formattedAmount = df.format(amount);  
-
-                model.addRow(new Object[]{cardNumber, date, formattedAmount});
+                String formattedAmount = String.format("%.2f", amount);
+                model.addRow(new Object[]{cardNumber, date, formattedAmount});  
             }
         }
     } catch (IOException e) {

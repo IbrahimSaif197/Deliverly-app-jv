@@ -199,14 +199,14 @@ public class PaymentWindow extends javax.swing.JFrame {
 }
 
 private void saveOrder() {
+    DecimalFormat df = new DecimalFormat("#.##");
     try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
-        bw.newLine(); 
+        bw.newLine();
         bw.write(orderID + ";" + customerID + ";" + vendorID + ";" + orderedItems + ";"
-                 + java.time.LocalDate.now() + ";" + "Pending" + ";" + deliveryMethod + ";" 
-                 + totalAmount + ";4.0"); 
-        bw.flush();
-        JOptionPane.showMessageDialog(this, "Order placed successfully!");
-    } catch (IOException e) {
+            + java.time.LocalDate.now() + ";Pending;" + deliveryMethod + ";"
+            + df.format(totalAmount) + ";4.0"); // Rating as placeholder
+        bw.flush();}
+    catch (IOException e) {
         JOptionPane.showMessageDialog(this, "Error saving order: " + e.getMessage());
     }
 
