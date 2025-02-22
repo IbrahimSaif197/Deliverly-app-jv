@@ -23,4 +23,3 @@ COM021;CUS019;Driver did not follow delivery instructions;Unsolved
 COM022;CUS020;Extra charges added to my bill;Unsolved
 COM023;CUS021;Order tracking was not updating;Unsolved
 COM024;CUS022;Food arrived late and was soggy;Unsolved
-

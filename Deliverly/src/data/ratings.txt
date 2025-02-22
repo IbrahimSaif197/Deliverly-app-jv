@@ -1,1 +1,7 @@
-
+runner ID; rating
+RNR001;4.8
+RNR002;5
+RNR003;3.6
+RNR004;4.2
+RNR005;4
+RNR006;3

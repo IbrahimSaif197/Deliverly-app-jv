@@ -8,7 +8,7 @@ public class Customer {
     private String username;
     private final String ordersFile = "src/data/orders.txt";
     private final String complaintsFile = "src/data/complaints.txt";
-    private final String usersFile = "src/data/users.txt"; // Ensure correct path
+    private final String usersFile = "src/data/users.txt"; 
     
     public Customer(String username) {
         this.username = username;
@@ -18,7 +18,7 @@ public class Customer {
 }
 
     public String getCustomerIDFromUsersFile(String username) {
-        File file = new File(usersFile); // Ensure correct file path
+        File file = new File(usersFile); 
 
         if (!file.exists()) {
             System.out.println("ERROR: users.txt not found at " + file.getAbsolutePath());
@@ -30,23 +30,23 @@ public class Customer {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(";");
                 if (parts.length > 1) {
-                    String storedCustomerID = parts[0].trim(); // First column = Customer ID
-                    String storedUsername = parts[1].trim();   // Second column = Username
+                    String storedCustomerID = parts[0].trim(); 
+                    String storedUsername = parts[1].trim();   
 
                     System.out.println("DEBUG: Checking " + storedUsername + " against " + username);
 
                     if (storedUsername.equalsIgnoreCase(username.trim())) {
-                        return storedCustomerID; // ✅ Correct Customer ID found
+                        return storedCustomerID; 
                     }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "ERROR"; // If user not found
+        return "ERROR"; 
     }
     public String[] getUserIDAndUsername(String identifier) {
-    File file = new File(usersFile); // Ensure correct file path
+    File file = new File(usersFile); 
 
     if (!file.exists()) {
         System.out.println("ERROR: users.txt not found at " + file.getAbsolutePath());
@@ -56,28 +56,27 @@ public class Customer {
     try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
         String line;
         while ((line = reader.readLine()) != null) {
-            String[] parts = line.split(";"); // Split user details
+            String[] parts = line.split(";"); 
             if (parts.length > 1) {
-                String storedCustomerID = parts[0].trim(); // First column = Customer ID
-                String storedUsername = parts[1].trim();   // Second column = Username
+                String storedCustomerID = parts[0].trim(); 
+                String storedUsername = parts[1].trim();   
 
                 System.out.println("DEBUG: Checking " + storedUsername + " and " + storedCustomerID + " against " + identifier);
 
-                // If identifier matches either Customer ID or Username
                 if (storedUsername.equalsIgnoreCase(identifier.trim()) || storedCustomerID.equalsIgnoreCase(identifier.trim())) {
-                    return new String[]{storedCustomerID, storedUsername}; // ✅ Return both ID and Username
+                    return new String[]{storedCustomerID, storedUsername}; 
                 }
             }
         }
     } catch (IOException e) {
         e.printStackTrace();
     }
-    return new String[]{"ERROR", "ERROR"}; // If user not found
+    return new String[]{"ERROR", "ERROR"}; 
 }
 
 
     public void submitComplaint(String complaint) {
-        String customerID = getCustomerIDFromUsersFile(this.username); // ✅ Pass username correctly
+        String customerID = getCustomerIDFromUsersFile(this.username); 
 
         if (customerID.equals("ERROR")) {
             JOptionPane.showMessageDialog(null, "Error retrieving Customer ID. Complaint not submitted.");
@@ -108,8 +107,8 @@ public class Customer {
         try (BufferedReader reader = new BufferedReader(new FileReader(ordersFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith(username + ";")) { // ✅ Match user ID properly
-                    history.add(line.substring(username.length() + 1)); // ✅ Adjusted index
+                if (line.startsWith(username + ";")) { 
+                    history.add(line.substring(username.length() + 1)); 
                 }
             }
         } catch (IOException e) {
@@ -123,14 +122,14 @@ public class Customer {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(";");
-                if (parts.length >= 3) { // ✅ Ensure proper split
-                    String storedUserID = parts[0];  // First column = User ID
-                    String storedUsername = parts[1]; // Second column = Username
-                    String storedPassword = parts[2]; // Third column = Password
+                if (parts.length >= 3) { 
+                    String storedUserID = parts[0];  
+                    String storedUsername = parts[1]; 
+                    String storedPassword = parts[2]; 
 
                     if ((storedUsername.equals(enteredUsername) || storedUserID.equals(enteredUsername)) &&
                             storedPassword.equals(enteredPassword)) {
-                        return storedUserID; // ✅ Return the correct User ID
+                        return storedUserID; 
                     }
                 }
             }

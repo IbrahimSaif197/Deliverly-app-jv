@@ -8,13 +8,22 @@ import javax.swing.JOptionPane;
 public class PaymentWindow extends javax.swing.JFrame {
     private String customerID;
     private double totalAmount;
+    private String orderID;
+    private String vendorID;
+    private String orderedItems;
+    private String deliveryMethod;
 
-    public PaymentWindow(String customerID, double totalAmount) {
-        this.customerID = customerID;
-        this.totalAmount = totalAmount;
-        initComponents();
-        jLabel2.setText("Total: $" + totalAmount); // Display total amount
-    }
+    public PaymentWindow(String customerID, double totalAmount, String orderID, String vendorID, String orderedItems, String deliveryMethod) {
+    this.customerID = customerID;
+    this.totalAmount = totalAmount;
+    this.orderID = orderID;
+    this.vendorID = vendorID;
+    this.orderedItems = orderedItems;
+    this.deliveryMethod = deliveryMethod;
+    initComponents();
+    jLabel2.setText("Total: $" + totalAmount);
+}
+
 
 
     @SuppressWarnings("unchecked")
@@ -127,61 +136,76 @@ public class PaymentWindow extends javax.swing.JFrame {
 
     private void confirmPaymentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmPaymentButtonActionPerformed
         String paymentMethod = cashRadioButton.isSelected() ? "Cash" : "Card";
-        String date = java.time.LocalDate.now().toString();
+    String date = java.time.LocalDate.now().toString();
 
-        String cardNumber = "N/A";
-        String cvc = "N/A";
-        String cardDate = "N/A";
+    String cardNumber = "N/A";
+    String cvc = "N/A";
+    String cardDate = "N/A";
 
-        if (!cashRadioButton.isSelected() && !cardRadioButton.isSelected()) {
-            JOptionPane.showMessageDialog(this, "Please select a payment method!");
+    if (!cashRadioButton.isSelected() && !cardRadioButton.isSelected()) {
+        JOptionPane.showMessageDialog(this, "Please select a payment method!");
+        return;
+    }
+
+    if (paymentMethod.equals("Card")) {
+        cardNumber = jTextField1.getText().trim();
+        cvc = jTextField2.getText().trim();
+        cardDate = jTextField3.getText().trim();
+
+        if (cardNumber.isEmpty() || cvc.isEmpty() || cardDate.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter all card details!");
             return;
         }
 
-        if (paymentMethod.equals("Card")) {
-            cardNumber = jTextField1.getText().trim();
-            cvc = jTextField2.getText().trim();
-            cardDate = jTextField3.getText().trim();
-
-            if (cardNumber.isEmpty() || cvc.isEmpty() || cardDate.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please enter all card details!");
-                return;
-            }
-
-            if (!cvc.matches("\\d{3}")) {
-                JOptionPane.showMessageDialog(this, "Invalid CVC! Enter a 3-digit number.");
-                return;
-            }
-
-            if (!cardNumber.matches("\\d{16}")) {
-                JOptionPane.showMessageDialog(this, "Invalid Card Number! Enter a 16-digit number.");
-                return;
-            }
-            if (!cardDate.matches("\\d{4}")) {
-                JOptionPane.showMessageDialog(this, "Invalid Expiry Date! Enter in MMYY format.");
-                return;
-            }
+        if (!cvc.matches("\\d{3}")) {
+            JOptionPane.showMessageDialog(this, "Invalid CVC! Enter a 3-digit number.");
+            return;
         }
 
-        Customer customer = new Customer(customerID);  
-String[] userDetails = customer.getUserIDAndUsername(customerID); 
+        if (!cardNumber.matches("\\d{16}")) {
+            JOptionPane.showMessageDialog(this, "Invalid Card Number! Enter a 16-digit number.");
+            return;
+        }
+        if (!cardDate.matches("\\d{4}")) {
+            JOptionPane.showMessageDialog(this, "Invalid Expiry Date! Enter in MMYY format.");
+            return;
+        }
+    }
 
-String correctUserID = userDetails[0]; 
-String correctUsername = userDetails[1]; 
+    Customer customer = new Customer(customerID);  
+    String[] userDetails = customer.getUserIDAndUsername(customerID); 
 
-if (correctUserID.equals("ERROR")) {
-    JOptionPane.showMessageDialog(this, "Error retrieving Customer ID. Payment not saved.");
-    return;
+    String correctUserID = userDetails[0]; 
+    String correctUsername = userDetails[1]; 
+
+    if (correctUserID.equals("ERROR")) {
+        JOptionPane.showMessageDialog(this, "Error retrieving Customer ID. Payment not saved.");
+        return;
+    }
+
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/receipts.txt", true))) {
+        bw.newLine();
+        bw.write(correctUserID + ";" + correctUsername + ";" + cardNumber + ";" + cvc + ";" + date + ";" + cardDate + ";" + totalAmount);
+        JOptionPane.showMessageDialog(this, "Payment Successful! Saving order...");
+
+        saveOrder();
+
+        this.dispose(); 
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error saving receipt: " + e.getMessage());
+    }
 }
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/receipts.txt", true))) {
-    bw.newLine();
-    bw.write(correctUserID + ";" + correctUsername + ";" + cardNumber + ";" + cvc + ";" + date + ";" + cardDate + ";" + totalAmount);
-    JOptionPane.showMessageDialog(this, "Payment Successful! Receipt saved.");
-    this.dispose(); 
-} catch (IOException e) {
-    JOptionPane.showMessageDialog(this, "Error saving receipt: " + e.getMessage());
-}
+private void saveOrder() {
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
+        bw.newLine(); 
+        bw.write(orderID + ";" + customerID + ";" + vendorID + ";" + orderedItems + ";"
+                 + java.time.LocalDate.now() + ";" + "Pending" + ";" + deliveryMethod + ";" + totalAmount);
+        bw.flush();
+        JOptionPane.showMessageDialog(this, "Order placed successfully!");
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error saving order: " + e.getMessage());
+    }
     }//GEN-LAST:event_confirmPaymentButtonActionPerformed
 
     private void jTextField1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField1MouseClicked
