@@ -43,8 +43,7 @@ public class Customer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "ERROR"; 
-    }
+        return "ERROR";     }
     public String[] getUserIDAndUsername(String identifier) {
     File file = new File(usersFile); 
 

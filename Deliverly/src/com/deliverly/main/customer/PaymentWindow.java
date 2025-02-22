@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
+import java.text.DecimalFormat;
 
 public class PaymentWindow extends javax.swing.JFrame {
     private String customerID;
@@ -21,7 +22,8 @@ public class PaymentWindow extends javax.swing.JFrame {
     this.orderedItems = orderedItems;
     this.deliveryMethod = deliveryMethod;
     initComponents();
-    jLabel2.setText("Total: $" + totalAmount);
+    DecimalFormat df = new DecimalFormat("#.##");
+    jLabel2.setText("Total: $" + df.format(totalAmount));
 }
 
 
