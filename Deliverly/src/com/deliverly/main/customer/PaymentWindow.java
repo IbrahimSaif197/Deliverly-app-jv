@@ -9,7 +9,7 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 import java.text.DecimalFormat;
 
-public class PaymentWindow extends javax.swing.JFrame {
+    public class PaymentWindow extends javax.swing.JFrame {
     private String customerID;
     private double totalAmount;
     private String orderID;
@@ -18,16 +18,23 @@ public class PaymentWindow extends javax.swing.JFrame {
     private String deliveryMethod;
 
     public PaymentWindow(String customerID, double totalAmount, String orderID, String vendorID, String orderedItems, String deliveryMethod) {
-    this.customerID = customerID;
-    this.totalAmount = totalAmount;
-    this.orderID = orderID;
-    this.vendorID = vendorID;
-    this.orderedItems = orderedItems;
-    this.deliveryMethod = deliveryMethod;
-    initComponents();
-    DecimalFormat df = new DecimalFormat("#.##");
-    jLabel2.setText("Total: Rm" + df.format(totalAmount));
-}
+        this.customerID = customerID;
+        this.totalAmount = totalAmount;
+        this.orderID = orderID;
+        this.vendorID = vendorID;
+        this.orderedItems = orderedItems;
+        this.deliveryMethod = deliveryMethod;
+
+        if (this.deliveryMethod.equalsIgnoreCase("Delivery")) {
+            this.totalAmount += 5.00;
+        }
+
+        initComponents();
+        DecimalFormat df = new DecimalFormat("#.##");
+        jLabel2.setText("Total: Rm" + df.format(this.totalAmount));
+    }
+
+
 private double getUserCredit(String customerID) {
         try (BufferedReader br = new BufferedReader(new FileReader("src/data/users.txt"))) {
             String line;
@@ -221,7 +228,7 @@ private void saveOrder() {
         return;
     }
 
-    String date = java.time.LocalDate.now().toString(); // Ensure date is always recorded
+    String date = java.time.LocalDate.now().toString(); 
     String cardNumber = "N/A";
     String cvc = "N/A";
     String cardDate = "N/A";
