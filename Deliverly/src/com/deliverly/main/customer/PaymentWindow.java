@@ -51,40 +51,39 @@ private double getUserCredit(String customerID) {
     }
 
 private void updateUserCredit(String customerID, double newCredit) {
-        File usersFile = new File("src/data/users.txt");
-        File tempFile = new File("src/data/users_temp.txt");
-        boolean updated = false;
+    File usersFile = new File("src/data/users.txt");
+    StringBuilder updatedContent = new StringBuilder();
+    boolean updated = false;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(usersFile));
-             BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile))) {
-
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] userDetails = line.split(";");
-                if (userDetails.length >= 8 && userDetails[0].equals(customerID)) {
-                    userDetails[7] = String.format("%.2f", newCredit);  
-                    line = String.join(";", userDetails);
-                    updated = true;
-                }
-                bw.write(line);
-                bw.newLine();
+    try (BufferedReader br = new BufferedReader(new FileReader(usersFile))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] userDetails = line.split(";");
+            if (userDetails.length >= 8 && userDetails[0].equals(customerID)) {
+                userDetails[7] = String.format("%.2f", newCredit); 
+                line = String.join(";", userDetails);
+                updated = true;
             }
+            updatedContent.append(line).append("\n");
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error reading user file: " + e.getMessage());
+        return;
+    }
+
+    if (updated) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(usersFile, false))) { 
+            bw.write(updatedContent.toString()); 
+            bw.flush();
+            JOptionPane.showMessageDialog(this, "Credit updated successfully!");
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error updating user credit: " + e.getMessage());
-            return;
         }
-
-        if (updated) {
-            if (usersFile.delete() && tempFile.renameTo(usersFile)) {
-                JOptionPane.showMessageDialog(this, "Credit updated successfully!");
-            } else {
-                JOptionPane.showMessageDialog(this, "Error replacing the file!");
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Customer ID not found. No changes made.");
-            tempFile.delete(); 
-        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Customer ID not found. No changes made.");
     }
+}
+
 private void saveOrder() {
         DecimalFormat df = new DecimalFormat("#.##");
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/data/orders.txt", true))) {
@@ -96,6 +95,32 @@ private void saveOrder() {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error saving order: " + e.getMessage());
         }}
+private void sendNotification(String customerId, String message) {
+        try {
+            FileWriter fw = new FileWriter("src//data//notifications.txt", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(customerId + ";" + message);
+            bw.newLine();
+            bw.close();
+            JOptionPane.showMessageDialog(null, "Notification has been sent successfully to the Vendor!");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error happened when sending to the customer " + e.getMessage());
+        }
+    }
+private String getVendorUsername(String vendorID) {
+    try (BufferedReader br = new BufferedReader(new FileReader("src/data/users.txt"))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] userDetails = line.split(";");
+            if (userDetails.length >= 2 && userDetails[0].equals(vendorID)) {
+                return userDetails[1]; 
+            }
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error retrieving vendor username: " + e.getMessage());
+    }
+    return "UNKNOWN";
+}
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -242,17 +267,14 @@ private void saveOrder() {
             JOptionPane.showMessageDialog(this, "Please enter all card details!");
             return;
         }
-
         if (!cvc.matches("\\d{3}")) {
             JOptionPane.showMessageDialog(this, "Invalid CVC! Enter a 3-digit number.");
             return;
         }
-
         if (!cardNumber.matches("\\d{16}")) {
             JOptionPane.showMessageDialog(this, "Invalid Card Number! Enter a 16-digit number.");
             return;
         }
-
         if (!cardDate.matches("\\d{4}")) {
             JOptionPane.showMessageDialog(this, "Invalid Expiry Date! Enter in MMYY format.");
             return;
@@ -276,6 +298,13 @@ private void saveOrder() {
         JOptionPane.showMessageDialog(this, "Payment Successful! Saving order...");
 
         saveOrder();
+        
+        // Notify the vendor about the new order
+        String vendorUsername = getVendorUsername(vendorID);
+        if (!vendorUsername.equals("UNKNOWN")) {
+            sendNotification(vendorUsername, "You have a new order from " + customerID + "!");
+        }
+
         this.dispose();
     } catch (IOException e) {
         JOptionPane.showMessageDialog(this, "Error saving receipt: " + e.getMessage());
